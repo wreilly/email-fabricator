@@ -2,14 +2,20 @@
   <mat-sidenav
           mode="side"
           role="navigation"
-  >
-    <p>Hello, world. Yrs., sidenav</p>
+          [opened]="myOpenedSidenav"
+  > <!-- TODO hard-coded open, for now
+  https://material.angular.io/components/sidenav/overview#opening-and-closing-a-sidenav
+  -->
+    <p>AppComponent. Remove me. inside mat-sidenav</p>
+    <app-sidenav-list></app-sidenav-list>
+    <p>AppComponent. Remove me. below app-sidenav-list</p>
   </mat-sidenav>
 <mat-sidenav-content>
-  <p>Hello, world. Yrs., sidenav-content</p>
+  <p>AppComponent. mat-sidenav-content above header (wh-a-a-?)</p>
   <div style="text-align: center">
     <app-header></app-header>
   </div>
+  <p>AppComponent. mat-sidenav-content below header (ok)</p>
   <main>
     <router-outlet></router-outlet>
   </main>
