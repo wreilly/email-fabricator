@@ -1,4 +1,34 @@
 /* You can add global styles to this file, and also import other style files */
 
+/*
+IMPORTANT!
+Yes, DO import this here in /styles.css
+
+It was NOT working to simply rely on
+../angular.json "options", under "serve"
+    ...
+    NO:
+            "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/pink-bluegrey.css", // << No
+              "/node_modules/@angular/material/prebuilt-themes/pink-bluegrey.css", // << No
+              "@angular/material/prebuilt-themes/pink-bluegrey.css", // << No
+              "/src/styles.css"
+            ]
+ */
+/* FURTHER (re: above)
+Apparently NOT good idea to put this "styles" stuff
+into angular.json:
+
+Schema validation failed with the following errors:
+  Data path "" should NOT have additional properties(styles).
+
+  So I removed it from angular.json, and it fixed the error. Cheers.
+
+ */
+/* YES: */
+@import "~@angular/material/prebuilt-themes/pink-bluegrey.css";
+
+
+
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

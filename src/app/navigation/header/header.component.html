@@ -1,1 +1,35 @@
-<p>header works!</p>
+<mat-toolbar color="primary">
+    <div style="padding: 10px; margin-left: 10px;">
+        <a
+                routerLink="/"
+                routerLinkActive="my-active"
+        >
+            <mat-icon>house</mat-icon>
+            <span>Home</span>
+        </a>
+    </div>
+    <div
+    fxFlex
+    fxLayout
+    fxLayoutAlign="flex-end">
+        <ul
+                fxLayout
+
+                class="navigation-items">
+            <!-- fxLayoutGap="10px"
+            "StaticInjectorError(Platform: core)[DefaultLayoutGapDirective -> StyleUtils]:
+    NullInjectorError: No provider for StyleUtils!"
+    Oi!
+    Wrong (too new) version of Flexy-poo
+        "@angular/flex-layout": "^9.0.0-beta.28",
+            -->
+            <li>
+                <a
+                        routerLink="/fabricator"
+                        routerLinkActive="my-active"
+                >Create Addresses</a>
+            </li>
+        </ul>
+    </div>
+</mat-toolbar>
+
