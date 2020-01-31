@@ -1,5 +1,16 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
+# WR__
+# Emacs tilde
+*~
+
+# ENVIRONMENT Variables for app:
+/src/environments
+
+# FIREBASE some cache thing
+/.firebase
+
+
 # compiled output
 /dist
 /tmp
