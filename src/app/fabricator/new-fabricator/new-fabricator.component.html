@@ -1,0 +1,85 @@
+<div fxLayoutAlign="center center"
+     fxLayoutGap="10px">
+    <p>new-fabricator works!</p>
+    <form
+            bind-formGroup="myFabricatorFormGroup"
+            on-ngSubmit="myOnSubmit()"
+            fxLayout="column"
+            fxLayoutGap="20px"
+    >
+        <mat-form-field>
+            <mat-label>myStudentIncrementerCounter label</mat-label>
+            <input
+                    formControlName="myFabricatorFormControlStudentIncrementerCounterName"
+                    matInput
+                    placeholder="0"
+                    type="number"
+            >
+            <mat-hint>myStudentIncrementerCounter hint</mat-hint>
+            <mat-error>myStudentIncrementerCounter error</mat-error>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>myNumberOfRows label</mat-label>
+            <input
+                    formControlName="myFabricatorFormControlNumberOfRowsName"
+                    matInput
+                    placeholder="25"
+                    type="number"
+            >
+            <mat-hint>myNumberOfRows hint</mat-hint>
+            <mat-error>myNumberOfRows error</mat-error>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>myGroup label</mat-label>
+            <input
+                    formControlName="myFabricatorFormControlGroupName"
+                    matInput
+                    placeholder=""
+                    type="text"
+            >
+            <mat-hint>myGroup hint</mat-hint>
+            <mat-error>myGroup error</mat-error>
+        </mat-form-field>
+<!-- Will be the "static suggested-but-editable ones"
+mySeparator = '-'
+const myPrefix = 'student'
+const mySuffix = '@hbsp.harvard.edu'
+
+        <mat-form-field>
+            <mat-label>label</mat-label>
+            <input
+                    formControlName=""
+                    matInput
+                    placeholder=""
+                    type="text"
+            >
+            <mat-hint>hint</mat-hint>
+            <mat-error>error</mat-error>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>label</mat-label>
+            <input
+                    formControlName=""
+                    matInput
+                    placeholder=""
+                    type="text"
+            >
+            <mat-hint>hint</mat-hint>
+            <mat-error>error</mat-error>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>label</mat-label>
+            <input
+                    formControlName=""
+                    matInput
+                    placeholder=""
+                    type="text"
+            >
+            <mat-hint>hint</mat-hint>
+            <mat-error>error</mat-error>
+        </mat-form-field>
+-->
+    </form>
+
+</div>
+

@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FlexLayoutModule } from '@angular/flex-layout';
+// import { ReactiveFormsModule } from '@angular/forms'; // << Now in FabricatorModule
 
 import { AppRoutingModule } from './app-routing.module';
 import { MyMaterialModule } from './my-material.module';
@@ -24,6 +25,7 @@ import {WelcomeComponent} from './welcome/welcome.component';
     AppRoutingModule,
     BrowserAnimationsModule,
     FlexLayoutModule,
+    // ReactiveFormsModule,
     MyMaterialModule,
     FabricatorModule,
   ],
