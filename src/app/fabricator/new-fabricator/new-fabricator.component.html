@@ -17,6 +17,7 @@
                     formControlName="myFabricatorFormControlStudentIncrementerCounterName"
                     matInput
                     type="number"
+                    [errorStateMatcher]="myOwnErrorStateMatcher"
             >
             <mat-hint>Enter base number (e.g. 1), OR, the NEXT number from your previous batch to continue with this same group (e.g. 26...)
             </mat-hint>
@@ -35,6 +36,7 @@
                     formControlName="myFabricatorFormControlNumberOfRowsName"
                     matInput
                     type="number"
+                    [errorStateMatcher]="myOwnErrorStateMatcher"
             >
             <mat-hint>myNumberOfRows hint</mat-hint>
             <mat-error>myNumberOfRows error: Must be greater than 0</mat-error>
@@ -46,6 +48,7 @@
                     matInput
                     placeholder=""
                     type="text"
+                    [errorStateMatcher]="myOwnErrorStateMatcher"
             >
             <mat-hint>myGroup hint</mat-hint>
             <mat-error>myGroup error</mat-error>
