@@ -13,7 +13,7 @@ import {
 https://stackoverflow.com/questions/50328751/angular-6-error-show-to-mat-form-field-is-not-a-known-element
  */
     MatInputModule,
-
+    MatButtonModule,
 } from '@angular/material';
 
 const myMaterialModulesImported = [
@@ -22,8 +22,9 @@ const myMaterialModulesImported = [
     MatIconModule,
     MatTabsModule,
     MatToolbarModule,
-    // MatFormFieldModule, // ? not needed ??
+    // MatFormFieldModule, // Not needed: part of MatInputModule
     MatInputModule,
+    MatButtonModule,
 ];
 
 @NgModule({
@@ -33,6 +34,7 @@ const myMaterialModulesImported = [
     exports: [...myMaterialModulesImported], // Yes aussi, w Spread Operator inside literal [ ]
     providers: [],
 })
+
 export class MyMaterialModule {
 
 }

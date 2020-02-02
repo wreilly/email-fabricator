@@ -6,7 +6,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { FabricatorRoutingModule } from './fabricator-routing.module';
 
 import { MyMaterialModule } from '../my-material.module';
-/* Hmm, rather than just this one, let's grab whole MyMaterialModule.
+/* Hmm, rather than just this one for MatTabs,
+   let's grab whole MyMaterialModule.
 (TODO The which will likely later get refactored to a SharedModule.)
 
 import {MatTabsModule} from '@angular/material';
@@ -27,9 +28,9 @@ import { ResultsFabricatorComponent } from './results-fabricator/results-fabrica
     CommonModule,
     FabricatorRoutingModule,
     ReactiveFormsModule,
-    // MatTabsModule,
+    // MatTabsModule, // << We bring in whole Material module instead
     MyMaterialModule,
-    FlexLayoutModule
+    FlexLayoutModule,
   ]
 })
 export class FabricatorModule { }

@@ -16,9 +16,18 @@ export class NewFabricatorComponent implements OnInit {
    */
   myFabricatorFormControlGroup: FormControl; // << It's a Control, not a "Group"
 
-  myStudentIncrementerCounter: number; // e.g. 0
+
+/* BETTER Prob. Just "TYPE" them:
+  myStudentIncrementerCounter: number; // e.g. 1 (instead of 0 ? t.b.d.)
   myNumberOfRows: number; // e.g. 25
   myGroup: string; // e.g. '01'
+*/
+/* LESS GREAT: "INITIALIZE" w. values (that reveal/determine TYPE anyway)
+ */
+  myStudentIncrementerCounter = 1; // probably going to make ONE-based vs. Zero-based; t.b.d.
+  myNumberOfRows = 25;
+  myGroup = '01';
+
 
   mySeparator = '-';
   myPrefix = 'student';
@@ -35,14 +44,27 @@ export class NewFabricatorComponent implements OnInit {
         '',
         { validators: [
             Validators.required,
-            Validators.minLength(1)
+            /* Curious. 0 as entry is INVALID, viz. LENGTH.
+That is NOT Intuitive!
+(Hmmph. I guess 0 is non-truthy or such? Sheesh.)
+
+errors:
+Object  minlength:
+Object
+ requiredLength: 1
+ actualLength: 0
+
+            Validators.minLength(1),
+*/
+              Validators.min(1),
           ]}
     );
 
     this.myFabricatorFormControlNumberOfRows = new FormControl(
         '',
         {validators: [
-            Validators.required
+            Validators.required,
+            Validators.min(1),
           ]}
     );
 
@@ -64,6 +86,41 @@ export class NewFabricatorComponent implements OnInit {
   } // /ngOnInit()
 
   myOnSubmit() {
+    /*
+    Okay, magic of Angular Reactive Forms means:
+    - ngOnSubmit() over in .HTML needs no passed parameter
+    - myOnSubmit() here in .TS needs no passed-in parameter
+    - We use the FormGroup's FormControls to access form values here
+    - We assign those form values from HTML to class members here in TypeScript (cool)
+    - And on we go with logic!
+     */
+
+    /* REMEMBER! You use the ___NAME to the FormControl, in both the .get('___') and in the .controls.___
+    */
+    this.myStudentIncrementerCounter = this.myFabricatorFormGroup
+        .get('myFabricatorFormControlStudentIncrementerCounterName').value;
+/* YES works: */
+    this.myNumberOfRows = this.myFabricatorFormGroup.controls.myFabricatorFormControlNumberOfRowsName.value;
+
+/* YES works:
+    this.myNumberOfRows = this.myFabricatorFormGroup
+        .get('myFabricatorFormControlNumberOfRowsName').value;
+*/
+
+    this.myGroup = this.myFabricatorFormGroup.get('myFabricatorFormControlGroupName').value;
+
+    console.log(this.myStudentIncrementerCounter); // yep e.g. 1
+    console.log(this.myNumberOfRows); // yep e.g. 100
+    console.log(this.myGroup); // yep e.g. 'studentgroupname'
+
+    this.fabricateEmailAddresses();
+
+  }
+
+  fabricateEmailAddresses() {
+    console.log('inside fabricate()! ', this.myStudentIncrementerCounter); // yep e.g. 1
+    console.log('inside fabricate()! ', this.myNumberOfRows); // yep e.g. 100
+    console.log('inside fabricate()! ', this.myGroup); // yep e.g. 'studentgroupname'
 
   }
 

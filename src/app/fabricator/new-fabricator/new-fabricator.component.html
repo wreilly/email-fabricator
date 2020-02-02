@@ -1,33 +1,43 @@
 <div fxLayoutAlign="center center"
      fxLayoutGap="10px">
-    <p>new-fabricator works!</p>
     <form
             bind-formGroup="myFabricatorFormGroup"
             on-ngSubmit="myOnSubmit()"
             fxLayout="column"
             fxLayoutGap="20px"
+            fxFlex="400px"
     >
+        <!-- fxFlex="400px" << Just to get it to be a MINIMUM WIDTH. O la.
+
+        https://github.com/angular/flex-layout/wiki/Declarative-API-Overview#api-for-any-element
+        -->
         <mat-form-field>
             <mat-label>myStudentIncrementerCounter label</mat-label>
             <input
                     formControlName="myFabricatorFormControlStudentIncrementerCounterName"
                     matInput
-                    placeholder="0"
                     type="number"
             >
-            <mat-hint>myStudentIncrementerCounter hint</mat-hint>
-            <mat-error>myStudentIncrementerCounter error</mat-error>
+            <mat-hint>Enter base number (e.g. 1), OR, the NEXT number from your previous batch to continue with this same group (e.g. 26...)
+            </mat-hint>
+<!-- Troppo Grande! tsk, tsk (needed fxLayoutGap="70px") o la!
+            <mat-hint>
+                <p>Enter base number (e.g. 1)</p>
+                <p>OR,</p>
+                <p>the NEXT number from your previous batch to continue with this same group (e.g. 26...)</p>
+            </mat-hint>
+-->
+            <mat-error>myStudentIncrementerCounter error: Must be greater than 0</mat-error>
         </mat-form-field>
         <mat-form-field>
             <mat-label>myNumberOfRows label</mat-label>
             <input
                     formControlName="myFabricatorFormControlNumberOfRowsName"
                     matInput
-                    placeholder="25"
                     type="number"
             >
             <mat-hint>myNumberOfRows hint</mat-hint>
-            <mat-error>myNumberOfRows error</mat-error>
+            <mat-error>myNumberOfRows error: Must be greater than 0</mat-error>
         </mat-form-field>
         <mat-form-field>
             <mat-label>myGroup label</mat-label>
@@ -79,6 +89,33 @@ const mySuffix = '@hbsp.harvard.edu'
             <mat-error>error</mat-error>
         </mat-form-field>
 -->
+        <button
+                mat-raised-button
+                type="submit"
+                bind-disabled="!myFabricatorFormGroup.valid"
+        >
+            Make Me {{
+            ( myFabricatorFormControlNumberOfRows.value )
+            > 0 ?
+                ( myFabricatorFormControlNumberOfRows.value )
+                : 'Some'
+            }} Addresses!
+<!-- Oops! Wrong logic below. "Overthinking it."
+- To get the "number of e-mail addresses to create,"
+you do *not* subtract Counter Base #, (be that 0 or anything else, like say 40), from the Number of Rows desired (like say 25). No.
+- You just use the NumberOfRows figure! (easy-peasy)
+
+            Make Me {{
+            ( myFabricatorFormControlNumberOfRows.value - myFabricatorFormControlStudentIncrementerCounter.value )
+            > 0 ?
+                ( myFabricatorFormControlNumberOfRows.value - myFabricatorFormControlStudentIncrementerCounter.value )
+                : 'Some'
+            }} Addresses!
+-->
+        </button>
+        <p
+        *ngIf="myFabricatorFormControlStudentIncrementerCounter.value > 0"
+        >Creating {{ myFabricatorFormControlNumberOfRows.value }} addresses, from {{ myFabricatorFormControlStudentIncrementerCounter.value }} to {{ ( myFabricatorFormControlStudentIncrementerCounter.value - 1 ) + myFabricatorFormControlNumberOfRows.value }} inclusive. Cheers.</p>
     </form>
 
 </div>
