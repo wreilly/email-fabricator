@@ -6,6 +6,8 @@ Seems not so far. FormGroupDirective for Reactive Forms, NgForm for Template-Dri
 
 import { Router } from '@angular/router';
 
+import { FabricatorService } from '../fabricator.service';
+
 import {ErrorStateMatcher} from '@angular/material'; // MatInput property
 /*
 Example above where v. specific Material Design best imported
@@ -71,11 +73,13 @@ export class NewFabricatorComponent implements OnInit {
   myPrefix = 'student';
   mySuffix = '@hbsp.harvard.edu';
 
-  myListOfStrings: string;
-  myStackOfStrings: string;
+  myArrayOfAddresses: string[];
+  myListOfStringsOfAddresses: string;
+  myStackOfStringsOfAddresses: string;
 
   constructor(
       private myRouter: Router,
+      private myFabricatorService: FabricatorService,
   ) { }
 
   ngOnInit(): void {
@@ -190,27 +194,32 @@ Object
 
     let myArrayOfAddresses = Array(this.myNumberOfRows - ( this.myStudentIncrementerCounter - 1 ) )
 */
-    let myArrayOfAddresses = Array(this.myNumberOfRows ) // << Array length is simply number of rows !!!
+    this.myArrayOfAddresses = Array(this.myNumberOfRows ) // << Array length is simply number of rows !!!
         .fill(null).map(() => `student-${this.myGroup}-${this.myStudentIncrementerCounter++}@hbsp.harvard.edu`);
     // N.B. MINUS ONE!
 
     // Get all Strings out of Array, into a single comma-separated string
-    let myListOfStringsOfAddresses = myArrayOfAddresses.toString();
+    this.myListOfStringsOfAddresses = this.myArrayOfAddresses.toString();
 
     // Turn comma-separated LIST of Strings into carriage-return-separated STACK (as 'twere) of Strings, via RegEx:
-    let myStackOfStringsOfAddresses = myListOfStringsOfAddresses.replace(/(student-[0-9]+-[0-9]+@hbsp.harvard.edu),/g, '$1\n');
+    this.myStackOfStringsOfAddresses = this.myListOfStringsOfAddresses.replace(/(student-[0-9]+-[0-9]+@hbsp.harvard.edu),/g, '$1\n');
 
     console.log('HERE IT IS! (whoa) \n =================\n');
-    console.log(myStackOfStringsOfAddresses);
+    console.log(this.myStackOfStringsOfAddresses);
     console.log('\n =================\n');
 
     /* Hmm...
     Should we reset those consts herein?
     Hmm.
      */
+/* Hmm, let's NOT do that, here ?  Reset Form is expected to, yes ?
     myArrayOfAddresses = [];
     myListOfStringsOfAddresses = '';
     myStackOfStringsOfAddresses = '';
+*/
+
+    this.myFabricatorService.sendInStackResults(this.myStackOfStringsOfAddresses);
+
   }
 
   myResetForm() {
