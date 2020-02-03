@@ -1,4 +1,15 @@
-<p>results-fabricator works!</p>
-<div>
-    {{ myStackOfStringsOfAddressesToDisplay }}
-</div>
+<section>
+<!--
+    <div>
+        {{ myStackOfStringsOfAddressesToDisplayRaw }}
+    </div>
+student-33-1@hbsp.harvard.edu student-33-2@hbsp.harvard.edu student-33-3@hbsp.harvard.edu...
+-->
+    <div>
+        <ul>
+            <li
+                    *ngFor="let oneAddress of myStackOfStringsOfAddressesToDisplayUlLi"
+            >{{ oneAddress }}</li>
+        </ul>
+    </div>
+</section>

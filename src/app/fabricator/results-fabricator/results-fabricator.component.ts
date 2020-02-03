@@ -9,24 +9,26 @@ import {Subscription} from 'rxjs';
 })
 export class ResultsFabricatorComponent implements OnInit, OnDestroy {
 
-  mySimpleSubscription: Subscription;
-  myStackOfStringsOfAddressesToDisplay: string;
+    mySimpleSubscription: Subscription;
+    myStackOfStringsOfAddressesToDisplayRaw: string;
+    myStackOfStringsOfAddressesToDisplayUlLi: string[];
 
-  constructor(
-      private myFabricatorService: FabricatorService,
-  ) { }
+    constructor(
+        private myFabricatorService: FabricatorService,
+    ) { }
 
-  ngOnInit() {
-    this.mySimpleSubscription = this.myFabricatorService.myStackOfStringsOfAddressesInServiceBehaviorSubject
-        .subscribe(
-            (whatWeGot) => {
-              console.log('whatWeGot BEHAVIOR ', whatWeGot);
-              this.myStackOfStringsOfAddressesToDisplay = whatWeGot;
-            }
-        );
-  }
+    ngOnInit() {
+        this.mySimpleSubscription = this.myFabricatorService.myStackOfStringsOfAddressesInServiceBehaviorSubject
+            .subscribe(
+                (whatWeGot) => {
+                    console.log('whatWeGot BEHAVIOR ', whatWeGot);
+                    this.myStackOfStringsOfAddressesToDisplayRaw = whatWeGot;
+                    this.myStackOfStringsOfAddressesToDisplayUlLi = this.myStackOfStringsOfAddressesToDisplayRaw.split('\n');
+                }
+            );
+    }
 
-  ngOnDestroy() {
-    this.mySimpleSubscription.unsubscribe();
-  }
+    ngOnDestroy() {
+        this.mySimpleSubscription.unsubscribe();
+    }
 }
