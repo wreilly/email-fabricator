@@ -1,0 +1,27 @@
+/*
+Problem!
+Can't see what you paste into Excel!
+
+Issue:
+The default Material Design, of
+light font color on dark background,
+yields a "copy'n'paste" text from the browser page,
+that when pasted into Excel, goes in (default) as HTML,
+bringing with it this light (invisible) font color,
+totally UNREADABLE to human eye in Excel.
+WTF.
+
+Fix:
+Create new style for div that flips it:
+- dark font color
+- light background.
+Yeesh.
+ */
+
+.lighten-background {
+    background-color: aliceblue;
+}
+
+.darken-font {
+    color: black;
+}

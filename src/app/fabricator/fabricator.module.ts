@@ -3,6 +3,19 @@ import { CommonModule } from '@angular/common';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import { ReactiveFormsModule } from '@angular/forms';
 
+/* Hmm NAH:
+import { saveAs } from '../../../node_modules/file-saver/src/FileSaver';
+*/
+import { saveAs } from 'file-saver';
+/*
+Trying directly over in ResultsFabricatorComponent, not here in a Module. hmm
+ */
+/*
+Needed both:
+$ npm install --save file-saver
+$ npm install --save-dev @types/file-saver
+ */
+
 import { FabricatorRoutingModule } from './fabricator-routing.module';
 
 import { MyMaterialModule } from '../my-material.module';

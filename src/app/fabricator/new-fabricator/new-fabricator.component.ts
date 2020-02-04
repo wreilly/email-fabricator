@@ -85,6 +85,7 @@ export class NewFabricatorComponent implements OnInit {
   ngOnInit(): void {
 
     this.myFabricatorFormControlStudentIncrementerCounter = new FormControl(
+        // N.B. HTML Input field is type="number" (non-numbers not allowed)
         '',
         { validators: [
             Validators.required,
@@ -105,6 +106,7 @@ Object
     );
 
     this.myFabricatorFormControlNumberOfRows = new FormControl(
+        // N.B. HTML Input field is type="number" (non-numbers not allowed)
         '',
         {validators: [
             Validators.required,
@@ -113,9 +115,16 @@ Object
     );
 
     this.myFabricatorFormControlGroup = new FormControl(
+        // N.B. HTML Input field is type="text" (all sorts of stuff allowed)
         '',
+        // ALPHA-NUMERIC, PERIOD ('.'), and HYPHEN ('-') are O.K.:
+        // TODO THINKING TO DROP HYPHEN (complicates things as HYPHEN is separator)
+        // e.g. 'Abc-123.75' or '01-AG-Econ.200' etc.
         {validators: [
-            Validators.required
+            Validators.required,
+            Validators.pattern(/[0-9a-zA-Z.-]/),
+            // N.B. Pattern matches/supports .fabricateEmailAddresses() regex
+            // used to convert LIST of strings into STACK of strings (see below)
           ]}
     );
 
@@ -202,9 +211,24 @@ Object
     this.myListOfStringsOfAddresses = this.myArrayOfAddresses.toString();
 
     // Turn comma-separated LIST of Strings into carriage-return-separated STACK (as 'twere) of Strings, via RegEx:
-    this.myStackOfStringsOfAddresses = this.myListOfStringsOfAddresses.replace(/(student-[0-9]+-[0-9]+@hbsp.harvard.edu),/g, '$1\n');
+    // "GROUP" MUST BE NUMBER
+/* WORKS FINE
+    this.myStackOfStringsOfAddresses = this.myListOfStringsOfAddresses
+        .replace(/(student-[0-9]+-[0-9]+@hbsp.harvard.edu),/g, '$1\n');
+*/
+    // "GROUP" MAY BE ALPHA-NUMERIC
+/* WORKS FINE
+    this.myStackOfStringsOfAddresses = this.myListOfStringsOfAddresses
+        .replace(/(student-[0-9a-zA-Z]+-[0-9]+@hbsp.harvard.edu),/g, '$1\n');
+*/
+    // "GROUP" MAY BE ALPHA-NUMERIC, PERIOD ('.'), HYPHEN ('-'):
+    // TODO THINKING TO DROP HYPHEN (complicates things as HYPHEN is separator)
+    // N.B. Pattern matches/supports Form Input Validator for GROUP (see above)
+    this.myStackOfStringsOfAddresses = this.myListOfStringsOfAddresses
+        .replace(/(student-[0-9a-zA-Z.-]+-[0-9]+@hbsp.harvard.edu),/g, '$1\n');
+    // N.B. NOTE THE '\n' ADDED HERE = good
 
-    console.log('HERE IT IS! (whoa) \n =================\n');
+    console.log('HERE IT IS! Stack of Strings of Addresses:\n =================\n');
     console.log(this.myStackOfStringsOfAddresses);
     console.log('\n =================\n');
 
