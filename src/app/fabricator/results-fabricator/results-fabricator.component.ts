@@ -49,6 +49,17 @@ student-01-4@hbsp.harvard.edu
     } // ngOnInit()
 
     myMakeFilenameToSave() {
+        /*
+        TODO Consider a MODEL for these data bits
+        - Right now, they initially come from NewFabricatorComponent
+        - But they are NOT passed over, through FabricatorService,
+        to this FabricatorResultsComponent.
+        - All that comes over is the string, '\n'-separated,
+        of all the newly-fabricated e-mail addresses.
+        - So, we can read that, grab a sample line, and
+        "reverse engineer" our few data bits w. a bit of
+        RegEx activity.
+         */
         let filenamePrefix: string;
         let filenameGroupArrayThing: RegExpMatchArray;
         let filenameGroup: string;
@@ -64,10 +75,11 @@ student-01-4@hbsp.harvard.edu
         // yep: student-r45-.8-1@hbsp.harvard.edu
 
         filenamePrefix = 'student'; // hard-code for now
-        filenameSuffix = 'AT-hbsp.harvard.edu'; // hard-code for now (REPLACE '@')
+        filenameSuffix = 'AT-hbsp.harvard.edu'; // hard-code for now
+        // (REPLACE '@' w 'AT', as the '@' symbol may well confuse a bit, used as a filename character.)
 
         // NO: filenameGroupArrayThing = sampleFirstStringFromArray.match(/[.]*-([0-9a-zA-Z.-]-[.]*)/);
-        // TODO YEAH : THINKING TO DROP HYPHEN (complicates things as HYPHEN is separator)
+        // TODONE YEAH :  DROPPED HYPHEN (complicates things as HYPHEN is separator)
         filenameGroupArrayThing = sampleFirstStringFromArray.match(/.*-([a-zA-Z0-9.]*)-/); // << NO HYPHEN allowed in Group name. Cheers.
         console.log('HUUUUH ', filenameGroupArrayThing);
         /* HUUUUH

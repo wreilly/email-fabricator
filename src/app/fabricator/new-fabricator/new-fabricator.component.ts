@@ -114,17 +114,59 @@ Object
           ]}
     );
 
+    const myRegExRightHere = new RegExp(/^[0-9a-zA-Z.]+$/);
+    /*
+    working correctly ( I do believe )
+    Essentially: Correctly shows error, if you've introduced a
+    hyphen into your Group name.
+    It had been that it only showed the error when you typed
+    a hyphen in the leftmost position. A hyphen introduced
+    subsequently was not getting detected, no error thrown. Not good.
+    Now it does.
+
+    Background re: hyphen:
+    We are not allowing hyphen within the
+    Group name. We allow the period, if you need a separator.
+    (The hyphen is reserved for the separator for all the parts
+    of the filename.)
+
+    Important:
+    1. Yes better as new up a RegEx (than inline pattern below)
+    2. Use / /  not " " or '  ' to send in your pattern parameter
+    3. Do not use /g  nor , flag: 'g'
+    4. Needed ^ at beginning and $ at end
+     */
+
     this.myFabricatorFormControlGroup = new FormControl(
         // N.B. HTML Input field is type="text" (all sorts of stuff allowed)
         '',
-        // ALPHA-NUMERIC, PERIOD ('.'), and HYPHEN ('-') are O.K.:
-        // TODO THINKING TO DROP HYPHEN (complicates things as HYPHEN is separator)
-        // e.g. 'Abc-123.75' or '01-AG-Econ.200' etc.
+        // ALPHA-NUMERIC, PERIOD ('.'), and HYPHEN ('-') are O.K.: /[0-9a-zA-Z.-]/
+        // e.g. 'Abc-123.75' or '01.AG-Econ-200' etc.
+        // TODONE DROPPED HYPHEN (complicates things as HYPHEN is separator) /[0-9a-zA-Z.]/
+        // e.g. 'Abc.123.75' or '01.AG.Econ.200' etc.
         {validators: [
-            Validators.required,
-            Validators.pattern(/[0-9a-zA-Z.-]/),
+                Validators.required,
+                Validators.pattern(myRegExRightHere),
+/* Trying to new up a RegEx instead
+                Validators.pattern(/[0-9a-zA-Z.]+/), // << No more /g ? // << No (more) hyphen // /[0-9a-zA-Z.]+/g
+*/
             // N.B. Pattern matches/supports .fabricateEmailAddresses() regex
             // used to convert LIST of strings into STACK of strings (see below)
+
+                /* ISSUE I AM FACING (fix is above with the new RegExp())
+                I believe above RegEx to be correct (see https://regexr.com)
+                And, when I enter a hyphen as first character, it correctly catches it (good).
+                But, when I enter other characters, the subsequent re-run of Angular
+                Validation "updateOn" "change" does NOT correctly catch this string,
+                that now DOES have a hyphen. Hmm!!
+
+                https://github.com/angular/angular/issues/14028
+
+Hmm, something about "don't use global '/g' !!"
+https://github.com/angular/angular/issues/14028#issuecomment-487524943
+https://stackoverflow.com/questions/2141974/javascript-regex-literal-with-g-used-multiple-times
+
+                 */
           ]}
     );
 
@@ -221,11 +263,11 @@ Object
     this.myStackOfStringsOfAddresses = this.myListOfStringsOfAddresses
         .replace(/(student-[0-9a-zA-Z]+-[0-9]+@hbsp.harvard.edu),/g, '$1\n');
 */
-    // "GROUP" MAY BE ALPHA-NUMERIC, PERIOD ('.'), HYPHEN ('-'):
-    // TODO THINKING TO DROP HYPHEN (complicates things as HYPHEN is separator)
+    // "GROUP" MAY BE ALPHA-NUMERIC, PERIOD ('.'), HYPHEN ('-'): [0-9a-zA-Z.-]+
+    // TODONE  DROPPED HYPHEN (complicates things as HYPHEN is separator) [0-9a-zA-Z.]+
     // N.B. Pattern matches/supports Form Input Validator for GROUP (see above)
     this.myStackOfStringsOfAddresses = this.myListOfStringsOfAddresses
-        .replace(/(student-[0-9a-zA-Z.-]+-[0-9]+@hbsp.harvard.edu),/g, '$1\n');
+        .replace(/(student-[0-9a-zA-Z.]+-[0-9]+@hbsp.harvard.edu),/g, '$1\n'); // << No longer hyphen in Group
     // N.B. NOTE THE '\n' ADDED HERE = good
 
     console.log('HERE IT IS! Stack of Strings of Addresses:\n =================\n');
