@@ -153,7 +153,7 @@ Object
             // N.B. Pattern matches/supports .fabricateEmailAddresses() regex
             // used to convert LIST of strings into STACK of strings (see below)
 
-                /* ISSUE I AM FACING (fix is above with the new RegExp())
+                /* ISSUE I AM FACING (<< NOW Fixed, above with the new RegExp())
                 I believe above RegEx to be correct (see https://regexr.com)
                 And, when I enter a hyphen as first character, it correctly catches it (good).
                 But, when I enter other characters, the subsequent re-run of Angular
@@ -162,7 +162,7 @@ Object
 
                 https://github.com/angular/angular/issues/14028
 
-Hmm, something about "don't use global '/g' !!"
+Hmm, something about "don't use global '/g' !!" (who k-new)
 https://github.com/angular/angular/issues/14028#issuecomment-487524943
 https://stackoverflow.com/questions/2141974/javascript-regex-literal-with-g-used-multiple-times
 
