@@ -28,6 +28,9 @@ export class ResultsFabricatorComponent implements OnInit, OnDestroy {
     mySimpleSubscription: Subscription;
     myStackOfStringsOfAddressesToDisplayRaw: string;
     myStackOfStringsOfAddressesToDisplayUlLiArray: string[];
+/* Do Not Need now.
+    anyResultsYet = false;
+*/
 
     // NO:
     // myStackOfStringsOfAddressesToSaveCSVArrayOfArrayOfStrings: [string[]] = [['']]; // No. empty init ? hmm.
@@ -73,6 +76,29 @@ Moving to the two button methods instead (.txt, .csv).
 
                     this.myMakeFilenameToSave();
 */
+
+/* Do Not Need Now
+                    if ( whatWeGot ) {
+                        /!* O la.
+                         truthy ?
+                          Not Helpful:
+                          myStackOfStringsOfAddressesToDisplayUlLiArray is (apparently) an Array with an empty string [""]. TRUTHY!
+
+                          Better:
+                          whatWeGot is just empty string "" FALSY (What You Want)
+
+                          Even Better:
+                          this.myStackOfStringsOfAddressesToDisplayRaw << this too
+                          is just empty string "" FALSY (What You Want)
+
+"sitepoint.com/javascript-truthy-falsy/. The following
+values are always falsy: false; 0 (zero);
+"" (empty string); null; undefined ."
+                         *!/
+                        this.anyResultsYet = true;
+                    }
+*/
+
                 }
             );
     } // ngOnInit()
@@ -149,7 +175,7 @@ length: 2
 
     }
 
-    myDownloadSomeFile() {
+    myDownloadSomeTXTFile() {
         this.myMakeFilenameToSave();
 
         saveAs(new Blob([this.myStackOfStringsOfAddressesToDisplayRaw], { type: 'text' }), this.filenameToSaveTXT);
@@ -283,7 +309,20 @@ https://www.papaparse.com/docs#json-to-csv
         // TODO
     }
 
+    myClearResults() {
+        // this.myStackOfStringsOfAddressesToDisplayUlLiArray = []; // << NOPE.
+        // Empties rendered screen of listings...
+        // Hah! But "it comes back" ! whoa
+
+        this.myFabricatorService.myStackOfStringsOfAddressesInServiceBehaviorSubject.next('');
+        // More important: we have to empty out the BehaviorSubject holding this data!!
+
+        this.myStackOfStringsOfAddressesToDisplayRaw = '';
+        // Empties the "truthy/falsy" value we use to disable buttons
+    }
+
     ngOnDestroy() {
+//        this.anyResultsYet = false; // not really needed, but hey
         this.mySimpleSubscription.unsubscribe();
     }
 }

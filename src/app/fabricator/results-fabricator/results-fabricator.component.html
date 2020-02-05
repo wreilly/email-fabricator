@@ -5,30 +5,75 @@
     </div>
 student-33-1@hbsp.harvard.edu student-33-2@hbsp.harvard.edu student-33-3@hbsp.harvard.edu...
 -->
+    <div>
+        <button
+                mat-raised-button
+                on-click="myDownloadSomeTXTFile()"
+                [disabled]="!myStackOfStringsOfAddressesToDisplayRaw"
+        >
+            Download some crazily-named .TXT file
+        </button> |
+        <!-- [disabled]="!anyResultsYet" << Okay not needed after all -->
+
+        <button
+                mat-raised-button
+                on-click="myDownloadSomeCSVFile()"
+                [disabled]="!myStackOfStringsOfAddressesToDisplayRaw"
+        >
+            Download some really crazy .CSV file
+        </button> |
+        <button
+                mat-raised-button
+                on-click="myCopyToClipboard()"
+                [disabled]="!myStackOfStringsOfAddressesToDisplayRaw"
+        >
+            Copy to clipboard (we hope)
+        </button> |
+        <button
+                mat-raised-button
+                on-click="myClearResults()"
+                [disabled]="!myStackOfStringsOfAddressesToDisplayRaw"
+        >
+            Clear Results
+        </button>
+    </div>
     <div class="lighten-background">
         <ul>
             <li
                     *ngFor="let oneAddress of myStackOfStringsOfAddressesToDisplayUlLiArray"
                     class="darken-font"
+                    style="list-style-type: none"
             >{{ oneAddress }}</li>
         </ul>
     </div>
-    <button
-            mat-raised-button
-            on-click="myDownloadSomeFile()"
+    <div
+            *ngIf="myStackOfStringsOfAddressesToDisplayRaw && (myStackOfStringsOfAddressesToDisplayUlLiArray.length > 14)"
     >
-        Download some crazily-named .TXT file
-    </button> |
-    <button
-            mat-raised-button
-            on-click="myDownloadSomeCSVFile()"
-    >
-        Download some really crazy .CSV file
-    </button> |
-    <button
-            mat-raised-button
-            on-click="myCopyToClipboard()"
-    >
-        Copy to clipboard (we hope)
-    </button>
+        <button
+                mat-raised-button
+                on-click="myDownloadSomeTXTFile()"
+        >
+            Download some crazily-named .TXT file
+        </button> |
+        <!-- [disabled]="!anyResultsYet" << Okay not needed after all -->
+
+        <button
+                mat-raised-button
+                on-click="myDownloadSomeCSVFile()"
+        >
+            Download some really crazy .CSV file
+        </button> |
+        <button
+                mat-raised-button
+                on-click="myCopyToClipboard()"
+        >
+            Copy to clipboard (we hope)
+        </button> |
+        <button
+                mat-raised-button
+                on-click="myClearResults()"
+        >
+            Clear Results
+        </button>
+    </div>
 </section>
