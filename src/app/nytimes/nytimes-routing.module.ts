@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 import {NYTimesComponent} from './nytimes.component';
 import { TopStoriesComponent } from './top-stories/top-stories.component';
+import { BookReviewsComponent } from './book-reviews/book-reviews.component';
 
 const myNYTimesRoutes: Routes = [
     {
@@ -12,7 +13,11 @@ const myNYTimesRoutes: Routes = [
             {
                 path: 'top-stories',
                 component: TopStoriesComponent
-            }
+            },
+            {
+                path: 'book-reviews',
+                component: BookReviewsComponent
+            },
         ]
     },
 ];

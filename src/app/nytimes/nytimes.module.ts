@@ -5,11 +5,13 @@ import { NYTimesRoutingModule } from './nytimes-routing.module';
 
 import { NYTimesComponent } from './nytimes.component';
 import { TopStoriesComponent} from './top-stories/top-stories.component';
+import { BookReviewsComponent } from './book-reviews/book-reviews.component';
 
 @NgModule({
     declarations: [
         NYTimesComponent,
         TopStoriesComponent,
+        BookReviewsComponent,
     ],
     imports: [
         CommonModule,
