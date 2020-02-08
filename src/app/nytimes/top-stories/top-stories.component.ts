@@ -9,10 +9,16 @@ import {BehaviorSubject, Observable, Subscription} from 'rxjs';
 })
 export class TopStoriesComponent implements OnInit, OnDestroy {
 
-    // myAllStoriesObservableInComponent: Observable<any>;
-    myAllStoriesObservableInComponent; // NOT BehaviorSubject<any>, hey?
-    myAllStoriesObservableInComponentDotPipe; // ? seemstabe an Observable; see below
-    myAllStoriesObservableInComponentDotPipeBehaviorSubject: BehaviorSubject<any> = new BehaviorSubject<any>(''); // ??
+    // myAllStoriesObservableInComponent: Observable<any>; // << No
+    myAllStoriesObservableInComponent: any;
+    /* TODO Hmm, BAD Variable name. Seems to be, not any Observable,
+    just an array ? (of objects, of the NYTimes stories, the results array []
+     */
+    // NOT BehaviorSubject<any>, hey?
+
+    myAllStoriesObservableInComponentDotPipe; // ? seemstabe an Observable; see below YEP - use | async
+
+    myAllStoriesObservableInComponentDotPipeBehaviorSubject: BehaviorSubject<any> = new BehaviorSubject<any>(''); // ?? NAH
 
     myAllStoriesSubscription: Subscription;
     myAllStoriesNoObservableSubscription: Subscription;
