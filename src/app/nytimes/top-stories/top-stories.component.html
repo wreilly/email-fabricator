@@ -4,5 +4,53 @@
         fxLayoutAlign="center"
 >
     <p>Top-Stories Component</p>
+    <div>
+        <button
+                mat-raised-button
+        on-click="getAllStories()"
+        >
+            Get Stories
+        </button> |
+        <button
+                mat-raised-button
+                on-click="getAllStoriesDotPipe()"
+        >
+            Get Stories (1.B. Dot Pipe)
+        </button>
+
+    </div>
+
+    <div>
+        <p>FIRST GO BIZ - *NO* async</p>
+        <ul>
+            <li *ngFor="let uno of myAllStoriesObservableInComponent">
+                <div class="my-title">{{ uno.title }}</div>
+                <div>
+                    <a href="{{uno.url}}" target="_blank" class="my-link-color">{{ uno.url }}</a>
+                </div>
+                <div>
+                    {{ uno.published_date }}
+                </div>
+            </li>
+        </ul>
+    </div>
+    <hr />
+    <div>
+        <p>DOT PIPE BIZ *YES* async</p>
+        <ul>
+            <li *ngFor="let uno of myAllStoriesObservableInComponentDotPipe | async">
+<!--            <li *ngFor="let uno of [{title: 'fake', url: 'here'}]">-->
+                <div class="my-title">{{ uno.title }}</div>
+                <div>
+                    <a href="{{uno.url}}" target="_blank" class="my-link-color">{{ uno.url }}</a>
+                </div>
+<!--
+                <div>
+                    {{ uno.published_date }}
+                </div>
+-->
+            </li>
+        </ul>
+    </div>
 </section>
 

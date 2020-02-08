@@ -2,3 +2,10 @@
 .my-top-stories {
     padding: 30px;
 }
+
+.my-title {
+    font-size: larger;
+}
+.my-link-color {
+    color: deepskyblue;
+}
