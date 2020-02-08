@@ -3,8 +3,26 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  'nytimes-api-key-top-stories': 'STMA4A1DcdjKxY68rwVzYFAlC2EficSF',
 };
+/* NYTIMES API INFO
+TOP STORIES API
+
+App Name
+email-fabricator
+
+App ID
+5a9e270b-2008-47b4-8fe9-c16ca3f30ee0
+
+API Key
+STMA4A1DcdjKxY68rwVzYFAlC2EficSF
+
+API Secret
+JilsH7FNtCHQUyb3
+
+ */
+
 
 /*
  * For easier debugging in development mode, you can import the following file

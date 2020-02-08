@@ -4,6 +4,10 @@
     margin: 0;
 }
 
+.navigation-items li {
+    font-size: 15px;
+}
+
 .my-active {
     color: aqua;
 }

@@ -7,6 +7,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { AppRoutingModule } from './app-routing.module';
 import { MyMaterialModule } from './my-material.module';
 import { FabricatorModule } from './fabricator/fabricator.module';
+import { NYTimesModule } from './nytimes/nytimes.module';
 
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './navigation/header/header.component';
@@ -28,6 +29,7 @@ import {WelcomeComponent} from './welcome/welcome.component';
     // ReactiveFormsModule,
     MyMaterialModule,
     FabricatorModule,
+    NYTimesModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

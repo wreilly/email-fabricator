@@ -1,5 +1,5 @@
 <mat-toolbar color="primary">
-    <div style="padding: 10px; margin-left: 10px;">
+    <div style="padding: 10px; margin-left: 10px; font-size: 18px;">
         <a
                 routerLink="/"
                 routerLinkActive="my-active"
@@ -14,7 +14,7 @@
     fxLayoutAlign="flex-end">
         <ul
                 fxLayout
-
+                fxLayoutGap="10px"
                 class="navigation-items">
             <!-- fxLayoutGap="10px"
             "StaticInjectorError(Platform: core)[DefaultLayoutGapDirective -> StyleUtils]:
@@ -28,6 +28,12 @@
                         routerLink="/fabricator"
                         routerLinkActive="my-active"
                 >Create Addresses</a>
+            </li>
+            <li>
+                <a
+                        routerLink="/nytimes"
+                        routerLinkActive="my-active"
+                >NY Times</a>
             </li>
         </ul>
     </div>

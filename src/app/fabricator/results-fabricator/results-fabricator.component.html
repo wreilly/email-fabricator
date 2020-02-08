@@ -1,5 +1,8 @@
-<section>
-<!--
+<section center>
+    <!-- N.B. Do NOT use fxLayout="center center" here.
+    You wind up w 3 adjacent columns: top buttons, results, bottom buttons. Nope! -->
+
+    <!--
     <div>
         {{ myStackOfStringsOfAddressesToDisplayRaw }}
     </div>
@@ -11,7 +14,7 @@ student-33-1@hbsp.harvard.edu student-33-2@hbsp.harvard.edu student-33-3@hbsp.ha
                 on-click="myDownloadSomeTXTFile()"
                 [disabled]="!myStackOfStringsOfAddressesToDisplayRaw"
         >
-            Download some crazily-named .TXT file
+            Download .TXT
         </button> |
         <!-- [disabled]="!anyResultsYet" << Okay not needed after all -->
 
@@ -20,14 +23,14 @@ student-33-1@hbsp.harvard.edu student-33-2@hbsp.harvard.edu student-33-3@hbsp.ha
                 on-click="myDownloadSomeCSVFile()"
                 [disabled]="!myStackOfStringsOfAddressesToDisplayRaw"
         >
-            Download some really crazy .CSV file
+            Download .CSV
         </button> |
         <button
                 mat-raised-button
                 on-click="myCopyToClipboard()"
                 [disabled]="!myStackOfStringsOfAddressesToDisplayRaw"
         >
-            Copy to clipboard (we hope)
+            Copy to Clipboard (forthcoming)
         </button> |
         <button
                 mat-raised-button
@@ -37,14 +40,18 @@ student-33-1@hbsp.harvard.edu student-33-2@hbsp.harvard.edu student-33-3@hbsp.ha
             Clear Results
         </button>
     </div>
-    <div class="lighten-background">
-        <ul>
-            <li
-                    *ngFor="let oneAddress of myStackOfStringsOfAddressesToDisplayUlLiArray"
-                    class="darken-font"
-                    style="list-style-type: none"
-            >{{ oneAddress }}</li>
-        </ul>
+    <div
+            *ngIf="myStackOfStringsOfAddressesToDisplayRaw && (myStackOfStringsOfAddressesToDisplayUlLiArray.length > 14)"
+    >
+        <div class="lighten-background">
+            <ul>
+                <li
+                        *ngFor="let oneAddress of myStackOfStringsOfAddressesToDisplayUlLiArray"
+                        class="darken-font"
+                        style="list-style-type: none"
+                >{{ oneAddress }}</li>
+            </ul>
+        </div>
     </div>
     <div
             *ngIf="myStackOfStringsOfAddressesToDisplayRaw && (myStackOfStringsOfAddressesToDisplayUlLiArray.length > 14)"
@@ -53,7 +60,7 @@ student-33-1@hbsp.harvard.edu student-33-2@hbsp.harvard.edu student-33-3@hbsp.ha
                 mat-raised-button
                 on-click="myDownloadSomeTXTFile()"
         >
-            Download some crazily-named .TXT file
+            Download .TXT
         </button> |
         <!-- [disabled]="!anyResultsYet" << Okay not needed after all -->
 
@@ -61,13 +68,13 @@ student-33-1@hbsp.harvard.edu student-33-2@hbsp.harvard.edu student-33-3@hbsp.ha
                 mat-raised-button
                 on-click="myDownloadSomeCSVFile()"
         >
-            Download some really crazy .CSV file
+            Download .CSV
         </button> |
         <button
                 mat-raised-button
                 on-click="myCopyToClipboard()"
         >
-            Copy to clipboard (we hope)
+            Copy to Clipboard (forthcoming)
         </button> |
         <button
                 mat-raised-button
