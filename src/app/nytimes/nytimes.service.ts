@@ -66,7 +66,7 @@ url: "https://www.nytimes.com/2020/02/06/us/puerto-rico-insurance-tsunami.html",
         );
     }
 
-    //     1.A. Get Top Stories, No Observable
+    // ABANDONED:    1.A. Get Top Stories, No Observable
     getTopStoriesNoObservable() {
         return this.myHttp.get(
             `${this.nytimesApiUrlStub}${environment['nytimes-api-key-top-stories']}`,
@@ -79,9 +79,9 @@ url: "https://www.nytimes.com/2020/02/06/us/puerto-rico-insurance-tsunami.html",
         );
     }
 
-    //     1.B. Get Top Stories, Dot Pipe ??
-    getTopStoriesDotPipe() {
-        return this.myHttp.get(
+    //     1.B. Get Top Stories, Dot Pipe
+    getTopStoriesDotPipe(): Observable<any> {
+        return this.myHttp.get( // << Returns an Observable!
             `${this.nytimesApiUrlStub}${environment['nytimes-api-key-top-stories']}`,
         ).pipe(
             tap(
@@ -127,6 +127,10 @@ https://forum.ionicframework.com/t/solved-ngfor-only-supports-binding-to-iterabl
             // Bottom line, seems I don't seem to need it.
 */
         ); // /.pipe()
+    } // /getTopStoriesDotPipe()
+
+    clearTopStoriesDotPipe() {
+        return;
     }
 
 

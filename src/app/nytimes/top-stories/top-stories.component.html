@@ -16,8 +16,13 @@
                 on-click="getAllStoriesDotPipe()"
         >
             Get Stories (1.B. Dot Pipe)
+        </button> |
+        <button
+                mat-raised-button
+                on-click="clearAllStories()"
+        >
+            Clear (All) Stories
         </button>
-
     </div>
 
     <div>
@@ -37,7 +42,7 @@
     <hr />
     <div>
         <p>DOT PIPE BIZ *YES* async</p>
-        <ul>
+        <ul *ngIf="showDotPipe">
             <li *ngFor="let uno of myAllStoriesObservableInComponentDotPipe | async">
 <!--            <li *ngFor="let uno of [{title: 'fake', url: 'here'}]">-->
                 <div class="my-title">{{ uno.title }}</div>
