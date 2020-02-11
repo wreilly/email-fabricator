@@ -1,8 +1,68 @@
 <section
         class="my-book-reviews"
-        fxLayout
+        fxLayout="column"
         fxLayoutAlign="center"
+        fxLayoutGap="10px"
 >
-    <p>Book Reviews (forthcoming)</p>
+    <form
+            bind-formGroup="myFormGroup"
+            on-ngSubmit="myOnSubmitAuthor()"
+            fxLayout="column"
+            fxLayoutGap="20px"
+            fxFlex="50%"
+    >
+        <!-- fxFlex="400px" made it also 400px HIGH not so good -->
+        <mat-form-field>
+            <mat-label>
+                Label: Author First Name
+            </mat-label>
+            <input
+                    matInput
+                    formControlName="myFormControlAuthorFNameName"
+                    placeholder="first placeholder..."
+                    type="text" />
+
+            <mat-hint>
+                (cAse InsenSITIVe)
+            </mat-hint>
+            <mat-error>
+                Author first name is required, min length 2!
+            </mat-error>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>
+                Label: Author Last Name
+            </mat-label>
+            <input
+                    matInput
+                    formControlName="myFormControlAuthorLNameName"
+                    placeholder="last placeholder..."
+                    type="text" />
+
+            <mat-hint>
+                (cAse InsenSITIVe)
+            </mat-hint>
+            <mat-error>
+                Author last name is required, min length 2!
+            </mat-error>
+        </mat-form-field>
+        <button
+                mat-raised-button
+                type="submit"
+                bind-disabled="!myFormGroup.valid"
+        >
+            Submit Author
+        </button>
+    </form>
+    <div>
+        <ul>
+            <li
+                    *ngFor="let uno of myBookReviewsResults | async"
+            >
+                {{ uno.book_title}}
+
+            </li>
+        </ul>
+    </div>
 </section>
 

@@ -69,7 +69,7 @@ export class TopStoriesComponent implements OnInit, OnDestroy {
         this.myNYTimesService.getTopStories();
     }
 
-    getAllStoriesNoObservable() { // 1.A.
+    getAllStoriesNoObservable() { // 1.A. << ABANDONED
         // Fire, & await results!
         this.myAllStoriesNoObservableSubscription = this.myNYTimesService.getTopStoriesNoObservable();
     }

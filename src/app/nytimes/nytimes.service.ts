@@ -64,7 +64,8 @@ url: "https://www.nytimes.com/2020/02/06/us/puerto-rico-insurance-tsunami.html",
                 // YES. Array of results.
             }
         );
-    }
+    } // /getTopStories  (1.)
+
 
     // ABANDONED:    1.A. Get Top Stories, No Observable
     getTopStoriesNoObservable() {
@@ -77,7 +78,8 @@ url: "https://www.nytimes.com/2020/02/06/us/puerto-rico-insurance-tsunami.html",
                 return topStoriesWeGotJSON.results;
             }
         );
-    }
+    } // /1.A. Abandoned
+
 
     //     1.B. Get Top Stories, Dot Pipe
     getTopStoriesDotPipe(): Observable<any> {
