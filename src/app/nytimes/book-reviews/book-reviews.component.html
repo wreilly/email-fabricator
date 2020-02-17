@@ -4,6 +4,19 @@
         fxLayoutAlign="center"
         fxLayoutGap="10px"
 >
+    <p>==============</p>
+    <p>PlainBool spinner</p>
+    <mat-progress-spinner
+            *ngIf="myIsLoadingPlainBool"
+            mode="indeterminate"></mat-progress-spinner>
+    <hr>
+    <p>==============</p>
+    <p>ObservableInComponent$ spinner</p>
+    <mat-progress-spinner
+            *ngIf="myIsLoadingObservableInComponent$.value"
+            mode="indeterminate"></mat-progress-spinner>
+    <hr>
+    <p>==============</p>
     <form
             bind-formGroup="myFormGroup"
             on-ngSubmit="myOnSubmitAuthor()"
