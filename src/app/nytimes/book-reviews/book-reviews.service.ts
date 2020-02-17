@@ -50,6 +50,10 @@ export class BookReviewsService {
         console.log('this.getAuthorFNameLName() ', theFName + ' ' + theLName);
         const authorURLStub = 'https://api.nytimes.com/svc/books/v3/reviews.json?author=';
         const myKey = environment['nytimes-api-key-top-stories'];
+
+        console.log(`${authorURLStub}${theFName}%20${theLName}&api-key=${myKey}`);
+        console.log('WTF!');
+
         return this.myHttp.get(
             `${authorURLStub}${theFName}%20${theLName}&api-key=${myKey}`,
         ).pipe(
@@ -59,13 +63,16 @@ export class BookReviewsService {
                     // !!! N.B. Make 'whatWeGot' to be of type  : any, NOT the mere default : Object  Cheers.
 
                     console.log(whatWeGot);
-                    /* Yes
+                    /* Yes - whole Object
                     {status: "OK", copyright: "Copyright (c) 2020 The New York Times Company.
                     All Rights Reserved.", num_results: 4, results: Array(4)}
 status: "OK" ...
                      */
 
-                    return whatWeGot.results; // that desired ARRAY (of BookReviews objects)
+                    return whatWeGot; // The WHOLE object. NOT just that desired ARRAY (of BookReviews objects)
+/* NO. Short-sighted. We need OTHER info than just that array. */
+                    // return whatWeGot.results; // that desired ARRAY (of BookReviews objects)
+
                 }
             )
         ); // /.pipe()

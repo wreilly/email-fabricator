@@ -18,9 +18,19 @@ export class BookReviewsComponent implements OnInit {
   myAuthorFName: string;
   myAuthorLName: string;
 
-  myBookReviewsResults: Observable<any>;
+    // myBookReviewsResults: Observable<any>; // ENTIRE Object
+    myBookReviewsResults: Observable<{ status: string; copyright: string; num_results: number; results: []}>; // ENTIRE Object
+    myBookReviewResultsDataValuesHereInComponent: { status: string; copyright: string; num_results: number; results: []};
+
   // 01 - { status: "OK", ... results: [ {}, {} ] }
   // 02 - [ {}, {} ]
+  // myBookReviewsResultsArray: any; // The Array of Book Review {}s in that Object << NO. Needs to be an Observable, methinks.
+  // myBookReviewsResultsArray: []; // The Array of Book Review {}s in that Object << NO. Needs to be an Observable, methinks.
+
+
+  myBookReviewsResultsArrayObservable$; // << This turns out to be NOT an Observable. Just []
+    // TODO Rename myBookReviewsResultsArrayObservable$ to myBookReviewsResultsArraySimply (or something like that)
+  // : Observable<any>[]; // The Array of Book Review {}s in that Object
 
   // *******  IS LOADING *******
   // Working! (albeit humbly) :o)
@@ -52,7 +62,7 @@ export class BookReviewsComponent implements OnInit {
             Validators.required,
             Validators.minLength(2),
             ]
-    )
+    );
 
     this.myFormControlAuthorLName = new FormControl(
         '',
@@ -60,13 +70,28 @@ export class BookReviewsComponent implements OnInit {
           Validators.required,
           Validators.minLength(2),
         ]
-    )
+    );
 
     this.myFormGroup = new FormGroup({
       myFormControlAuthorFNameName: this.myFormControlAuthorFName,
       myFormControlAuthorLNameName: this.myFormControlAuthorLName
     });
 
+  }
+
+  myFAKEOnSubmitAuthor() { // FAKE
+      this.myBookReviewsResults = this.myBookReviewsService.getAuthorFNameLName(
+          'Annie',
+          'Dillard'
+/*
+          this.myAuthorFName,
+          this.myAuthorLName
+*/
+      ).pipe(
+          tap( // << Just pass through the desired results
+              (whatWeGot) => {
+                  console.log('whatWeGot by gumbo FAKE ', whatWeGot); // Yes [ {},
+              }));
   }
 
   myOnSubmitAuthor() {
@@ -82,13 +107,72 @@ export class BookReviewsComponent implements OnInit {
     Q. Why?
     A. To allow logic herein viz. isLoading
     */
+    // The ENTIRE Object (includes 'num_results')
     this.myBookReviewsResults = this.myBookReviewsService.getAuthorFNameLName(
         this.myAuthorFName,
         this.myAuthorLName
     ).pipe(
         tap( // << Just pass through the desired results
             (whatWeGot) => {
-              console.log(whatWeGot); // Yes [ {}, {} ]
+              console.log('whatWeGot by gumbo ', whatWeGot); // Yes [ {}, {} ]
+
+                // No. Seems to cause Service HTTP call to NOT get fired
+                // this.myBookReviewsResultsArray = whatWeGot.results; // whamma-jamma ?
+              this.myBookReviewsResultsArrayObservable$ = whatWeGot.results; // whamma-jamma ?
+              console.log('999 this.myBookReviewsResultsArrayObservable$ ', this.myBookReviewsResultsArrayObservable$);
+              // yep array (but NOT an Observable !!!)
+
+                /* 002
+
+                 */
+              this.myBookReviewResultsDataValuesHereInComponent = whatWeGot; // whamma-jamma ??
+
+                /* 001
+                Hmm. I just better defined the TYPE for 'myBookReviewResults' (above).
+                Now the property .num_results *IS* recognized (by the IDE) over on the TEMPLATE (via | async )
+                But - the property . num_results is still *NOT* recognized right here
+                in the Component TS:   Hmm.
+                Do I have to .subscribe() ??? to it herein, to get at the property? Oi.
+                 */
+                // this.myBookReviewsResults.num_results; // << ??
+                // console.log(this.myBookReviewsResults.num_results); // << ??
+
+
+/* NO. Caused Infinite Loop. sigh.
+              this.myBookReviewsResults.subscribe(
+*/
+                  /*
+                  INTERESTING.
+                  Apparently this .subscribe() above, within the .pipe(tap()),
+                  is causing a LOOP, INFINITE (sigh), and I wind up calling NYTimes API
+                  some 10 times in a row (till they kick me out).
+
+                  I'm sorta on the right track, that you need to .subscribe() to "get at"
+                  the Observable values, here in the TS Component. Bueno.
+                  Just doing it miserably wrong to do so here inside .pipe(tap()).
+
+                  Here is a note from S.O., on using .subscribe() like that:
+https://stackoverflow.com/questions/36803389/async-pipe-does-not-fill-object-data-into-template
+"It is probably easier to assign the object
+(that is inside the Observable, hero$ below) to a property of the component,
+using component logic:
+
+this._heroService.hero$.subscribe(data => this.hero = data.json());
+
+and then use NgIf or the Elvis/safe navigation operator to display the data in the view:
+
+<div *ngIf="hero">{{hero.name}}</div>
+ or
+<div>{{hero?.name}}</div>"
+                   */
+/* BOTTOM of our Infinite Loop-causing biz.
+                    (whatTheHell) => {
+                        console.log(whatTheHell);
+                        console.log(whatTheHell.num_results);
+                    }
+                ); // << ??
+*/
+
               // Fake that our (real) network call, took a whole 1 second (so we can see spinners!)
               setTimeout(() => {
                     this.myIsLoadingPlainBool = false;

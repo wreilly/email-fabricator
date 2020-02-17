@@ -67,12 +67,44 @@
             Submit Author
         </button>
     </form>
+    <div *ngIf="myBookReviewsResults">
+        <p>
+        <p>Author1: {{ myFormControlAuthorFName.value }} {{ myFormControlAuthorLName.value }}</p>
+        <p *ngIf="(myBookReviewsResults | async)?.results.length > 0">Author2: {{ (myBookReviewsResults | async)?.results[0].book_author }}</p>
+        <!-- TODO viz. ".book_author" being unrecognized by TS/WebStorm:
+               If/when you provide a better TYPE for the Book Review
+                that is in each Object in this Array, you'll get better
+                IDE TypeScript support here. -->
+
+        <!-- YES -->
+        <p>Results1: {{  (myBookReviewsResults | async)?.num_results }}</p>
+        <!-- YES but not needed -->
+<!--
+        <p>Results1.A.: {{ myBookReviewsResults ? (myBookReviewsResults | async)?.num_results : 0}}</p> &lt;!&ndash; 1.A. = Unnecessary '?' check, on this one w. Observable. Cheers &ndash;&gt;
+-->
+        <!-- YES -->
+        <p *ngIf="myBookReviewsResults | async as myThing">Results2: {{ myThing?.num_results }}</p>
+        <!-- YES -->
+            <p>Results3: {{ myBookReviewResultsDataValuesHereInComponent ? myBookReviewResultsDataValuesHereInComponent.num_results : 999 }}</p>
+<!--    Whoa. It worked. Results: 4
+        https://stackoverflow.com/questions/36803389/async-pipe-does-not-fill-object-data-into-template
+            "Objects are a bit tricky with the async pipe."
+            (see above Results 1, Results 2.
+            Results 3 is driven by another approach, from over in the Component .TS)
+            -->
+<!--  NO:       <p>Results: {{ myBookReviewsResults.num_results | async }}</p>-->
+    </div>
     <div>
         <ul>
             <li
-                    *ngFor="let uno of myBookReviewsResults | async"
-            >
+                    *ngFor="let uno of myBookReviewsResultsArrayObservable$">
+<!--   above is simply an Array, NOT observable. No use of async here.             | async "-->
+
                 {{ uno.book_title}}
+                <!-- TODO viz. ".book_title" being unrecognized by TS/WebStorm:
+                If/when you provide a better TYPE for the Book Review
+                 that is in each Object in this Array, you'll get better
+                 IDE TypeScript support here. -->
 
             </li>
         </ul>
