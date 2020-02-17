@@ -1,7 +1,9 @@
 <mat-nav-list role="navigation">
     <a
             mat-list-item
-            routerLink="/">
+            on-click="myCloseSidenav()"
+            routerLink="/"
+    >
         <mat-icon>
             face
         </mat-icon>
@@ -9,16 +11,27 @@
     </a>
     <a
             mat-list-item
-            routerLink="/fabricator">
+            on-click="myCloseSidenav()"
+            routerLink="/fabricator"
+    >
         <mat-icon>
             email
         </mat-icon>
         <span>Create!</span>
     </a>
+    <!-- On purpose: Variety
+    (below) A <mat-list-item> nesting an <a>,
+    rather than (above), an <a> with a mat-list-item
+    directive on it. Cheers.
+    -->
     <mat-list-item>
-        <a routerLink="/nytimes">
+        <a
+                on-click="myCloseSidenav()"
+                routerLink="/nytimes">
             <img src="../../../assets/nytimes-T.png" alt="NY Times" height="25px"> </a>
-        <a routerLink="/nytimes"><span>&nbsp; NY Times</span></a>
+        <a
+                on-click="myCloseSidenav()"
+                routerLink="/nytimes"><span>&nbsp; NY Times</span></a>
     </mat-list-item>
 </mat-nav-list>
 

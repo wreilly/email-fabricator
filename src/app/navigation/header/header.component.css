@@ -8,6 +8,10 @@
     font-size: 15px;
 }
 
+.navigation-items li p {
+    font-size: 12px;
+}
+
 .my-active {
     color: aqua;
 }

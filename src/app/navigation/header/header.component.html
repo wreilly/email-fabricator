@@ -1,4 +1,12 @@
 <mat-toolbar color="primary">
+    <div fxHide.gt-xs>
+        <button
+                mat-icon-button
+                on-click="myToggleMatSidenav()"
+        >
+            <mat-icon>menu</mat-icon>
+        </button>
+    </div>
     <div style="padding: 10px; margin-left: 10px; font-size: 18px;">
         <a
                 routerLink="/"
@@ -9,9 +17,29 @@
         </a>
     </div>
     <div
+            fxFlex
+            fxLayout
+            fxHide.xs
+    >
+        <ul
+                fxLayout
+                fxLayoutGap="10px"
+                class="navigation-items">
+            <li>
+                <p
+                        style="cursor: pointer"
+                        on-click="myToggleMatSidenav()"
+                >
+                    {{ myIsMatSidenavOpen ? 'Close' : 'Open' }} Sidenav
+                </p>
+            </li>
+        </ul>
+    </div>
+    <div
     fxFlex
     fxLayout
-    fxLayoutAlign="flex-end">
+    fxLayoutAlign="flex-end"
+    fxHide.xs>
         <ul
                 fxLayout
                 fxLayoutGap="10px"

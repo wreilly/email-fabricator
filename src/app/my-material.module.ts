@@ -14,6 +14,7 @@ https://stackoverflow.com/questions/50328751/angular-6-error-show-to-mat-form-fi
  */
     MatInputModule,
     MatButtonModule,
+    MatProgressSpinnerModule,
 } from '@angular/material';
 
 const myMaterialModulesImported = [
@@ -25,6 +26,7 @@ const myMaterialModulesImported = [
     // MatFormFieldModule, // Not needed: part of MatInputModule
     MatInputModule,
     MatButtonModule,
+    MatProgressSpinnerModule,
 ];
 
 @NgModule({

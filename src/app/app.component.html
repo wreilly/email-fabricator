@@ -2,15 +2,34 @@
   <mat-sidenav
           mode="side"
           role="navigation"
-          [opened]="myOpenedSidenav"
-  > <!-- <></>ODO hard-coded open, for now
+          ref-myMatSidenav_ref
+  > <!-- TODO hard-coded open, for now
+  WAS:           [opened]="myOpenedSidenav"
   https://material.angular.io/components/sidenav/overview#opening-and-closing-a-sidenav
+
+  mode="side" vs. "over" vs. "push"
+  https://material.angular.io/components/sidenav/overview#changing-the-sidenav-39-s-behavior
+
+
+  See also how done in project:
+  $ pwd
+/Users/william.reilly/dev/Angular/Udemy-AngularMaterial-MaxS/2019/WR__2/fitness-tracker-wr3
   -->
-    <app-sidenav-list></app-sidenav-list>
+    <app-sidenav-list
+            on-myToggleMatSidenavEventEmitterSidenavName="myMatSidenav_ref.toggle(); myTellPseudoEmitHeaderAboutSidenavToggle()"
+    ></app-sidenav-list>
   </mat-sidenav>
   <mat-sidenav-content>
     <div style="text-align: center">
-      <app-header></app-header>
+      <app-header
+      on-myToggleMatSidenavEventEmitterHeaderName="myMatSidenav_ref.toggle()"
+      [myIsMatSidenavOpenFromParent]="myIsMatSidenavOpenAppComponent"
+      ></app-header>
+      <!-- Thought to do following, on <app-header>, but NO:
+      on-myToggleMatSidenavEventEmitterSidenavName="myTellPseudoEmitHeaderAboutSidenavToggle()"
+
+      Event is not available on <app-header> etc. Sigh.
+      -->
     </div>
     <main>
       <router-outlet></router-outlet>
