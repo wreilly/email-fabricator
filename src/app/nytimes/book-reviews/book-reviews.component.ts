@@ -1,8 +1,46 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, NgForm, FormGroupDirective } from '@angular/forms';
+
+import { ErrorStateMatcher } from '@angular/material';
+// Above rare example of MaterialDesign item NOT in (shared) MyMaterialModule. Cheers.
+
 import { BookReviewsService } from './book-reviews.service';
-import {BehaviorSubject, Observable, Subject} from 'rxjs';
-import {map, tap} from 'rxjs/operators';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {tap} from 'rxjs/operators';
+
+export class MyErrorStateMatcherNotSubmitted implements ErrorStateMatcher {
+    isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
+        return !!(control && control.invalid && ( control.dirty || control.touched ));
+        // Here in My Custom we OMIT the form.isSubmitted (which is default)
+        // https://medium.com/better-programming/javascript-bang-bang-i-shot-you-down-use-of-double-bangs-in-javascript-7c9d94446054
+        // TL;DR "The !! (double bang) logical operators return a value’s truthy value."
+
+        // https://material.angular.io/components/input/overview#changing-when-error-messages-are-shown
+    }
+}
+
+interface MyBookReviewsResultsArray {
+    /* E.g.
+    book_author: "Annie Dillard"
+book_title: "For the Time Being"
+byline: "WENDY LESSER"
+isbn13: ["9780375403804"]
+publication_dt: "1999-03-28"
+summary: ""
+uri: "nyt://book/00000000-0000-0000-0000-000000000000"
+url: "http://www.nytimes.com/1999/03/28/books/deliver-us-from-evil.html"
+uuid: "00000000-0000-0000-0000-000000000000"
+     */
+    book_author: string;
+    book_title: string;
+    byline: string;
+    isbn13: string[];
+    publication_dt: string;
+    summary: string;
+    uri: string;
+    url: string;
+    uuid: string;
+}
 
 @Component({
   selector: 'app-book-reviews',
@@ -14,13 +52,25 @@ export class BookReviewsComponent implements OnInit {
   myFormControlAuthorFName: FormControl;
   myFormControlAuthorLName: FormControl;
   myFormGroup: FormGroup;
+  myVeryOwnErrorStateMatcherNotSubmitted: ErrorStateMatcher;
 
   myAuthorFName: string;
   myAuthorLName: string;
 
-    // myBookReviewsResults: Observable<any>; // ENTIRE Object
-    myBookReviewsResults: Observable<{ status: string; copyright: string; num_results: number; results: []}>; // ENTIRE Object
-    myBookReviewResultsDataValuesHereInComponent: { status: string; copyright: string; num_results: number; results: []};
+    // myBookReviewsResults$: Observable<any>; // ENTIRE Object
+    myBookReviewsResults$: Observable<{
+        status: string;
+        copyright: string;
+        num_results: number;
+        results: MyBookReviewsResultsArray[]
+    }>; // ENTIRE Object
+
+    myBookReviewResultsDataValuesHereInComponent: {
+        status: string;
+        copyright: string;
+        num_results: number;
+        results: MyBookReviewsResultsArray[]
+    };
 
   // 01 - { status: "OK", ... results: [ {}, {} ] }
   // 02 - [ {}, {} ]
@@ -28,8 +78,8 @@ export class BookReviewsComponent implements OnInit {
   // myBookReviewsResultsArray: []; // The Array of Book Review {}s in that Object << NO. Needs to be an Observable, methinks.
 
 
-  myBookReviewsResultsArrayObservable$; // << This turns out to be NOT an Observable. Just []
-    // TODO Rename myBookReviewsResultsArrayObservable$ to myBookReviewsResultsArraySimply (or something like that)
+  myBookReviewsResultsArraySimply: MyBookReviewsResultsArray[]; // << This turns out to be NOT an Observable. Just []
+    // TODONE ! :o) Rename myBookReviewsResultsArrayObservable$ to myBookReviewsResultsArraySimply (or something like that)
   // : Observable<any>[]; // The Array of Book Review {}s in that Object
 
   // *******  IS LOADING *******
@@ -77,21 +127,31 @@ export class BookReviewsComponent implements OnInit {
       myFormControlAuthorLNameName: this.myFormControlAuthorLName
     });
 
+    this.myVeryOwnErrorStateMatcherNotSubmitted = new MyErrorStateMatcherNotSubmitted();
+
   }
 
-  myFAKEOnSubmitAuthor() { // FAKE
-      this.myBookReviewsResults = this.myBookReviewsService.getAuthorFNameLName(
-          'Annie',
-          'Dillard'
-/*
-          this.myAuthorFName,
-          this.myAuthorLName
-*/
+  myOnSubmitAuthorAnnieDillard(fNameHardCoded, lNameHardCoded) {
+      this.myIsLoadingPlainBool = true;
+      this.myIsLoadingObservableInComponent$.next(true);
+      this.myBookReviewsResults$ = this.myBookReviewsService.getAuthorFNameLName(
+          fNameHardCoded,
+          lNameHardCoded
       ).pipe(
-          tap( // << Just pass through the desired results
-              (whatWeGot) => {
-                  console.log('whatWeGot by gumbo FAKE ', whatWeGot); // Yes [ {},
-              }));
+          tap(
+              (whatWeGotHardCoded) => {
+                  this.myBookReviewsResultsArraySimply = whatWeGotHardCoded.results;
+                  this.myBookReviewResultsDataValuesHereInComponent = whatWeGotHardCoded;
+                  setTimeout(
+                      () => {
+                          this.myIsLoadingPlainBool = false;
+                          this.myIsLoadingObservableInComponent$.next(false);
+                      }
+                      , 1000
+                  );
+              }
+          )
+      );
   }
 
   myOnSubmitAuthor() {
@@ -108,7 +168,7 @@ export class BookReviewsComponent implements OnInit {
     A. To allow logic herein viz. isLoading
     */
     // The ENTIRE Object (includes 'num_results')
-    this.myBookReviewsResults = this.myBookReviewsService.getAuthorFNameLName(
+    this.myBookReviewsResults$ = this.myBookReviewsService.getAuthorFNameLName(
         this.myAuthorFName,
         this.myAuthorLName
     ).pipe(
@@ -118,14 +178,14 @@ export class BookReviewsComponent implements OnInit {
 
                 // No. Seems to cause Service HTTP call to NOT get fired
                 // this.myBookReviewsResultsArray = whatWeGot.results; // whamma-jamma ?
-              this.myBookReviewsResultsArrayObservable$ = whatWeGot.results; // whamma-jamma ?
-              console.log('999 this.myBookReviewsResultsArrayObservable$ ', this.myBookReviewsResultsArrayObservable$);
+              this.myBookReviewsResultsArraySimply = whatWeGot.results; // whamma-jamma ? YEP
+              console.log('999 this.myBookReviewsResultsArraySimply ', this.myBookReviewsResultsArraySimply);
               // yep array (but NOT an Observable !!!)
 
                 /* 002
 
                  */
-              this.myBookReviewResultsDataValuesHereInComponent = whatWeGot; // whamma-jamma ??
+              this.myBookReviewResultsDataValuesHereInComponent = whatWeGot; // whamma-jamma ?? YEP
 
                 /* 001
                 Hmm. I just better defined the TYPE for 'myBookReviewResults' (above).
@@ -134,12 +194,12 @@ export class BookReviewsComponent implements OnInit {
                 in the Component TS:   Hmm.
                 Do I have to .subscribe() ??? to it herein, to get at the property? Oi.
                  */
-                // this.myBookReviewsResults.num_results; // << ??
-                // console.log(this.myBookReviewsResults.num_results); // << ??
+                // this.myBookReviewsResults$.num_results; // << ??
+                // console.log(this.myBookReviewsResults$.num_results); // << ??
 
 
 /* NO. Caused Infinite Loop. sigh.
-              this.myBookReviewsResults.subscribe(
+              this.myBookReviewsResults$.subscribe(
 */
                   /*
                   INTERESTING.
@@ -184,7 +244,7 @@ and then use NgIf or the Elvis/safe navigation operator to display the data in t
     );
 /* # 03 (I think?) YES worked. No .subscribe() here. Use | async in template. Cheers.
 
-    this.myBookReviewsResults = this.myBookReviewsService.getAuthorFNameLName(
+    this.myBookReviewsResults$ = this.myBookReviewsService.getAuthorFNameLName(
         this.myAuthorFName,
         this.myAuthorLName
     );
@@ -205,7 +265,7 @@ No, not right here:
           /!* Yes
           [{…}, {…}, {…}, {…}]
            *!/
-          this.myBookReviewsResults = whatWeGot;
+          this.myBookReviewsResults$ = whatWeGot;
         }
     );
 */
@@ -215,12 +275,26 @@ No, not right here:
         map(
             (whatWeGot) => {
               console.log('whatWeGot ', whatWeGot);
-              // this.myBookReviewsResults = whatWeGot;
+              // this.myBookReviewsResults$ = whatWeGot;
             }
         )
     );
 */
-  }
+
+    this.myResetForm();
+
+  } // /myOnSubmitAuthor()
+
+    myResetForm() {
+      this.myFormGroup.reset();
+      /* ErrorStateMatcher
+      Needed, because default is to call the Form INVALID if it HAS BEEN SUBMITTED.
+      Our state is just that - we just Submitted.
+      So we want to OMIT the "Submitted" test/requirement from our (custom) ErrorStateMatcher. Cheers.
+      https://material.angular.io/components/input/overview#changing-when-error-messages-are-shown
+
+       */
+    }
 
 
 

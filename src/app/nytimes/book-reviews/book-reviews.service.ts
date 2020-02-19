@@ -51,9 +51,6 @@ export class BookReviewsService {
         const authorURLStub = 'https://api.nytimes.com/svc/books/v3/reviews.json?author=';
         const myKey = environment['nytimes-api-key-top-stories'];
 
-        console.log(`${authorURLStub}${theFName}%20${theLName}&api-key=${myKey}`);
-        console.log('WTF!');
-
         return this.myHttp.get(
             `${authorURLStub}${theFName}%20${theLName}&api-key=${myKey}`,
         ).pipe(
@@ -70,7 +67,8 @@ status: "OK" ...
                      */
 
                     return whatWeGot; // The WHOLE object. NOT just that desired ARRAY (of BookReviews objects)
-/* NO. Short-sighted. We need OTHER info than just that array. */
+
+/* NO. Just ".results" is Short-sighted. We need OTHER info than just that array. */
                     // return whatWeGot.results; // that desired ARRAY (of BookReviews objects)
 
                 }
