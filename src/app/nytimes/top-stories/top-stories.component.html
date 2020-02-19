@@ -42,7 +42,9 @@
     <div>
         <p>DOT PIPE BIZ *YES* async</p>
         <ul *ngIf="showDotPipe">
-            <li *ngFor="let uno of myAllStoriesObservableInComponentDotPipe | async">
+            <li
+                    style="padding-bottom: 20px; list-style-type: none;"
+                    *ngFor="let uno of myAllStoriesObservableInComponentDotPipe | async">
 <!--            <li *ngFor="let uno of [{title: 'fake', url: 'here'}]">-->
                 <div class="my-title">{{ uno.title }}</div>
                 <div>

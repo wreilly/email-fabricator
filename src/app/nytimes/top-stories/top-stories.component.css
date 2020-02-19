@@ -3,9 +3,14 @@
     padding: 30px;
 }
 
+/* Now in top-most styles.css. Shared by book-reviews.component
 .my-title {
     font-size: larger;
 }
+*/
+
+/* Now in top-most styles.css. Shared by book-reviews.component
 .my-link-color {
     color: deepskyblue;
 }
+*/
