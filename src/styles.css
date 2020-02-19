@@ -32,3 +32,11 @@ Schema validation failed with the following errors:
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.my-link-color {
+    color: deepskyblue;
+}
+
+.my-title {
+    font-size: larger;
+}
