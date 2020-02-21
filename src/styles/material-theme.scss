@@ -1,0 +1,41 @@
+// https://grensesnittet.computas.com/dynamic-themes-in-angular-material/
+/*
+Copied from
+$ pwd
+/Users/william.reilly/dev/Angular/AngularMaterialDesign/eTallangDynamicThemes/from-scratch/wr-theme-dino
+
+ */
+
+@import '~@angular/material/theming'; // /_theming.scss
+
+/* Not Using Here
+@import './component-theme';
+*/
+
+@include mat-core();
+
+$primary: mat-palette($mat-indigo);
+$accent: mat-palette($mat-pink, A200, A100, A400);
+$warn: mat-palette($mat-red);
+
+$theme: mat-light-theme($primary, $accent, $warn);
+
+@include angular-material-theme($theme);
+/* Not Using Here
+@include component-theme($theme);
+*/
+
+
+// Our dark theme
+.dark-theme {
+  color: $light-primary-text;
+  $dark-primary: mat-palette($mat-yellow);
+  $dark-accent: mat-palette($mat-amber, A400, A100, A700);
+  $dark-warn: mat-palette($mat-red);
+  $dark-theme: mat-dark-theme($dark-primary, $dark-accent, $dark-warn);
+
+  @include angular-material-theme($dark-theme);
+  /* Not Using Here
+  @include component-theme($dark-theme);
+  */
+}

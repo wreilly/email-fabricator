@@ -26,9 +26,14 @@ Schema validation failed with the following errors:
 
  */
 /* YES: */
+/* OLDER: For Default Material Design */
 @import "~@angular/material/prebuilt-themes/pink-bluegrey.css";
 
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Pacifico');
+/* Above WAS in index.html */
 
+/* NEWER: For Dynamic Material Design */
+@import "./styles/material-theme.scss";
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

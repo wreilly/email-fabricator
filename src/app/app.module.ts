@@ -5,6 +5,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 // import { ReactiveFormsModule } from '@angular/forms'; // << Now in FabricatorModule; also NYTimesModule
 
 import { AppRoutingModule } from './app-routing.module';
+import { CoreModule } from './core/core.module';
 import { MyMaterialModule } from './my-material.module';
 import { FabricatorModule } from './fabricator/fabricator.module';
 import { NYTimesModule } from './nytimes/nytimes.module';
@@ -27,6 +28,7 @@ import {WelcomeComponent} from './welcome/welcome.component';
     BrowserAnimationsModule,
     FlexLayoutModule,
     // ReactiveFormsModule,
+    CoreModule,
     MyMaterialModule,
     FabricatorModule,
     NYTimesModule,

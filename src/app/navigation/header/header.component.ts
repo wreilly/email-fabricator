@@ -1,5 +1,7 @@
 import {Component, EventEmitter, Output, Input, OnInit} from '@angular/core';
 
+import { ThemeService } from '../../core/services/theme.service';
+
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -18,7 +20,9 @@ export class HeaderComponent implements OnInit {
 
   @Input() myIsMatSidenavOpenFromParent: boolean; // That madness you keep hearing about.
 
-  constructor() { }
+  constructor(
+      private myThemeService: ThemeService,
+  ) { }
 
   ngOnInit() {
   }
@@ -36,6 +40,10 @@ export class HeaderComponent implements OnInit {
     console.log('AFTER this.myIsMatSidenavOpen ', this.myIsMatSidenavOpen);
     console.log('AFTER this.myIsMatSidenavOpenFromParent ', this.myIsMatSidenavOpenFromParent);
     this.myToggleMatSidenavEventEmitterHeader.emit(null);
+  } // /myToggleMatSidenav()
+
+  myToggleTheme(lightOrDark) {
+    this.myThemeService.setTheme(lightOrDark);
   }
 
 }
