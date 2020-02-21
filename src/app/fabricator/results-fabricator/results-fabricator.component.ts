@@ -17,6 +17,7 @@ N.B. I did *not* use the seemingly appropriate (but in my estimation, not) 'ngx-
  */
 
 import { Papa } from 'ngx-papaparse'; // This DID need this 'ngx-' wrapper to get it to work in Angular (for me anyway)
+import { Clipboard } from '@angular/cdk/clipboard';
 
 @Component({
   selector: 'app-results-fabricator',
@@ -52,6 +53,10 @@ export class ResultsFabricatorComponent implements OnInit, OnDestroy {
         private mySaveAs: saveAs, // no. "saveAs refers to a value, but is being used as a type here" Hmm
 */
         private myPapaCSVParser: Papa,
+        private myClipboard: Clipboard,
+        /*
+        https://dev.to/angular/use-the-new-angular-clipboard-cdk-to-interact-with-the-clipboard-31o2
+         */
     ) { }
 
     ngOnInit() {
@@ -305,8 +310,31 @@ https://www.papaparse.com/docs#json-to-csv
         saveAs(new Blob([myStackOfStringsOfAddressesToSaveCSVArrayOfArrayOfStringsUnparsed03], {type: 'text'}), this.filenameToSaveCSV);
     }
 
-    myCopyToClipboard() {
+    myCopyToClipboard(whatIsToBeCopied) {
         // TODO
+        /*
+        https://dev.to/angular/use-the-new-angular-clipboard-cdk-to-interact-with-the-clipboard-31o2
+
+        Okay this is basically working, but, we are very simply using this
+        "Copy to Clipboard" to copy a class property value directly,
+        we are not using it to point to any particular template
+        element text content, nor input or textarea value etc.
+        The latter is what most/all of the online pages I found about this, show.
+
+        So - the raw class property value has no structure, no <ul><li> etc.
+        I need to put that in here in this copy function. See below.
+        INPUT
+        whatIsToBeCopied is simply myStackOfStringsOfAddressesToDisplayUlLiArray
+        And myStackOfStringsOfAddressesToDisplayUlLiArray is:
+
+
+        OUTPUT
+         */
+        console.log('whatIsToBeCopied ', whatIsToBeCopied);
+        this.myClipboard.copy(whatIsToBeCopied);
+/* WAS WORKING OK BUT.... trying something different, line above
+        return `${whatIsToBeCopied}`;
+*/
     }
 
     myClearResults() {
@@ -324,5 +352,9 @@ https://www.papaparse.com/docs#json-to-csv
     ngOnDestroy() {
 //        this.anyResultsYet = false; // not really needed, but hey
         this.mySimpleSubscription.unsubscribe();
+    }
+
+    runMyCopyToClipboard() {
+        this.myCopyToClipboard(this.myStackOfStringsOfAddressesToDisplayRaw);
     }
 }

@@ -25,3 +25,14 @@ Yeesh.
 .darken-font {
     color: black;
 }
+
+/*
+https://css-tricks.com/solved-with-css-colorizing-svg-backgrounds/
+Hmm. original SVG here was apparently 0,0,0 black
+Need to alter to something else (my arbitrary-ish fill is pink-ish)
+Then that wild brightness factor just blazes that pink all the way to white = what I wanted
+ */
+.lighten-svg {
+    fill: rgb(700,100,10);
+    filter: brightness(1000%);
+}

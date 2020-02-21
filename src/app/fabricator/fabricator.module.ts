@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {FlexLayoutModule} from '@angular/flex-layout';
-import { ReactiveFormsModule } from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 /* Hmm NAH:
 import { saveAs } from '../../../node_modules/file-saver/src/FileSaver';
@@ -44,6 +44,7 @@ import { ResultsFabricatorComponent } from './results-fabricator/results-fabrica
     // MatTabsModule, // << We bring in whole Material module instead
     MyMaterialModule,
     FlexLayoutModule,
+    FormsModule,
   ]
 })
 export class FabricatorModule { }

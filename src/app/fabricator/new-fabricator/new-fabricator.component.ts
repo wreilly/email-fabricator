@@ -329,21 +329,31 @@ let myStackOfStrings = ''
 myArray = Array(myNumberOfRows - myCounter).fill(null).map(() => `student-${myGroup}-${myCounter++}@hbsp.harvard.edu`)
 // About that NULL (in .fill())
 https://medium.com/@wisecobbler/4-ways-to-populate-an-array-in-javascript-836952aea79f
+*/
 
-myArray
-// tslint:disable-next-line:max-line-length
-["student-01-0@hbsp.harvard.edu", "student-01-1@hbsp.harvard.edu", "student-01-2@hbsp.harvard.edu", "student-01-3@hbsp.harvard.edu", "student-01-4@hbsp.harvard.edu", "student-01-5@hbsp.harvard.edu", "student-01-6@hbsp.harvard.edu", "student-01-7@hbsp.harvard.edu", "student-01-8@hbsp.harvard.edu", "student-01-9@hbsp.harvard.edu", "student-01-10@hbsp.harvard.edu", "student-01-11@hbsp.harvard.edu", "student-01-12@hbsp.harvard.edu", "student-01-13@hbsp.harvard.edu", "student-01-14@hbsp.harvard.edu", "student-01-15@hbsp.harvard.edu", "student-01-16@hbsp.harvard.edu", "student-01-17@hbsp.harvard.edu", "student-01-18@hbsp.harvard.edu", "student-01-19@hbsp.harvard.edu", "student-01-20@hbsp.harvard.edu", "student-01-21@hbsp.harvard.edu", "student-01-22@hbsp.harvard.edu", "student-01-23@hbsp.harvard.edu", "student-01-24@hbsp.harvard.edu"]
+/*myArray
 
-
+["student-01-0@hbsp.harvard.edu", "student-01-1@hbsp.harvard.edu",
+"student-01-2@hbsp.harvard.edu", "student-01-3@hbsp.harvard.edu",
+"student-01-4@hbsp.harvard.edu", "student-01-5@hbsp.harvard.edu", "student-01-6@hbsp.harvard.edu",
+"student-01-7@hbsp.harvard.edu", "student-01-8@hbsp.harvard.edu", "student-01-9@hbsp.harvard.edu",
+"student-01-10@hbsp.harvard.edu", "student-01-11@hbsp.harvard.edu",
+"student-01-12@hbsp.harvard.edu", "student-01-13@hbsp.harvard.edu",
+"student-01-14@hbsp.harvard.edu", "student-01-15@hbsp.harvard.edu", "student-01-16@hbsp.harvard.edu",
+"student-01-17@hbsp.harvard.edu", "student-01-18@hbsp.harvard.edu",
+"student-01-19@hbsp.harvard.edu", "student-01-20@hbsp.harvard.edu", "student-01-21@hbsp.harvard.edu",
+"student-01-22@hbsp.harvard.edu", "student-01-23@hbsp.harvard.edu", "student-01-24@hbsp.harvard.edu"]*/
+/*
 
 // Get all Strings out of Array, into a single comma-separated string
 
 myListOfStrings = myArray.toString()
 
-myListOfStrings
-"student-01-0@hbsp.harvard.edu,student-01-1@hbsp.harvard.edu,student-01-2@hbsp.harvard.edu,student-01-3@hbsp.harvard.edu,student-01-4@hbsp.harvard.edu,student-01-5@hbsp.harvard.edu,student-01-6@hbsp.harvard.edu,student-01-7@hbsp.harvard.edu,student-01-8@hbsp.harvard.edu,student-01-9@hbsp.harvard.edu,student-01-10@hbsp.harvard.edu,student-01-11@hbsp.harvard.edu,student-01-12@hbsp.harvard.edu,student-01-13@hbsp.harvard.edu,student-01-14@hbsp.harvard.edu,student-01-15@hbsp.harvard.edu,student-01-16@hbsp.harvard.edu,student-01-17@hbsp.harvard.edu,student-01-18@hbsp.harvard.edu,student-01-19@hbsp.harvard.edu,student-01-20@hbsp.harvard.edu,student-01-21@hbsp.harvard.edu,student-01-22@hbsp.harvard.edu,student-01-23@hbsp.harvard.edu,student-01-24@hbsp.harvard.edu"
+*/
 
 
+
+/*
 // Turn comma-separated LIST of Strings into carriage-return-separated STACK (as 'twere) of Strings, via RegEx:
 
 myStackOfStrings = myListOfStrings.replace(/(student-[0-9]+-[0-9]+@hbsp.harvard.edu),/g, '$1\n')
