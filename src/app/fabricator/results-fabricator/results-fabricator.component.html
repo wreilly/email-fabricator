@@ -40,9 +40,13 @@ student-33-1@hbsp.harvard.edu student-33-2@hbsp.harvard.edu student-33-3@hbsp.ha
             Clear Results
         </button>
     </div>
-    <div
-            *ngIf="myStackOfStringsOfAddressesToDisplayRaw && (myStackOfStringsOfAddressesToDisplayUlLiArray.length > 14)"
-    >
+    <div *ngIf="myStackOfStringsOfAddressesToDisplayRaw">
+<!-- This test for ' > 14 ' here was WRONG: (copy 'n pasta mis-cue!)
+
+        <div
+                *ngIf="myStackOfStringsOfAddressesToDisplayRaw && (myStackOfStringsOfAddressesToDisplayUlLiArray.length > 14)"
+        >
+-->
         <div class="lighten-background">
             <ul>
                 <li
