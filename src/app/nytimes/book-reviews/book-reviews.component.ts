@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, NgForm, FormGroupDirective } from '@angular/forms';
 
-import { ErrorStateMatcher } from '@angular/material';
+import { ErrorStateMatcher } from '@angular/material/core';
 // Above rare example of MaterialDesign item NOT in (shared) MyMaterialModule. Cheers.
 
 import { BookReviewsService } from './book-reviews.service';

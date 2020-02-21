@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
 
 import { FabricatorService } from '../fabricator.service';
 
-import {ErrorStateMatcher} from '@angular/material'; // MatInput property
+import { ErrorStateMatcher } from '@angular/material/core'; // MatInput property
 /*
 Example above where v. specific Material Design best imported
 just here in Component where used,
