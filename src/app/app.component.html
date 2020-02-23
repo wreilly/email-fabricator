@@ -1,33 +1,28 @@
 <div [ngClass]="{'dark-theme': isThemeDarkInApp}">
 
-
 <mat-sidenav-container>
   <mat-sidenav
           mode="side"
           role="navigation"
           ref-myMatSidenav_ref
-  > <!-- TODOnolongerToDo hard-coded open, for now
-  WAS:           [opened]="myOpenedSidenav"
-  https://material.angular.io/components/sidenav/overview#opening-and-closing-a-sidenav
+  > <!--
+    https://material.angular.io/components/sidenav/overview#opening-and-closing-a-sidenav
 
   mode="side" vs. "over" vs. "push"
   https://material.angular.io/components/sidenav/overview#changing-the-sidenav-39-s-behavior
 
-
-  See also how done in project:
-  $ pwd
+  See also how done in project:  $ pwd
 /Users/william.reilly/dev/Angular/Udemy-AngularMaterial-MaxS/2019/WR__2/fitness-tracker-wr3
   -->
     <app-sidenav-list
-            on-myToggleMatSidenavEventEmitterSidenavName="myMatSidenav_ref.toggle(); myTellPseudoEmitHeaderAboutSidenavToggle()"
+            on-myToggleMatSidenavEventEmitterSidenavName="myMatSidenav_ref.toggle(); myTellStoreAboutSidenavToggle()"
     ></app-sidenav-list>
   </mat-sidenav>
   <mat-sidenav-content>
     <div style="text-align: center">
       <app-header
-      on-myToggleMatSidenavEventEmitterHeaderName="myMatSidenav_ref.toggle(); myTellPseudoEmitHeaderAboutSidenavToggle(); myTellStoreAboutSidenavToggle()"
-      [myIsMatSidenavOpenFromParent]="myIsMatSidenavOpenAppComponent"
-      [oLaFromParent]="isSidenavOpenInApp$ | async"
+      on-myToggleMatSidenavEventEmitterHeaderName="myMatSidenav_ref.toggle(); myTellStoreAboutSidenavToggle()"
+      [myIsMatSidenavOpenFromParent]="isSidenavOpenInApp$ | async"
       ></app-header>
       <!-- Thought to do following, on <app-header>, but NO:
       on-myToggleMatSidenavEventEmitterSidenavName="myTellPseudoEmitHeaderAboutSidenavToggle()"

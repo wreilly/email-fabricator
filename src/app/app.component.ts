@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ThemeService} from './core/services/theme.service';
-import {Observable, Subject} from 'rxjs';
+import {Observable, Subject, Subscription} from 'rxjs';
 import * as UIActions from './shared/ui.actions';
-// import * as fromUI from './shared/ui.reducer'; // seemingly NO.
+// NO: import * as fromUI from './shared/ui.reducer'; // seemingly NO.
 import * as fromRoot from './app.reducer'; // ? instead of fromUI ? yes tink so
 import { Store } from '@ngrx/store';
 
@@ -13,12 +13,8 @@ import { Store } from '@ngrx/store';
 })
 export class AppComponent implements OnInit {
   title = 'email-fabricator';
-  // myOpenedSidenav = true; // TODONOPE hard-coded open for now
-  myIsMatSidenavOpenAppComponent = false; // wtf etc >> true; // << Surprise. when you first get exposed to this, it is actually TRUE
-  // = false; // : boolean; // = true; // TODO w-i-p (bit mad)
-  // https://material.angular.io/components/sidenav/overview#opening-and-closing-a-sidenav
 
-/* No. Here in App it's just a Boolean, not an Observable.
+/* No. Here in App it's just a Boolean, not an Observable nor Subject.
   private isThemeDarkInApp$: Subject<boolean>;
 
   On Init() we .subscribe() to an Observable,
@@ -26,13 +22,14 @@ export class AppComponent implements OnInit {
   that arrives here we just consume the boolean
   value - no longer handle as observable.
 */
-  public isThemeDarkInApp: boolean; // << Don't have this 'private' (!)
+  public isThemeDarkInApp: boolean; // << public. Don't have this 'private' (!)
 
-  isSidenavOpenInApp$: Observable<boolean>; // ?
-  isSidenavOpenInApp: boolean; // ?
+  // https://material.angular.io/components/sidenav/overview#opening-and-closing-a-sidenav
+  isSidenavOpenInApp$: Observable<boolean>; // YES
 
   ngOnInit(): void {
     // TODO Auth Service initAuthListener, later ....
+
     this.myThemeService.isThemeDarkInServicePublic$
         .subscribe(
         (lightOrDark) => {
@@ -40,52 +37,47 @@ export class AppComponent implements OnInit {
         }
     );
 
-    // Moved ( ? ) from ngOnInit() (too late?) to constructor() ( ? )
-    // Seems to be okay in either... I'll leave in ngOnInit() for now...
-    // this.isSidenavOpenInApp$ = this.myStore.select(fromUI.getIsSidenavOpen); // << No. (Why not?)
+    // this.isSidenavOpenInApp$ = this.myStore.select(fromUI.getIsSidenavOpen); // << No. (hmm)
+    // this.isSidenavOpenInApp$ = this.myStore.select(fromRoot.getIsSidenavOpen); // << No. (Why not?)
     this.isSidenavOpenInApp$ = this.myStore.select(stateWeGot => stateWeGot.ui.sidenavIsOpen); // << YES. "Hallelujah!"
-  }
+
+  } // /ngOnInit()
 
   constructor(
       private myThemeService: ThemeService,
-      // private myStore: Store<fromUI.MyState>,
+      // private myStore: Store<fromUI.MyState>, // No. (Why not?)
       private myStore: Store<fromRoot.MyOverallState>,
   ) {
-/* Yeah. Sorta. 01 anyway; not 02
+
+    // This code does nothing; just exploring how to get at value in Observable.
+/* Yeah. Sorta. 01 anyway; 02 only appears first time. sigh. */
+/*
     myStore.select(
         (stateWeGot) => {
-          console.log('01 constructor. stateWeGot ', stateWeGot); // ?
-          /!*
-          { ui: { sidenavIsOpen: false } }
+          console.log('01 constructor. stateWeGot ', stateWeGot); // yes:
+          /!* Yes:
+          { ui: { sidenavIsOpen: false } }   (or, true)
            *!/
+          return stateWeGot; // << kinda important !!!
         }).subscribe((stateWeGotNested) => {
-      console.log('02 constructor. stateWeGotNested ', stateWeGotNested); // ? undefined
-    });*/
-
-    myStore.select(stateWeGot => stateWeGot.ui.sidenavIsOpen).subscribe(stateWeGotNested => {
-      console.log('02 constructor. stateWeGotNested ', stateWeGotNested); // Finally got false !  ? undefined
+      console.log('02 constructor. stateWeGotNested ', stateWeGotNested); // ? { ui: { sidenavIsOpen: false } } << 1st time only
     });
-
-    // Moved ( ? ) from ngOnInit() (too late?) to constructor() ( ? )
-    // Seems to be okay in either... I'll leave up in ngOnInit() for now...
-    // this.isSidenavOpenInApp$ = this.myStore.select(fromRoot.getIsSidenavOpen); // << No. (Why not?)
-    // this.isSidenavOpenInApp$ = this.myStore.select(stateWeGot => stateWeGot.ui.sidenavIsOpen); // << YES. "Hallelujah!"
-  }
-
-  myTellPseudoEmitHeaderAboutSidenavToggle() { // MO' MADNESS (METHINKS)
-    console.log('pseudo!');
-/*
-    console.log('BEFORE this.myIsMatSidenavOpenAppComponent ', this.myIsMatSidenavOpenAppComponent);
-    this.myIsMatSidenavOpenAppComponent = !this.myIsMatSidenavOpenAppComponent; // !?
-    console.log('AFTER this.myIsMatSidenavOpenAppComponent ', this.myIsMatSidenavOpenAppComponent);
 */
+
+    // This code does nothing; just exploring how to get at value in Observable.
+    myStore.select(stateWeGot => stateWeGot.ui.sidenavIsOpen).subscribe(stateWeGotNested => {
+      console.log('03 constructor. stateWeGotNested ', stateWeGotNested); // Yes false / true
+    });
+    /*
+    Above emulates AppComponent code in:
+    https://medium.com/@holtkam2/angular-ngrx-store-understanding-the-data-flow-28566a2d6b4b
+     */
+
   }
 
   myTellStoreAboutSidenavToggle() {
-    console.log('BEFORE what does Store have ?');
-    console.log(this.isSidenavOpenInApp$);
+    console.log('this.isSidenavOpenInApp$ : ', this.isSidenavOpenInApp$); // Store object ... (!)
     this.myStore.dispatch(new UIActions.SetSidenavToOppositeState());
-    console.log('AFTER what does Store have ?');
   }
 
 }

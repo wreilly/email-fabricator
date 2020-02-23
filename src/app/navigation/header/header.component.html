@@ -28,16 +28,9 @@
             <li>
                 <p
                         style="cursor: pointer"
-                        on-click="myToggleMatSidenavNew()"
+                        on-click="myToggleMatSidenav()"
                 >
-                    NEWER  {{ oLaFromParent ? 'Close' : 'Open' }} Sidenav
-                </p>
-            </li>            <li>
-                <p
-                        style="cursor: pointer"
-                        on-click="myToggleMatSidenavNew()"
-                >
-                  NEW  {{ ( myIsSidenavOpenInHeader$ | async) ? 'Close' : 'Open' }} Sidenav
+                    {{ myIsMatSidenavOpenFromParent ? 'Close' : 'Open' }} Sidenav
                 </p>
             </li>
             <li>
@@ -45,10 +38,9 @@
                         style="cursor: pointer"
                         on-click="myToggleMatSidenav()"
                 >
-                  OLD  {{ myIsMatSidenavOpen ? 'Close' : 'Open' }} Sidenav
+                    {{ (myIsSidenavOpenInHeader$ | async) ? 'Close' : 'Open' }} 22 Sidenav
                 </p>
-            </li>
-        </ul>
+            </li>        </ul>
     </div>
     <div
     fxFlex
@@ -59,13 +51,6 @@
                 fxLayout
                 fxLayoutGap="10px"
                 class="navigation-items">
-            <!-- fxLayoutGap="10px"
-            "StaticInjectorError(Platform: core)[DefaultLayoutGapDirective -> StyleUtils]:
-    NullInjectorError: No provider for StyleUtils!"
-    Oi!
-    Wrong (too new) version of Flexy-poo
-        "@angular/flex-layout": "^9.0.0-beta.28",
-            -->
             <li>
                 <a
                         routerLink="/fabricator"

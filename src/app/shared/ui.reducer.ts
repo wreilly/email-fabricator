@@ -25,8 +25,7 @@ export function UIReducer(state = myInitialState,
                     state.sidenavIsOpen = true;
                 }
             }
-            return state; // ?
-            // return state.sidenavIsOpen; // ? seems not
+            return state;
 
         default:
             return state;
@@ -39,5 +38,4 @@ export const getIsSidenavOpen = (statePassedIn: MyState) => {
     {sidenavIsOpen: false}
      */
     return statePassedIn.sidenavIsOpen; // ?
-    // return statePassedIn; // ? << no; needs to be just the boolean. okay
 };

@@ -14,6 +14,8 @@ In **previous** project I'd quit it, and (sorta) concluded that:
         current status, to then dispatch the
         opposite action. Seems to defeat purpose
         of easy-to-use "toggle", no?"
+        As noted in UIReducer:
+        // "WR__ Dreadful pseudo-toggle if/else code. Yish."
 
 Googling finds me an example I think is making use of toggle idea: (we shall see)
 https://gist.github.com/btroncone/a6e4347326749f938510
