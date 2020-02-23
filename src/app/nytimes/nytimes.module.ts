@@ -1,9 +1,10 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common'; // << MUST HAVE! (Routing failed, without. Yeesh!)
+import { SharedModule } from '../shared/shared.module';
+// import { CommonModule } from '@angular/common'; // << MUST HAVE! (Routing failed, without. Yeesh!) // << SharedModule now
 import { HttpClientModule } from '@angular/common/http';
-import { ReactiveFormsModule } from '@angular/forms';
-import { FlexLayoutModule } from '@angular/flex-layout';
-import { MyMaterialModule } from '../my-material.module';
+// import { ReactiveFormsModule } from '@angular/forms'; // << SharedModule now
+// import { FlexLayoutModule } from '@angular/flex-layout'; // << SharedModule now
+// import { MyMaterialModule } from '../my-material.module'; // << SharedModule now
 import { NYTimesRoutingModule } from './nytimes-routing.module';
 
 import { NYTimesComponent } from './nytimes.component';
@@ -17,11 +18,12 @@ import { BookReviewsComponent } from './book-reviews/book-reviews.component';
         BookReviewsComponent,
     ],
     imports: [
-        CommonModule,
+        SharedModule,
+        // CommonModule, // << SharedModule now
         HttpClientModule,
-        ReactiveFormsModule,
-        FlexLayoutModule,
-        MyMaterialModule,
+        // ReactiveFormsModule, // << SharedModule now
+        // FlexLayoutModule, // << SharedModule now
+        // MyMaterialModule, // << SharedModule now
         NYTimesRoutingModule,
     ],
     // exports: [

@@ -1,12 +1,18 @@
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule } from '@angular/platform-browser'; // super-set over CommonModule, fwiw
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { FlexLayoutModule } from '@angular/flex-layout';
-// import { ReactiveFormsModule } from '@angular/forms'; // << Now in FabricatorModule; also NYTimesModule
+import { SharedModule } from './shared/shared.module'; // << Need to bring into top-most App Module, too!
+
+// import { FlexLayoutModule } from '@angular/flex-layout'; // << Now in SharedModule
+// import { MyMaterialModule } from './my-material.module'; // << Now in SharedModule
+
+// import { ReactiveFormsModule } from '@angular/forms'; // << Now in SharedModule
+// earlier: << Now in FabricatorModule; also NYTimesModule
 
 import { AppRoutingModule } from './app-routing.module';
 import { CoreModule } from './core/core.module';
-import { MyMaterialModule } from './my-material.module';
+
+
 import { FabricatorModule } from './fabricator/fabricator.module';
 import { NYTimesModule } from './nytimes/nytimes.module';
 
@@ -26,14 +32,15 @@ import {WelcomeComponent} from './welcome/welcome.component';
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    FlexLayoutModule,
-    // ReactiveFormsModule,
+    SharedModule,
+    // FlexLayoutModule, // << SharedModule
+    // ReactiveFormsModule, // << SharedModule
     CoreModule,
-    MyMaterialModule,
+    // MyMaterialModule, // << SharedModule
     FabricatorModule,
     NYTimesModule,
   ],
-  providers: [],
+  providers: [], // << None. From CoreModule (for (singleton) Services)
   bootstrap: [AppComponent]
 })
 export class AppModule { }
