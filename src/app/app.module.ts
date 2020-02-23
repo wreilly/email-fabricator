@@ -9,6 +9,12 @@ import { SharedModule } from './shared/shared.module'; // << Need to bring into 
 // import { ReactiveFormsModule } from '@angular/forms'; // << Now in SharedModule
 // earlier: << Now in FabricatorModule; also NYTimesModule
 
+import { StoreModule } from '@ngrx/store';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { reducers } from './app.reducer';
+
+import { environment } from '../environments/environment';
+
 import { AppRoutingModule } from './app-routing.module';
 import { CoreModule } from './core/core.module';
 
@@ -32,6 +38,12 @@ import {WelcomeComponent} from './welcome/welcome.component';
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    StoreModule.forRoot(reducers),
+    // https://blog.angular-university.io/angular-ngrx-devtools/
+    !environment.production ? StoreDevtoolsModule.instrument({
+      maxAge: 10
+    }) : [], // 03 hmm ?
+
     SharedModule,
     // FlexLayoutModule, // << SharedModule
     // ReactiveFormsModule, // << SharedModule

@@ -25,8 +25,9 @@
   <mat-sidenav-content>
     <div style="text-align: center">
       <app-header
-      on-myToggleMatSidenavEventEmitterHeaderName="myMatSidenav_ref.toggle()"
+      on-myToggleMatSidenavEventEmitterHeaderName="myMatSidenav_ref.toggle(); myTellPseudoEmitHeaderAboutSidenavToggle(); myTellStoreAboutSidenavToggle()"
       [myIsMatSidenavOpenFromParent]="myIsMatSidenavOpenAppComponent"
+      [oLaFromParent]="isSidenavOpenInApp$ | async"
       ></app-header>
       <!-- Thought to do following, on <app-header>, but NO:
       on-myToggleMatSidenavEventEmitterSidenavName="myTellPseudoEmitHeaderAboutSidenavToggle()"

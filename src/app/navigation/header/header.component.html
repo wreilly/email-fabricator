@@ -28,9 +28,24 @@
             <li>
                 <p
                         style="cursor: pointer"
+                        on-click="myToggleMatSidenavNew()"
+                >
+                    NEWER  {{ oLaFromParent ? 'Close' : 'Open' }} Sidenav
+                </p>
+            </li>            <li>
+                <p
+                        style="cursor: pointer"
+                        on-click="myToggleMatSidenavNew()"
+                >
+                  NEW  {{ ( myIsSidenavOpenInHeader$ | async) ? 'Close' : 'Open' }} Sidenav
+                </p>
+            </li>
+            <li>
+                <p
+                        style="cursor: pointer"
                         on-click="myToggleMatSidenav()"
                 >
-                    {{ myIsMatSidenavOpen ? 'Close' : 'Open' }} Sidenav
+                  OLD  {{ myIsMatSidenavOpen ? 'Close' : 'Open' }} Sidenav
                 </p>
             </li>
         </ul>
