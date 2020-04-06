@@ -26,21 +26,20 @@
                 fxLayoutGap="10px"
                 class="navigation-items">
             <li>
-                <p
-                        style="cursor: pointer"
+                <div
+                        style="cursor: pointer; font-size: xx-small"
                         on-click="myToggleMatSidenav()"
                 >
-                    {{ myIsMatSidenavOpenFromParent ? 'Close' : 'Open' }} Sidenav
-                </p>
+                    {{ myIsMatSidenavOpenFromParent ? 'Close' : 'Open' }} Sidenav <span style="font-size: smaller">(from App)</span>
+                </div>
+                <div
+                        style="cursor: pointer; font-size: xx-small"
+                        on-click="myToggleMatSidenav()"
+                >
+                    {{ (myIsSidenavOpenInHeader$ | async) ? 'Close' : 'Open' }} Sidenav <span style="font-size: smaller">(from Header)</span>
+                </div>
             </li>
-            <li>
-                <p
-                        style="cursor: pointer"
-                        on-click="myToggleMatSidenav()"
-                >
-                    {{ (myIsSidenavOpenInHeader$ | async) ? 'Close' : 'Open' }} 22 Sidenav
-                </p>
-            </li>        </ul>
+        </ul>
     </div>
     <div
     fxFlex
