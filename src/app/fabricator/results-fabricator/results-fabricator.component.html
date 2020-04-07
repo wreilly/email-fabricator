@@ -1,4 +1,4 @@
-<section center>
+<section> <!-- Nope: that 'center' attribute didn't belong here. -->
     <!-- N.B. Do NOT use fxLayout="center center" here.
     You wind up w 3 adjacent columns: top buttons, results, bottom buttons. Nope! -->
 
@@ -124,7 +124,7 @@ https://stackoverflow.com/questions/35378087/how-to-use-ngmodel-on-divs-contente
 -->
         <div class="lighten-background">
             <ul>
-                <li>WR__ here?</li>
+<!--            <li>WR__ here?</li>-->
                 <li
                         *ngFor="let oneAddress of myStackOfStringsOfAddressesToDisplayUlLiArray"
                         class="darken-font"

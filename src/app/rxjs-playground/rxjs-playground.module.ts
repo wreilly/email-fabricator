@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+// import { CommonModule } from '@angular/common'; // from SHARED instead
+import { SharedModule } from '../shared/shared.module';
 
 import { RxjsPlaygroundComponent } from './rxjs-playground.component';
 import { RxjsPlaygroundRoutingModule } from './rxjs-playground-routing.module';
@@ -9,7 +10,8 @@ import { RxjsPlaygroundRoutingModule } from './rxjs-playground-routing.module';
       RxjsPlaygroundComponent,
   ],
   imports: [
-    CommonModule,
+    SharedModule,
+    // CommonModule,
     RxjsPlaygroundRoutingModule,
   ],
   exports: [
