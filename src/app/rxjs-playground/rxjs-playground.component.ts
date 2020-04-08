@@ -1,6 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import {BehaviorSubject, Subject, Subscription} from 'rxjs';
 
+// https://ultimatecourses.com/learn/rxjs-masterclass
+
 @Component({
   selector: 'app-rxjs-playground',
   templateUrl: './rxjs-playground.component.html',
@@ -9,6 +11,7 @@ import {BehaviorSubject, Subject, Subscription} from 'rxjs';
 export class RxjsPlaygroundComponent implements OnInit, OnDestroy {
 
     somethingToShow: string;
+    somethingBehaviorToShow: string;
 
 /*
 I *think* (~MBU~) we do *not* want Subject, BehaviorSubject
@@ -26,6 +29,7 @@ A. We need to reference those Subscription(s) down in ngOnDestroy()
 */
     mySubscriptionOne: Subscription;
     mySubscriptionTwo: Subscription;
+    myBehaviorSubscriptionOne: Subscription;
 
     constructor() { }
 
@@ -48,6 +52,11 @@ A. We need to reference those Subscription(s) down in ngOnDestroy()
 
         const myBehaviorSubjectOne = new BehaviorSubject('that first bit of Behavior string');
 
+        this.myBehaviorSubscriptionOne = myBehaviorSubjectOne.subscribe((observerFromBehaviorSubjectWeGot) => {
+            console.log('observerFromBehaviorSubjectWeGot ', observerFromBehaviorSubjectWeGot);
+            this.somethingBehaviorToShow = observerFromBehaviorSubjectWeGot; // << Yep. 'that first bit of Behavior string'
+        })
+
         this.mySubscriptionTwo = mySubjectOne.subscribe(
             (observerTwoWeGot: string) => {
                 console.log('observerTwoWeGot ', observerTwoWeGot);
@@ -57,9 +66,19 @@ A. We need to reference those Subscription(s) down in ngOnDestroy()
         mySubjectOne.next('a SECOND bit of string');
 
         setTimeout(() => {
-            console.log('myBehaviorSubjectOne.getValue(): ', myBehaviorSubjectOne.getValue());
+            console.log('myBehaviorSubjectOne.getValue(): ', myBehaviorSubjectOne.getValue()); // << Yep.
+            // 'that first bit of Behavior string'
+
             this.somethingToShow = myBehaviorSubjectOne.getValue();
-        }, 3000);
+            /* NOTE
+            Use of .getValue() off of BehaviorSubject not such great idea. That is synchronous, kinda anti-pattern for RxJS.
+            Consider operator like "WithLatestFrom()" instead.
+            "Master / Slave"
+            https://scotch.io/tutorials/rxjs-operators-for-dummies-forkjoin-zip-combinelatest-withlatestfrom
+            #toc-withlatestfrom-the-master-slave-operator
+
+             */
+        }, 2000);
 
     }
 
@@ -69,6 +88,9 @@ A. We need to reference those Subscription(s) down in ngOnDestroy()
         }
         if (this.mySubscriptionTwo) {
             this.mySubscriptionTwo.unsubscribe();
+        }
+        if (this.myBehaviorSubscriptionOne) {
+            this.myBehaviorSubscriptionOne.unsubscribe();
         }
     }
 }
