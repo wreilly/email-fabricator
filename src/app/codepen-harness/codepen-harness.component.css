@@ -1,4 +1,7 @@
-.my-codepen-harness {
-    /* As seen in NYTimes subsection... */
-    padding: 30px;
+/*
+for codepen-harness SVG
+*/
+svg {
+    display: block;
+    fill: #0ebeff;
 }
