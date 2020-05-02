@@ -16,6 +16,46 @@ class="my-postpen"-->
         <span><img src="../../../assets/AWS_Lambda_logo.svg.png" height="50px"></span>
     </div>
 
+    <section class="containerX"
+             style="width: 100%;"
+    >
+    <section class="containerX"
+             fxLayout="column"
+             fxLayoutAlign="center center"
+             fxLayoutGap="20px"
+             fxFlex="200px"
+             fxFlexOffset="{{myOffsetForPseudoCenteringCalculation}}"
+    >
+        <mat-card
+                fxFlex="1 1 auto">
+            <mat-card-title>Title 01 you know</mat-card-title>
+            <mat-card-content class="wr--mat-card-content">
+                <p>AA0011 POST FORM About to make you a self with THIS MUCH INCHES (whoa): {{ myHeightFormControl.value }}</p>
+            </mat-card-content>
+        </mat-card>
+        <mat-card
+                fxFlex="0 1 auto"
+        >
+            <!-- https://stackoverflow.com/questions/46331933/card-header-background-color-on-angular2-materials
+            -->
+            <mat-card-content [ngClass]="{'wr--mat-card-content':true}">AA POST FORM About to make you a self with THIS MUCH INCHES (whoa): {{ myHeightFormControl.value }}
+            </mat-card-content>
+        </mat-card>
+        <mat-card
+                fxFlex="1 1 auto"
+
+        >
+            <!-- https://stackoverflow.com/questions/46331933/card-header-background-color-on-angular2-materials
+            -->
+            <mat-card-content [ngClass]="{'wr--mat-card-content':true}">BB POST FORM About to make you a self with THIS MUCH INCHES (whoa): {{ myHeightFormControl.value }}
+            </mat-card-content>
+        </mat-card>
+    </section>
+    </section>
+
+    <section class="containerX"
+             style="width: 100%;"
+    >
     <form
             bind-formGroup="myCyuFormGroup"
             on-ngSubmit="mySendIt()">
@@ -46,9 +86,11 @@ class="my-postpen"-->
 
         <section class="containerX"
                 fxLayout="column"
-                fxLayoutAlign="center"
+                fxLayoutAlign="center center"
                 fxLayoutGap="20px"
-                fxFlex="100px"
+
+                 fxFlex="{{myHardCodedFxFlexWidth}}px"
+                 fxFlexOffset="{{myOffsetForPseudoCenteringCalculation}}"
         >
         <mat-form-field>
             <mat-label>Age Label</mat-label>
@@ -95,7 +137,7 @@ class="my-postpen"-->
         </button>
         </section>
     </form>
-
+    </section>
 
 <!--    <hr/>-->
     <!--        https://github.com/angular/flex-layout/wiki/Responsive-API
@@ -109,37 +151,7 @@ class="my-postpen"-->
         <p>02 testing language here is fine but the times that you think of what to say is really strange so watch out I ask you.</p>
     </div>
 -->
-    <section class="containerX"
-            fxLayout="column"
-            fxLayoutAlign="center"
-            fxLayoutGap="20px"
-            fxFlex="200px"
-    >
-        <mat-card
-        fxFlex="1 1 auto">
-            <mat-card-title>Title 01 you know</mat-card-title>
-            <mat-card-content class="wr--mat-card-content">
-                <p>AA0011 POST FORM About to make you a self with THIS MUCH INCHES (whoa): {{ myHeightFormControl.value }}</p>
-            </mat-card-content>
-        </mat-card>
-        <mat-card
-                fxFlex="0 1 auto"
-        >
-            <!-- https://stackoverflow.com/questions/46331933/card-header-background-color-on-angular2-materials
-            -->
-            <mat-card-content [ngClass]="{'wr--mat-card-content':true}">AA POST FORM About to make you a self with THIS MUCH INCHES (whoa): {{ myHeightFormControl.value }}
-            </mat-card-content>
-        </mat-card>
-        <mat-card
-                fxFlex="1 1 auto"
 
-        >
-            <!-- https://stackoverflow.com/questions/46331933/card-header-background-color-on-angular2-materials
-            -->
-            <mat-card-content [ngClass]="{'wr--mat-card-content':true}">BB POST FORM About to make you a self with THIS MUCH INCHES (whoa): {{ myHeightFormControl.value }}
-            </mat-card-content>
-        </mat-card>
-    </section>
 <!--
     <div
             fxFlex="50px"

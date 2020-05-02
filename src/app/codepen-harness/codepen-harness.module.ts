@@ -6,6 +6,9 @@ import { FormsModule } from '@angular/forms';
 // I use ReactiveForms everywhere else; "Layout Align" demo needs plain Forms. MBU.
 
 import { CodepenHarnessRoutingModule } from './codepen-harness-routing.module';
+
+import { CodepenHarnessService } from './codepen-harness.service';
+
 import { CodepenHarnessComponent } from './codepen-harness.component';
 import { PostpenComponent } from './postpen/postpen.component';
 import { FlexLayoutComponent } from './flex-layout/flex-layout.component';
@@ -25,6 +28,9 @@ import { FlexBbComponent } from './flex-bb/flex-bb.component';
     // CommonModule,
     FormsModule,
     CodepenHarnessRoutingModule,
-  ]
+  ],
+  providers: [
+      CodepenHarnessService,
+  ],
 })
 export class CodepenHarnessModule { }
