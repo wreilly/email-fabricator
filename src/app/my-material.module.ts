@@ -10,6 +10,8 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { ClipboardModule } from '@angular/cdk/clipboard'; // << 1st time from CDK
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatCardModule } from '@angular/material/card';
+import { MatRadioModule } from '@angular/material/radio';
 
 // MatFormFieldModule, // seems it is needed ?
 /* WHEN I get MatInputModule into this, I'll no longer need MatFormFieldModule. Cheers.
@@ -31,6 +33,8 @@ const myMaterialModulesImported = [
     MatProgressSpinnerModule,
     ClipboardModule,
     MatSlideToggleModule,
+    MatCardModule,
+    MatRadioModule,
 ];
 
 @NgModule({

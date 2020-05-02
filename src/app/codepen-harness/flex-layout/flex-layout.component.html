@@ -1,0 +1,272 @@
+<div
+        fxLayout="column"
+        fxLayoutAlign="center center"
+        fxLayoutGap="10px"
+>
+<!--
+https://tburleson-layouts-demos.firebaseapp.com/#/stackoverflow
+-->
+    <!--
+    https://codinglatte.com/posts/angular/angular-flex-layout-introduction/
+    https://codinglatte.com/posts/angular/responsive-app-angular-flex-layout/
+    https://codinglatte.com/posts/angular/wrapper-responsive-design-angular-flex-layouts/
+    https://codinglatte.com/posts/angular/adaptive-layout-design-angular-flex-layout/
+    https://codinglatte.com/posts/angular/responsive-navbar-angular-flex-layout/
+
+    -->
+    <div
+            fxLayout="row"
+            fxLayoutAlign="center center"
+            fxLayoutGap="10px"
+    >
+        <span><img src="../../../assets/flex-layout-demo-alligator.png" height="50px" /></span>
+        <p><i>Postpen</i> - FlexLayout with Angular Material Design</p>
+        <span><img src="../../../assets/material.png" height="50px" /></span>
+    </div>
+    <!-- *****  SAND-BOX 01  ******************* -->
+    <p>*****  SAND-BOX 01 *******************</p>
+
+    <mat-card class="card-demo">
+        <mat-card-title>Layout Children with 'layout-align'</mat-card-title>
+        <mat-card-subtitle><a href="https://tburleson-layouts-demos.firebaseapp.com/#/docs" target="_blank">Source</a></mat-card-subtitle>
+        <mat-card-content>
+            <div class="containerX">
+     <div class="colorNested box" style="height: 400px;">
+<!--                <div class="colorNested box" [class.taller]="options.direction != 'row'">-->
+<!-- ISSUE 01 - .taller is height: 300px;
+Without it, when "column", container box remains only 200px tall, not tall enough to properly contain all 5 boxes o well.
+Note: ISSUE 01 is independent of ISSUE 02. -->
+
+                    <div [fxLayout]="options.direction" [fxLayoutAlign]="layoutAlign()" style="height: 100%;">
+         <!-- ISSUE 02 - "height: 100%;" is needed. Without it, when "column", all the radio-button controls fail for main-axis! No 'center' nor 'space-between' etc. None of them.
+Note: (as noted above) ISSUE 02 is independent of ISSUE 01.  -->
+<!--                    <div [fxLayout]="options.direction" [fxLayoutAlign]="layoutAlign()">-->
+                        <!--
+                          options = {
+                             direction :  'row',
+                             mainAxis  : 'space-around',
+                             crossAxis :  'center'
+                           };
+                        -->
+                        <div class="blocks one">1</div>
+<!-- Some Global CSS re: this page: /src/styles.scss
+.blocks {
+    min-width: 75px; // << ALL 5 BOXES MIN-SIZES....
+    min-height: 50px;
+    border-radius: 3px;
+}
+div.colored > div:nth-child(10n+1), .one {
+    background-color: #009688;
+}
+.two_h {
+    min-height: 100px; // << BOX 2 and BOX 4 GET SPECIAL (LARGER) MIN-SIZES
+}
+.two_w {
+    min-width: 125px;
+}
+-->
+
+                        <div class="blocks" [class.two_h]="options.direction == 'row'"
+                             [class.two_w]="options.direction != 'row'">2
+                        </div>
+                        <div class="blocks three">3</div>
+                        <div class="blocks" [class.four_h]="options.direction == 'row'"  [class.four_w]="options.direction != 'row'">4</div>
+<!--                        https://github.com/angular/flex-layout/wiki/fxFlex-API-->
+                        <div class="blocks" fxFlex="2 1 auto">e.g. fxFlex="2 1 auto" - 000001 4 is a nice number it goes into 8 very neatly and sometimes is good for playing bridge or golf or even pickup basketball y not sez I - 000002 4 is a nice number it goes into 8 very neatly and sometimes is good for playing bridge or golf or even pickup basketball y not sez I - 000003 4 is a nice number it goes into 8 very neatly and sometimes is good for playing bridge or golf or even pickup basketball y not sez I - 000004 4 is a nice number it goes into 8 very neatly and sometimes is good for playing bridge or golf or even pickup basketball y not sez I - 000005 4 is a nice number it goes into 8 very neatly and sometimes is good for playing bridge or golf or even pickup basketball y not sez I - 000006 4 is a nice number it goes into 8 very neatly and sometimes is good for playing bridge or golf or even pickup basketball y not sez I
+                        </div>
+                        <div class="blocks fives">5</div>
+                    </div>
+                </div>
+            </div>
+        </mat-card-content>
+        <mat-card-actions fxLayout="row" fxLayoutAlign="center" fxHide.gt-sm="false" fxHide.lt-sm="true">
+            <form fxLayout="row" fxLayout.xs="column" fxLayoutAlign="space-around stretch"
+                  class="demo_controls">
+                <div>
+                    <div>Layout Direction</div>
+                    <mat-radio-group [(ngModel)]="options.direction" name="direction" fxLayout="column">
+                        <mat-radio-button value="row">row</mat-radio-button>
+                        <mat-radio-button value="column">column</mat-radio-button>
+                    </mat-radio-group>
+                </div>
+                <div>
+                    <div>Alignment in Layout Direction
+                        ({{options.direction == 'row' ? 'horizontal' : 'vertical'}})
+                    </div>
+                    <mat-radio-group [(ngModel)]="options.mainAxis" name="mainAxis" fxLayout="column">
+                        <mat-radio-button value="">none</mat-radio-button>
+                        <mat-radio-button value="start">start (default)</mat-radio-button>
+                        <mat-radio-button value="center">center</mat-radio-button>
+                        <mat-radio-button value="end">end</mat-radio-button>
+                        <mat-radio-button value="space-around">space-around</mat-radio-button>
+                        <mat-radio-button value="space-between">space-between</mat-radio-button>
+                        <mat-radio-button value="space-evenly">space-evenly</mat-radio-button>
+                    </mat-radio-group>
+                </div>
+                <div>
+                    <div>Alignment in Perpendicular Direction
+                        ({{options.direction == 'column' ? 'horizontal' : 'vertical'}})
+                    </div>
+                    <mat-radio-group [(ngModel)]="options.crossAxis" name="crossAxis" fxLayout="column">
+                        <mat-radio-button value="none"><em>none</em></mat-radio-button>
+                        <mat-radio-button value="start">start</mat-radio-button>
+                        <mat-radio-button value="center">center</mat-radio-button>
+                        <mat-radio-button value="end">end</mat-radio-button>
+                        <mat-radio-button value="stretch">stretch (default)</mat-radio-button>
+                    </mat-radio-group>
+                </div>
+            </form>
+        </mat-card-actions>
+        <mat-card-footer style="width:95%;">
+            <div class="hint forceAbove" style="padding-left:50px;">
+                &lt;div fxLayout="{{ options.direction }}"
+                <span style="padding-left: 30px">fxLayoutAlign="{{ layoutAlign() }}"</span>
+                &gt;
+            </div>
+        </mat-card-footer>
+    </mat-card>
+
+
+    <p>*****  /SAND-BOX 01 *******************</p>
+    <!-- *****  /SAND-BOX 01  ******************* -->
+
+    <p>*****  SAND-BOX 02 *******************</p>
+<!-- JSFIDDLE - worked, but doesn't really use a LOT of flex-layout !!! ( ? ) MBU. Just some box sizing on [fxFlex] values.
+-->
+    <mat-card class="card-demo">
+        <mat-card-title><a href="http://jsfiddle.net/tndgvkfq/" target="_blank">JsFiddle</a>
+        </mat-card-title>
+        <mat-card-subtitle>
+            Grid with column spans calculated using
+            '<span style="color: #333333">flex: &lt;grow&gt; &lt;shrink&gt; calc(&lt;...&gt;);</span>'
+            expressions.
+        </mat-card-subtitle>
+        <mat-card-content>
+            <div class="containerX">
+                <div class="container">
+                    <div>flex: 1 1 5em;</div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+                <div class="container">
+                    <div></div>
+                    <div [fxFlex]="calc2Cols"> flex: 2 2 calc(10em + 10px);</div>
+                    <div></div>
+                </div>
+                <div class="container">
+                    <div [fxFlex]="calc2Cols"> flex: 2 2 calc(10em + 10px);</div>
+                    <div></div>
+                    <div></div>
+                </div>
+                <div class="container">
+                    <div></div>
+                    <div></div>
+                    <div [fxFlex]="calc2Cols"> flex: 2 2 calc(10em + 10px);</div>
+                </div>
+                <div class="container">
+                    <div [fxFlex]="calc3Cols" class="col3"> flex: 3 3 calc(15em + 20px);</div>
+                    <div></div>
+                </div>
+                <div class="container">
+                    <div></div>
+                    <div [fxFlex]="calc3Cols" class="col3"> flex: 3 3 calc(15em + 20px);</div>
+                </div>
+            </div>
+        </mat-card-content>
+        <mat-card-footer class="bottomPad">
+            <div class="hint">Note: each cell has 'margin-left:10px' so the 'calc( )' expressions must
+                account for those.
+            </div>
+        </mat-card-footer>
+    </mat-card>
+
+<!-- -->
+    <p>*****  /SAND-BOX 02 *******************</p>
+<!--
+    <div
+            fxLayout="center"
+            fxLayoutAlign="column"
+
+    >
+        <mat-card
+                fxFlex="25"
+        >
+            <mat-card-content [ngClass]="{'wr&#45;&#45;mat-card-content':true}">AA POST FORM About to make you a self with THIS MUCH INCHES (whoa)
+            </mat-card-content>
+        </mat-card>
+        <mat-card
+                fxFlex="40"
+        >
+            <mat-card-content [ngClass]="{'wr&#45;&#45;mat-card-content':true}">BB POST FORM About to make you a self with THIS MUCH INCHES (whoa):
+            </mat-card-content>
+        </mat-card>
+    </div>
+-->
+<!--
+    <div
+            fxLayout
+            fxLayoutAlign
+            fxLayout.xs="column"
+            fxLayoutGap="10px"
+            fxFlex
+    >
+        <mat-card fxFlex="25%" fxFlexOffset="50px">
+            <mat-card-content>01 POST FORM About to make you a self with THIS MUCH INCHES (whoa):
+            </mat-card-content>
+        </mat-card>
+        <mat-card fxFlex="25%">
+            <mat-card-content>01.5 Shotty
+            </mat-card-content>
+        </mat-card>
+        <mat-card fxFlex>
+            <mat-card-content>02 POST FORM About to make you a self with THIS MUCH DOLLARS (whoa):
+            </mat-card-content>
+        </mat-card>
+    </div>
+    <div fxLayout>
+        <div>just more stuff</div>
+    </div>
+-->
+
+
+
+</div>
+
+
+
+
+<!--  **************************************************************
+
+SVG in CHROME ==>> FAILING
+
+  Very frustrating. Stupid. It is 2020 after all. WTF.
+  Worked in Firefox.
+
+Yeah, yeah, .PNG as fallback:
+-->
+<!--
+        <span><img src="../../../assets/FlexLayoutsAngular.png" height="100px" /></span>
+-->
+<!-- No        <span><img src="../../../assets/material.svg" alt=""></span>
+https://github.com/jonathantneal/svg4everybody
+-->
+<!--        <svg><use href="../../../assets/material.svg" /></svg>-->
+<!--
+<p>1</p>        <object data="../../../assets/material.svg" type="image/svg+xml"></object>
+<p>2</p>        <object data="/assets/material.svg" type="image/svg+xml"></object>
+<p>3</p>        <embed src="../../../assets/material.svg" type="image/svg+xml">
+-->
+<!--
+<p>4</p>        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 179.2 192.7"><defs><style>.cls-1{fill:#ffa726;}.cls-2{fill:#fb8c00;}.cls-3{fill:#ffe0b2;}.cls-4{fill:#fff3e0;}.cls-5{fill:#fff;}</style></defs><title>material</title><g id="Layer_2" data-name="Layer 2"><g id="Layer_1-2" data-name="Layer 1"><polygon class="cls-1" points="89.4 0 89.4 0 89.4 0 0 32 13.5 150.4 89.4 192.7 89.4 192.7 89.4 192.7 165.4 150.4 179.2 32 89.4 0"/><polygon class="cls-2" points="89.4 0 89.4 21.4 89.4 21.4 89.4 118.7 89.4 118.7 89.4 192.7 89.4 192.7 165.4 150.4 179.2 32 89.4 0"/><polygon class="cls-3" points="102.9 146.3 39.6 115.8 75.9 93.4 139.6 124 102.9 146.3"/><polygon class="cls-4" points="102.9 122.8 39.6 92.2 75.9 69.9 139.6 100.5 102.9 122.8"/><polygon class="cls-5" points="102.9 99.3 39.6 68.7 75.9 46.3 139.6 76.9 102.9 99.3"/></g></g></svg>
+-->
+<!-- Firefox: YES. Chrome: NO  :o(
+
+    https://stackoverflow.com/questions/10737166/chrome-not-rendering-svg-referenced-via-img-tag
+    <div id="ObjectTag">
+        <object type="image/svg+xml" data="https://upload.wikimedia.org/wikipedia/commons/b/bd/Test.svg" width="400" height="600">
+            Your browser does not support SVG.
+        </object>
+    </div>
+    <div class="BackgroundImage"></div>
+-->

@@ -1,0 +1,91 @@
+/*.BackgroundImage {*/
+/*    background: url('https://upload.wikimedia.org/wikipedia/commons/b/bd/Test.svg') no-repeat scroll left top;*/
+/*    width: 400px;*/
+/*    height: 600px;*/
+/*}*/
+
+.wr--mat-card-content {
+    background-color: coral;
+    white-space: normal;
+
+}
+/*
+    width: 100px;
+ */
+
+/* JSFIDDLE */
+.containerX {
+    padding: 5px;
+    border: solid 1px #b6b6b6;
+    box-sizing: content-box !important;
+}
+
+.card-demo mat-card,
+.card-demo mat-card-content {
+    margin-bottom: 24px;
+}
+
+.card-demo mat-card-footer {
+    left: 24px;
+    margin-bottom: 24px;
+}
+
+div.container {
+    display: flex;
+    margin-bottom: 10px;
+    color: white;
+}
+
+.container div[ng-reflect-flex*=calc] {
+    color: #343434;
+    background-color: #8bc34a;
+}
+
+.container div.col3 {
+    background-color: #009682;
+    color: white;
+}
+
+div.container > div {
+    flex: 1 1 5em;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    background-color: #03a9f4;
+    margin-left: 10px;
+    height: 50px;
+    padding-left: 10px;
+    padding-top: 10px;
+}
+
+div.container > div:first-child {
+    margin-left: 0;
+}
+
+/* LAYOUT ALIGN */
+.hint {
+    margin: 5px;
+    font-size: 0.9em;
+    color: #a3a3a3;
+}
+
+mat-radio-group {
+    padding-top: 15px;
+}
+
+.demo_controls {
+    width: 100%;
+    height: 200px;
+    margin-bottom: 25px;
+}
+
+.demo_controls > div {
+    padding-top: 15px;
+    color: #6c6c6c;
+}
+
+.demo {
+    margin-bottom: 60px;
+}

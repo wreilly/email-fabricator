@@ -2,3 +2,30 @@
     /* As seen in NYTimes subsection... */
     padding: 30px;
 }
+.wr--mat-card-content {
+    background-color: aquamarine;
+    white-space: normal;
+
+}
+.containerX {
+    padding: 5px;
+    border: solid 1px #b6b6b6;
+    box-sizing: content-box !important;
+}
+/*
+https://www.w3schools.com/cssref/tryit.asp?filename=trycss_text_white-space
+
+p.a {
+  white-space: nowrap;
+}
+
+p.b {
+  white-space: normal;
+}
+
+p.c {
+  white-space: pre;
+}
+
+    width: 100px;
+ */

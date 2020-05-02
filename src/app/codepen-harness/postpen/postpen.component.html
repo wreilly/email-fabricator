@@ -1,13 +1,157 @@
-<section
-        class="my-postpen"
+<div
         fxLayout="column"
-        fxLayoutAlign="center"
+        fxLayoutAlign="center center"
         fxLayoutGap="10px"
 >
-    <p>postpen API for AWS works</p>
+<!--
+fxFlexFill
+class="my-postpen"-->
+    <div
+            fxFlex="300px"
+            fxLayout="row"
+            fxLayoutGap="20px">
+        <span><img src="../../../assets/aws-api-gateway.png" height="50px"></span>
+        <p><i>Postpen</i> - API Gateway to AWS Lambda</p>
+<!--        <p>seventy-six trombones led the big parade</p>-->
+        <span><img src="../../../assets/AWS_Lambda_logo.svg.png" height="50px"></span>
+    </div>
 
+    <form
+            bind-formGroup="myCyuFormGroup"
+            on-ngSubmit="mySendIt()">
+        <!-- fxFlex="400px" << Just to get it to be a MINIMUM WIDTH. O la.
+        https://github.com/angular/flex-layout/wiki/Declarative-API-Overview#api-for-any-element
+
+                    fxLayoutAlign="stretch"
+        -->
+
+<!-- O la. Finding. ("Re"-finding, oughta be.)
+1. With just a FormControl (no FormGroup), yes, you gotta BIND- it. Okay.
+2. When the FormControl is IN a FormGroup, no, no BIND- of the Control. Just BIND- the Group. Ok? Ok.
+
+1. FormControl ALONE
+        <input type="text"
+        bind-formControl="myAgeFormControl"> // << Yes
+        <input type="text"
+        bind-formControl="myAgeFormControlName"> // << NO
+
+2. FormControl IN FORMGROUP
+        <input type="text"
+        bind-formControlName="myAgeFormControlName"> // << NO. No "binding" needed
+        <input type="text"
+        formControlName="myAgeFormControlName"> // << Yes. :)
+        <input type="text"
+        bind-formControl="myAgeFormControl"> // << Hmm. No IDE complaint. But, in FormGroup, no need to bind. Doubtless bad idea to bind. cheers.
+-->
+
+        <section class="containerX"
+                fxLayout="column"
+                fxLayoutAlign="center"
+                fxLayoutGap="20px"
+                fxFlex="100px"
+        >
+        <mat-form-field>
+            <mat-label>Age Label</mat-label>
+            <input 
+                    matInput
+                    type="number"
+                   formControlName="myAgeFormControlName">
+            <mat-hint>Age Hint (not zero plz)</mat-hint>
+            <mat-error>Age Error wassup w the zero?</mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Height Label</mat-label>
+            <input
+                    matInput
+                    type="number"
+                    formControlName="myHeightFormControlName">
+            <mat-hint>Height Hint (not zero plz)</mat-hint>
+            <mat-error>Height Error wassup w the zero?</mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Income Label</mat-label>
+            <input
+                    matInput
+                    type="number"
+                    formControlName="myIncomeFormControlName">
+            <mat-hint>Income Hint (not zero plz)</mat-hint>
+            <mat-error>Income Error wassup w the zero?</mat-error>
+        </mat-form-field>
+
+        <mat-card>
+            <mat-card-header>Header hey</mat-card-header>
+            <mat-card-content class="wr--mat-card-content">
+                <p>IN FORM About to make you a self with THIS MUCH YEARS (whoa): {{ myAgeFormControl.value }} so there</p>
+            </mat-card-content>
+        </mat-card>
+
+        <button
+                class="mat-raised-button"
+                type="submit"
+                bind-disabled="!myCyuFormGroup.valid">
+            Submit Button
+        </button>
+        </section>
+    </form>
+
+
+<!--    <hr/>-->
+    <!--        https://github.com/angular/flex-layout/wiki/Responsive-API
+    *ngIf="myIncomeFormControl.value > 0"
+    fxFlex.gt-sm="50%"
+    fxFlex="20"
+    -->
+<!--
+    <div style="width: 120px;">
+        <p>01 testing language here is fine but the times that you think of what to say is really strange so watch out I ask you.</p>
+        <p>02 testing language here is fine but the times that you think of what to say is really strange so watch out I ask you.</p>
+    </div>
+-->
+    <section class="containerX"
+            fxLayout="column"
+            fxLayoutAlign="center"
+            fxLayoutGap="20px"
+            fxFlex="200px"
+    >
+        <mat-card
+        fxFlex="1 1 auto">
+            <mat-card-title>Title 01 you know</mat-card-title>
+            <mat-card-content class="wr--mat-card-content">
+                <p>AA0011 POST FORM About to make you a self with THIS MUCH INCHES (whoa): {{ myHeightFormControl.value }}</p>
+            </mat-card-content>
+        </mat-card>
+        <mat-card
+                fxFlex="0 1 auto"
+        >
+            <!-- https://stackoverflow.com/questions/46331933/card-header-background-color-on-angular2-materials
+            -->
+            <mat-card-content [ngClass]="{'wr--mat-card-content':true}">AA POST FORM About to make you a self with THIS MUCH INCHES (whoa): {{ myHeightFormControl.value }}
+            </mat-card-content>
+        </mat-card>
+        <mat-card
+                fxFlex="1 1 auto"
+
+        >
+            <!-- https://stackoverflow.com/questions/46331933/card-header-background-color-on-angular2-materials
+            -->
+            <mat-card-content [ngClass]="{'wr--mat-card-content':true}">BB POST FORM About to make you a self with THIS MUCH INCHES (whoa): {{ myHeightFormControl.value }}
+            </mat-card-content>
+        </mat-card>
+    </section>
+<!--
+    <div
+            fxFlex="50px"
+            class="mat-body-strong"
+    >POST FORM About to make you a self with THIS MUCH MONEY (whoa): {{ myIncomeFormControl.value }}</div>
+-->
+
+
+<!-- Worked. Superseded by 'submit' button in form.
     <button
             class="mat-raised-button"
             on-click="mySendIt()"
-    >send it</button>
-</section>
+    >on-click Send it</button>
+-->
+</div>

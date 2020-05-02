@@ -1,0 +1,192 @@
+<!--<section class="containerX"
+        fxLayout="column"
+        fxLayoutAlign="center center"
+        fxFlex="400px"
+        fxLayoutGap="10px"
+>
+    <mat-card>
+        <mat-card-title>Title 01ab you know</mat-card-title>
+        <mat-card-content class="wr&#45;&#45;mat-card-content">
+            <p>AA0011 POST FORM About to make you a self with THIS MUCH INCHES (whoa):</p>
+        </mat-card-content>
+    </mat-card>
+    <mat-card
+
+    >
+        &lt;!&ndash; https://stackoverflow.com/questions/46331933/card-header-background-color-on-angular2-materials
+        &ndash;&gt;
+        <mat-card-content [ngClass]="{'wr&#45;&#45;mat-card-content':true}">AA POST FORM About to make you a self with THIS MUCH INCHES (whoa):
+        </mat-card-content>
+    </mat-card>
+    <mat-card
+
+
+    >
+        &lt;!&ndash; https://stackoverflow.com/questions/46331933/card-header-background-color-on-angular2-materials
+        &ndash;&gt;
+        <mat-card-content [ngClass]="{'wr&#45;&#45;mat-card-content':true}">BB POST FORM About to make you a self with THIS MUCH INCHES (whoa):
+        </mat-card-content>
+    </mat-card>
+</section>-->
+<!-- class="card-demo"-->
+
+<!--
+<section class="containerX"
+         fxLayout="column"
+         fxLayoutAlign="center"
+         fxLayoutGap="20px"
+         fxFlex="200px"
+>
+    <mat-card
+            fxFlex="1 1 auto">
+        <mat-card-title>Title 01 you know</mat-card-title>
+        <mat-card-content class="wr&#45;&#45;mat-card-content">
+            <p>AA0011 POST FORM About to make you a self with THIS MUCH INCHES (whoa):</p>
+        </mat-card-content>
+    </mat-card>
+    <mat-card
+            fxFlex="0 1 auto"
+    >
+        <mat-card-content [ngClass]="{'wr&#45;&#45;mat-card-content':true}">AA POST FORM About to make you a self with THIS MUCH INCHES (whoa):
+        </mat-card-content>
+    </mat-card>
+    <mat-card
+            fxFlex="1 1 auto"
+
+    >
+        <mat-card-content [ngClass]="{'wr&#45;&#45;mat-card-content':true}">BB POST FORM About to make you a self with THIS MUCH INCHES (whoa):
+        </mat-card-content>
+    </mat-card>
+</section>
+-->
+
+
+
+
+
+<section class="containerX"
+fxLayout="column">
+
+    <p>********  SAND BOX 01  ***************</p>
+<mat-card class="card-demo">
+    <mat-card-title><a href="" target="_blank">Layout Gap</a></mat-card-title>
+    <mat-card-subtitle>Using 'fxLayoutGap' to create a grid-like layout
+    </mat-card-subtitle>
+    <mat-card-content class="large">
+        <div fxFlexFill>
+            <div fxFlexFill
+                 [fxLayout]="direction01 + ' wrap'"
+                 fxLayoutGap="10px grid"
+                 style="cursor: pointer;"
+                 (click)="toggleDirection01()">
+                <div fxFlex="25">
+                    <div class="one" fxFlexFill fxLayoutAlign="center center">
+                        A
+                    </div>
+                </div>
+                <div fxFlex="25">
+                    <div class="two" fxFlexFill fxLayoutAlign="center center">
+                        B
+                    </div>
+                </div>
+                <div fxFlex="25">
+                    <div class="three" fxFlexFill fxLayoutAlign="center center">
+                        C
+                    </div>
+                </div>
+                <div fxFlex="25">
+                    <div class="four" fxFlexFill fxLayoutAlign="center center">
+                        D
+                    </div>
+                </div>
+                <div fxFlex="25">
+                    <div class="five" fxFlexFill fxLayoutAlign="center center">
+                        E
+                    </div>
+                </div>
+                <div fxFlex="25">
+                    <div class="six" fxFlexFill fxLayoutAlign="center center">
+                        F
+                    </div>
+                </div>
+                <div fxFlex="25">
+                    <div class="seven" fxFlexFill fxLayoutAlign="center center">
+                        G
+                    </div>
+                </div>
+            </div>
+        </div>
+    </mat-card-content>
+    <mat-card-footer class="bottomPad">
+        <div class="hint"></div>
+    </mat-card-footer>
+</mat-card>
+
+<p>********  /SAND BOX 01  ****************</p>
+
+
+<p>********  SAND BOX 02  ****************</p>
+<section class="containerX"
+         fxLayout="column"
+         fxLayoutAlign="center"
+         fxFlex
+         fxLayoutGap="20px"
+>
+<section
+        class="containerX"
+        fxLayout="row"
+        fxLayoutAlign="center"
+        fxFlex
+        fxLayoutGap="20px">
+
+<mat-card>
+    <mat-card-title><a
+            href="http://stackoverflow.com/questions/37039029/flex-css-rowspan-2-and-colspan-2"
+            target="_blank">StackOverflow</a> flex-aa12 works!</mat-card-title>
+    <mat-card-subtitle>Grid Area with Column and Row Span... [Click to change direction!]
+    </mat-card-subtitle>
+    <mat-card-content
+    >
+        <div class="containerX" [fxLayout]="'row'+direction" (click)="toggleDirection()"
+             style="cursor: pointer;">
+        <!--
+           <div [fxLayout]="options.direction" [fxLayoutAlign]="layoutAlign()" style="height: 100%;">
+             options = {
+    direction :  'row',
+    mainAxis  : 'space-around',
+    crossAxis :  'center'
+  };
+
+  layoutAlign() {
+    return `${this.options.mainAxis} ${this.options.crossAxis}`;
+  }
+        -->
+<!--        <div
+                fxLayout="row"
+                fxLayoutAlign="center"
+                fxFlex
+                fxLayoutGap="10px">-->
+            <div fxFlex [fxLayout]="'column'">
+                <div class="one   flexitem " fxFlex> A</div>
+                <div class="two   flexitem " fxFlex> B</div>
+                <div class="three flexitem " fxFlex> C</div>
+            </div>
+            <div fxFlex="67" [fxLayout]="'column'+direction">
+                <div fxLayout="row" fxFlex="33%">
+                    <div class="five  flexitem " fxFlex> E</div>
+                    <div class="five  flexitem " fxFlex> F</div>
+                </div>
+                <div class="four  flexitem " fxFlex> D</div>
+            </div>
+        </div>
+    </mat-card-content>
+    <mat-card-footer class="bottomPad">
+        <div class="hint">Current direction: &lt;fxLayout="row{{ direction }}"&gt;</div>
+    </mat-card-footer>
+</mat-card>
+
+</section>
+<!-- -->
+</section>
+<p>********  /SAND BOX 02  ****************</p>
+</section>
