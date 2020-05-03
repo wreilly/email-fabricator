@@ -9,3 +9,18 @@
     border: solid 1px #b6b6b6;
     box-sizing: content-box !important;
 }
+.containerXred {
+    padding: 5px;
+    border: solid 1px red;
+    box-sizing: content-box !important;
+}
+.containerXblue {
+    padding: 5px;
+    border: solid 1px blue;
+    box-sizing: content-box !important;
+}
+.containerXgreen {
+    padding: 5px;
+    border: solid 1px green;
+    box-sizing: content-box !important;
+}

@@ -25,7 +25,7 @@ export class PostpenComponent implements OnInit {
     // *** ON WINDOW RE-SIZE  **********
     myWidthThing = window.innerWidth;
     myOffsetForPseudoCenteringCalculation: number;
-    myHardCodedFxFlexWidth = 200; // 200px
+    myHardCodedFxFlexWidth = 300; // 200; // 200px
     myResizeTimeout; // not too pretty simply declaring o well.
 
 

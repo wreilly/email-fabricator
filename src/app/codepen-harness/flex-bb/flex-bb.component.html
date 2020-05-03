@@ -1,22 +1,59 @@
+<section class="containerXred"
+         style="width: 100%;"
+         fxLayout="column"
+         fxLayoutAlign="start stretch"
+>
+<!--    style="width: 100%; height: 400px;" fxLayoutAlign="start"  fxLayoutAlign="space-between center" -->
 
-    <section class="containerX"
-             style="width: 100%;"
+    <section class="containerXblue"
+    >
+        <!--
+        fxFlex="300px"
+         fxLayoutAlign="space-between center"
+         fxLayoutAlign="space-around center"
+         fxLayoutAlign="space-evenly center"
+        -->
 
-             >
+        <section class="containerX"
+                 fxLayout="column"
+                 fxLayoutAlign="center"
+                 fxFlex="{{myHardCodedFxFlexWidth}}px"
+                 fxFlexOffset="{{myOffsetForPseudoCenteringCalculation}}"
+        >
+
+        <mat-card
+        >
+            <mat-card-title>Title 01 you know</mat-card-title>
+            <mat-card-content class="wr--mat-card-content">
+                <p>AA0011 POST FORM About to make you a self with THIS MUCH INCHES (whoa): </p>
+            </mat-card-content>
+        </mat-card>
+        <mat-card
+
+        >
+            <!-- https://stackoverflow.com/questions/46331933/card-header-background-color-on-angular2-materials
+            -->
+            <mat-card-content [ngClass]="{'wr--mat-card-content':true}">AA POST FORM About to make you a self with THIS MUCH INCHES (whoa):
+            </mat-card-content>
+        </mat-card>
+        <mat-card>
+            <!-- https://stackoverflow.com/questions/46331933/card-header-background-color-on-angular2-materials
+            -->
+            <mat-card-content [ngClass]="{'wr--mat-card-content':true}">BB POST FORM About to make you a self with THIS MUCH INCHES (whoa):
+            </mat-card-content>
+        </mat-card>
+        </section>
+    </section>
+
+
+<section class="containerXgreen">
 <!--
     style="height: 800px; width: 100%"
 -->
-        <!--<div style="width: 100%">-->
-<!--<section class="containerX"-->
-<!--         fxLayout="column"-->
-<!--         fxLayoutAlign="end end"-->
-<!--         fxLayoutGap="20px"-->
-<!--         fxFlex="200px"-->
-<!--&gt;-->
     <section class="containerX"
 
              fxLayout="column"
-             fxLayoutAlign="center center"
+
              fxFlex="{{myHardCodedFxFlexWidth}}px"
              fxFlexOffset="{{myOffsetForPseudoCenteringCalculation}}"
     >
@@ -29,19 +66,20 @@
                 fxLayoutAlign="center"
                 fxFlex
                 fxLayoutGap="20px">-->
-        <section class="containerX"
-                 fxLayout="column"
+<!--        <section class="containerX"-->
+<!--                 fxLayout="column"-->
 
-                fxFlex="400px">
+<!--                fxFlex="400px">-->
 
 
-    <mat-card fxFlex="20%"
+    <mat-card
             >
         <mat-card-title>Flex-bb Title 01 you know</mat-card-title>
         <mat-card-content class="wr--mat-card-content">
             <p>AA0011 POST FORM About to make you a self with THIS MUCH INCHES (whoa):</p>
         </mat-card-content>
     </mat-card>
+        <!-- https://github.com/angular/flex-layout/wiki/fxFlex-API -->
     <mat-card
 fxFlex="1 1 20%"
     >
@@ -56,5 +94,119 @@ fxFlex="1 1 20%"
     </mat-card>
 </section>
 <!--    </section>-->
-    </section>
-    </section>
+<!--    </section>-->
+</section>
+
+<section class="containerXblue">
+
+    <!-- ******************************** -->
+    <div class="containerXred"
+         fxLayout="column"
+         fxLayoutAlign="center center"
+         fxLayoutGap="10px"
+    >
+        <div class="containerXblue"
+             fxLayout="row"
+             fxLayoutGap="30px">
+            <!-- class="containerXblue" fxFlex="300px" -->
+            <span><img src="../../../assets/aws-api-gateway.png" height="50px"></span>
+            <p><i>Postpen</i> - API Gateway to AWS Lambda</p>
+            <!--        <p>seventy-six trombones led the big parade</p>-->
+            <span><img src="../../../assets/AWS_Lambda_logo.svg.png" height="50px"></span>
+        </div>
+
+
+        <section class="containerXgreen"
+                 style="width: 100%; height: 400px;"
+                 fxLayoutAlign="center"
+                 fxLayout="column"
+        >
+            <mat-card>
+                <mat-card-header>Header hey</mat-card-header>
+                <mat-card-content class="wr--mat-card-content">
+                    <p>IN FORM About to make you a self with THIS MUCH YEARS (whoa):  so there</p>
+                </mat-card-content>
+            </mat-card>
+            <form
+                    >
+                <!--
+                https://github.com/angular/flex-layout/wiki/Declarative-API-Overview#api-for-any-element
+                            fxLayoutAlign="stretch"
+                -->
+
+                <!-- O la. Finding. ("Re"-finding, oughta be.)
+                1. With just a FormControl (no FormGroup), yes, you gotta BIND- it. Okay.
+                2. When the FormControl is IN a FormGroup, no, no BIND- of the Control. Just BIND- the Group. Ok? Ok.
+
+                1. FormControl ALONE (something I do not often/ever do)
+                        <input type="text"
+                        bind-formControl="myAgeFormControl"> // << Yes
+                        <input type="text"
+                        bind-formControl="myAgeFormControlName"> // << NO
+
+                2. FormControl IN FORMGROUP
+                        <input type="text"
+                        bind-formControlName="myAgeFormControlName"> // << NO. No "binding" needed
+                        <input type="text"
+                        formControlName="myAgeFormControlName"> // << Yes. :)
+                        <input type="text"
+                        bind-formControl="myAgeFormControl"> // << Hmm. No IDE complaint. But, in FormGroup, no need to bind. Doubtless bad idea to bind. cheers.
+                -->
+
+                <section class="containerX"
+                         fxLayout="column"
+
+                         fxLayoutGap="10px"
+
+                         fxFlex="{{myHardCodedFxFlexWidth}}px"
+                         fxFlexOffset="{{myOffsetForPseudoCenteringCalculation}}"
+                >
+                    <mat-form-field>
+                        <mat-label>Age Label</mat-label>
+                        <input
+                                matInput
+                                type="number"
+                                >
+                        <mat-hint>Age Hint (not zero plz)</mat-hint>
+                        <mat-error>Age Error wassup w the zero?</mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-label>Height Label</mat-label>
+                        <input
+                                matInput
+                                type="number"
+                                >
+                        <mat-hint>Height Hint (not zero plz)</mat-hint>
+                        <mat-error>Height Error wassup w the zero?</mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <mat-label>Income Label</mat-label>
+                        <input
+                                matInput
+                                type="number"
+                                >
+                        <mat-hint>Income Hint (not zero plz)</mat-hint>
+                        <mat-error>Income Error wassup w the zero?</mat-error>
+                    </mat-form-field>
+
+                    <button
+                            class="mat-raised-button"
+                            type="submit"
+                            >
+                        Submit Button
+                    </button>
+                </section>
+            </form>
+        </section>
+    </div>
+
+</section>
+
+
+
+
+</section>
+
+

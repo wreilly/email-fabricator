@@ -9,7 +9,7 @@ Hah!
 The "onWindowResize()" is a POOR candidate to put over in a
 Service, like done below.
 Why?
-Performance is BAD.
+Performance is BAD. // << Firefox BAD.  Chrome, not as bad. fwiw.
 Resizing the window responds slowly for this centering functionality.
 It leaves the element NOT centered, and the user
 has to REFRESH the page to get it to center again! (whoa)
