@@ -1,4 +1,4 @@
-<div class="containerXred"
+<div [ngClass]="{'containerXred': myDebugTrace}"
         fxLayout="column"
         fxLayoutAlign="start center"
         fxLayoutGap="10px"
@@ -80,7 +80,7 @@ ANOTHER WAY: (no function() needed)
 
 
 
-    <div class="containerXblue"
+    <div [ngClass]="{'containerXblue': myDebugTrace}"
             fxLayout="row"
             fxLayoutGap="30px">
         <!-- class="containerXblue" fxFlex="300px" -->
@@ -90,13 +90,108 @@ ANOTHER WAY: (no function() needed)
         <span><img src="../../../assets/AWS_Lambda_logo.svg.png" height="50px"></span>
     </div>
 
-    <section class="containerXorange"
-             fxLayout="column" fxLayoutAlign="start center"
-             style="width: 100%; height: 400px;"
+    <section [ngClass]="{'containerXorange': myDebugTrace}"
+             fxLayout="column" fxLayoutAlign="start stretch"
+             style="width: 100%;"
     >
-        <section class="containerXblue">
-            <section class="containerXred"
-                     fxLayout="column" fxFlex="200px"
+        <form
+                bind-formGroup="myCyuFormGroup"
+                on-ngSubmit="mySendIt()">
+            <!--
+            https://github.com/angular/flex-layout/wiki/Declarative-API-Overview#api-for-any-element
+                        fxLayoutAlign="stretch"
+            -->
+
+            <!-- O la. Finding. ("Re"-finding, oughta be.)
+            1. With just a FormControl (no FormGroup), yes, you gotta BIND- it. Okay.
+            2. When the FormControl is IN a FormGroup, no, no BIND- of the Control. Just BIND- the Group. Ok? Ok.
+
+            1. FormControl ALONE (something I do not often/ever do)
+                    <input type="text"
+                    bind-formControl="myAgeFormControl"> // << Yes
+                    <input type="text"
+                    bind-formControl="myAgeFormControlName"> // << NO
+
+            2. FormControl IN FORMGROUP
+                    <input type="text"
+                    bind-formControlName="myAgeFormControlName"> // << NO. No "binding" needed
+                    <input type="text"
+                    formControlName="myAgeFormControlName"> // << Yes. :)
+                    <input type="text"
+                    bind-formControl="myAgeFormControl"> // << Hmm. No IDE complaint. But, in FormGroup, no need to bind. Doubtless bad idea to bind. cheers.
+            -->
+
+            <section [ngClass]="{'containerX': myDebugTrace}"
+                     fxLayout="column"
+                     fxLayoutGap="10px"
+                     fxFlex="{{myHardCodedFxFlexWidth}}px"
+                     fxFlexOffset="{{myOffsetForPseudoCenteringCalculation}}"
+                     style="margin-bottom: 60px;"
+            >
+                <mat-form-field>
+                    <mat-label>Age Label</mat-label>
+                    <input
+                            matInput
+                            type="number"
+                            formControlName="myAgeFormControlName"
+                            [errorStateMatcher]="myOwnThisTimeErrorStateMatcher"
+                    >
+                    <mat-hint>Age Hint (not zero plz)</mat-hint>
+                    <mat-error>Age Error wassup w the zero?</mat-error>
+                </mat-form-field>
+
+                <mat-form-field>
+                    <mat-label>Height Label</mat-label>
+                    <input
+                            matInput
+                            type="number"
+                            formControlName="myHeightFormControlName"
+                            [errorStateMatcher]="myOwnThisTimeErrorStateMatcher"
+                    >
+                    <mat-hint>Height Hint (not zero plz)</mat-hint>
+                    <mat-error>Height Error wassup w the zero?</mat-error>
+                </mat-form-field>
+
+                <mat-form-field>
+                    <mat-label>Income Label</mat-label>
+                    <input
+                            matInput
+                            type="number"
+                            formControlName="myIncomeFormControlName"
+                            [errorStateMatcher]="myOwnThisTimeErrorStateMatcher"
+                    >
+                    <mat-hint>Income Hint (not zero plz)</mat-hint>
+                    <mat-error>Income Error wassup w the zero?</mat-error>
+                </mat-form-field>
+
+                <button
+                        class="mat-raised-button"
+                        type="submit"
+                        bind-disabled="!myCyuFormGroup.valid">
+                    Submit Button
+                </button>
+                <div>
+                    <p>What We Have in the Form myCyuFormGroup {{myCyuFormGroup.value | json}}</p>
+                </div>
+            </section>
+
+        </form>
+
+        </section>
+
+
+    <section [ngClass]="{'containerXgreen': myDebugTrace}"
+             fxLayout="column" fxLayoutAlign="space-between stretch"
+             style="width: 100%; height: 600px;"
+    > <!-- See Curious Discussion # 2 below re: that 'stretch' -->
+<!--        style="width: 100%;"        fxLayout="column"-->
+
+        <section [ngClass]="{'containerXblue': myDebugTrace}">
+            <section [ngClass]="{'containerXred': myDebugTrace}"
+                     fxLayout="column"
+
+                     fxFlex="{{myHardCodedFxFlexWidth}}px"
+                     fxFlexOffset="{{myOffsetForPseudoCenteringCalculation}}"
             >
                 <!-- Curious Discussion # 3
                 You CAN Use "Hard-Coded" (or Otherwise Simply Asserted)
@@ -116,27 +211,26 @@ ANOTHER WAY: (no function() needed)
 
                 -->
                 <mat-card>
-                    <mat-card-header>Header heyAAA </mat-card-header>
+                    <mat-card-header>&lt;section> 1 with Function() Center heyAAA </mat-card-header>
                     <mat-card-content class="wr--mat-card-content">
-                        <p>IN FORM About to make you a self with THIS MUCH YEARS (whoa):  so there</p>
+                        <p>fxLayoutAlign="space-between stretch"
+                            style="width: 100%;</p>
                     </mat-card-content>
                 </mat-card>
                 <mat-card>
-                    <mat-card-header>Header heyBBB </mat-card-header>
+                    <mat-card-header>&lt;section> 3 with Function() Center heyBBB </mat-card-header>
                     <mat-card-content class="wr--mat-card-content">
-                        <p>IN FORM About to make you a self with THIS MUCH YEARS (whoa):  so there</p>
+                        <!--
+                        Errors parsing template: Unexpected character "EOF" (Do you have an unescaped "{" in your template? Use "{{ '{' }}") to escape it.) ("
+                        -->
+                        <p>fxFlex="{{ '{' }}{{ '{' }}myHardCodedFxFlexWidth}}px"
+                            fxFlexOffset="{{ '{' }}{{ '{' }}myOffsetForPseudoCenteringCalculation}}"</p>
                     </mat-card-content>
                 </mat-card>
             </section>
         </section>
-    </section>
 
-    <section class="containerXgreen"
-             fxLayout="column" fxLayoutAlign="space-around stretch"
-             style="width: 100%; height: 1000px;"
-    > <!-- See Curious Discussion # 2 below re: that 'stretch' -->
-<!--        style="width: 100%;"        fxLayout="column"-->
-        <section class="containerXred">
+            <section class="containerXred">
             <!-- Curious discussion # 1
             How To Get A Fixed Column Width
             And To Get it Centered
@@ -180,118 +274,48 @@ ANOTHER WAY: (no function() needed)
 
 <!--   style="width: 100%; height: 400px;"     fxLayoutAlign="center"        fxLayout="column"-->
         <mat-card>
-            <mat-card-header>Header hey111 </mat-card-header>
+            <mat-card-header>&lt;section> 1 with Function() Center hey111 </mat-card-header>
             <mat-card-content class="wr--mat-card-content">
-                <p>IN FORM About to make you a self with THIS MUCH YEARS (whoa): {{ myAgeFormControl.value }} so there</p>
+                <p>fxLayoutAlign="space-between stretch"
+                    style="width: 100%;</p>
             </mat-card-content>
         </mat-card>
             <mat-card>
-                <mat-card-header>Header hey222</mat-card-header>
+                <mat-card-header>&lt;section> 3 with Function() Center hey222</mat-card-header>
                 <mat-card-content class="wr--mat-card-content">
-                    <p>IN FORM About to make you a self with THIS MUCH YEARS (whoa): {{ myAgeFormControl.value }} so there</p>
+                    <p>fxFlex="{{ '{' }}{{ '{' }}myHardCodedFxFlexWidth}}px"
+                        fxFlexOffset="{{ '{' }}{{ '{' }}myOffsetForPseudoCenteringCalculation}}"</p>
                 </mat-card-content>
             </mat-card>
         </section>
-        </section>
+            </section>
 
 
+</section>
+    <section class="containerXgreen"
+             fxLayout="column" fxLayoutAlign="space-around center"
+             style="width: 100%; height: 400px;"
+    >
         <section class="containerXblue">
             <section class="containerXred"
                      fxLayout="column"
+                     fxLayoutGap="10px"
                      fxFlex="{{myHardCodedFxFlexWidth}}px"
-                     fxFlexOffset="{{myOffsetForPseudoCenteringCalculation}}"
             >
-                <mat-card>
-                    <mat-card-header>Header hey333 </mat-card-header>
+                <mat-card style="background-color: bisque;">
+                    <mat-card-header>&lt;section> 1 with LayoutAlign Center hey333 </mat-card-header>
                     <mat-card-content class="wr--mat-card-content">
-                        <p>IN FORM About to make you a self with THIS MUCH YEARS (whoa): {{ myAgeFormControl.value }} so there</p>
+                        <p>fxLayoutAlign="space-around center"
+                            style="width: 100%;</p>
                     </mat-card-content>
                 </mat-card>
-                <mat-card>
-                    <mat-card-header>Header hey444</mat-card-header>
+                <mat-card style="background-color: bisque;">
+                    <mat-card-header>&lt;section> 3 with LayoutAlign Center hey444</mat-card-header>
                     <mat-card-content class="wr--mat-card-content">
-                        <p>IN FORM About to make you a self with THIS MUCH YEARS (whoa): {{ myAgeFormControl.value }} so there</p>
+                        <p>fxFlex="{{ '{' }}{{ '{' }}myHardCodedFxFlexWidth}}px"</p>
                     </mat-card-content>
                 </mat-card>
             </section>
         </section>
-
-
-
-
-
-        <form
-                bind-formGroup="myCyuFormGroup"
-                on-ngSubmit="mySendIt()">
-        <!--
-        https://github.com/angular/flex-layout/wiki/Declarative-API-Overview#api-for-any-element
-                    fxLayoutAlign="stretch"
-        -->
-
-<!-- O la. Finding. ("Re"-finding, oughta be.)
-1. With just a FormControl (no FormGroup), yes, you gotta BIND- it. Okay.
-2. When the FormControl is IN a FormGroup, no, no BIND- of the Control. Just BIND- the Group. Ok? Ok.
-
-1. FormControl ALONE (something I do not often/ever do)
-        <input type="text"
-        bind-formControl="myAgeFormControl"> // << Yes
-        <input type="text"
-        bind-formControl="myAgeFormControlName"> // << NO
-
-2. FormControl IN FORMGROUP
-        <input type="text"
-        bind-formControlName="myAgeFormControlName"> // << NO. No "binding" needed
-        <input type="text"
-        formControlName="myAgeFormControlName"> // << Yes. :)
-        <input type="text"
-        bind-formControl="myAgeFormControl"> // << Hmm. No IDE complaint. But, in FormGroup, no need to bind. Doubtless bad idea to bind. cheers.
--->
-
-        <section class="containerX"
-                fxLayout="column"
-
-                fxLayoutGap="10px"
-
-                 fxFlex="{{myHardCodedFxFlexWidth}}px"
-                 fxFlexOffset="{{myOffsetForPseudoCenteringCalculation}}"
-        >
-        <mat-form-field>
-            <mat-label>Age Label</mat-label>
-            <input 
-                    matInput
-                    type="number"
-                   formControlName="myAgeFormControlName">
-            <mat-hint>Age Hint (not zero plz)</mat-hint>
-            <mat-error>Age Error wassup w the zero?</mat-error>
-        </mat-form-field>
-
-        <mat-form-field>
-            <mat-label>Height Label</mat-label>
-            <input
-                    matInput
-                    type="number"
-                    formControlName="myHeightFormControlName">
-            <mat-hint>Height Hint (not zero plz)</mat-hint>
-            <mat-error>Height Error wassup w the zero?</mat-error>
-        </mat-form-field>
-
-        <mat-form-field>
-            <mat-label>Income Label</mat-label>
-            <input
-                    matInput
-                    type="number"
-                    formControlName="myIncomeFormControlName">
-            <mat-hint>Income Hint (not zero plz)</mat-hint>
-            <mat-error>Income Error wassup w the zero?</mat-error>
-        </mat-form-field>
-
-        <button
-                class="mat-raised-button"
-                type="submit"
-                bind-disabled="!myCyuFormGroup.valid">
-            Submit Button
-        </button>
-        </section>
-    </form>
     </section>
 </div>
