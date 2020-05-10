@@ -4,6 +4,8 @@ import { SharedModule } from '../shared/shared.module';
 import { CommonModule } from '@angular/common';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {ReactiveFormsModule} from '@angular/forms';
+ALSO MY-MATERIALS MODULE is in SHARED MODULE
+import { MyMaterialModule } from '../my-material.module';
 */
 // import {FormsModule} from '@angular/forms'; // << Q. ?? what is using this? A. Don't (yet) know.
 
@@ -33,6 +35,8 @@ import {MatTabsModule} from '@angular/material';
 import { FabricatorComponent } from './fabricator.component';
 import { NewFabricatorComponent } from './new-fabricator/new-fabricator.component';
 import { ResultsFabricatorComponent } from './results-fabricator/results-fabricator.component';
+import {MatPaginatorModule} from '@angular/material/paginator';
+import {MatSortModule} from '@angular/material/sort';
 
 
 @NgModule({
@@ -41,15 +45,17 @@ import { ResultsFabricatorComponent } from './results-fabricator/results-fabrica
     NewFabricatorComponent,
     ResultsFabricatorComponent
   ],
-  imports: [
-    SharedModule,
-    // CommonModule, // << from SharedModule now
-    FabricatorRoutingModule,
-    // ReactiveFormsModule, // << from SharedModule now
-    // MatTabsModule, // << We bring in whole Material module instead
-    // MyMaterialModule, // << from SharedModule now
-    // FlexLayoutModule, // << from SharedModule now
-    // FormsModule,  // << from SharedModule ???? ????
-  ]
+    imports: [
+        SharedModule,
+        // CommonModule, // << from SharedModule now
+        FabricatorRoutingModule,
+        MatPaginatorModule,
+        MatSortModule,
+        // ReactiveFormsModule, // << from SharedModule now
+        // MatTabsModule, // << We bring in whole Material module instead
+        // MyMaterialModule, // << from SharedModule now
+        // FlexLayoutModule, // << from SharedModule now
+        // FormsModule,  // << from SharedModule ???? ????
+    ]
 })
 export class FabricatorModule { }

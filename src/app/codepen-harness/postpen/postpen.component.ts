@@ -184,15 +184,19 @@ export class PostpenComponent implements OnInit {
     mySendIt() {
         console.log('this.mySendIt() this.myMethod METHOD: ', this.myMethod);
         // *** - 05 - *******************
-        // this.myCompareYourselfFormInfoObject.age = this.myAge;
-        console.log('01 this.myCyuFormGroup.getRawValue(); ', this.myCyuFormGroup.getRawValue());
+
+        // console.log('01 this.myCyuFormGroup.getRawValue(); ', this.myCyuFormGroup.getRawValue());
         // {myAgeFormControlName: 12, myHeightFormControlName: 13, myIncomeFormControlName: 14}
-        console.log('02 this.myCyuFormGroup.get(\'myAgeFormControlName\'); ', this.myCyuFormGroup.get('myAgeFormControlName'));
+
+        // console.log('02 this.myCyuFormGroup.get(\'myAgeFormControlName\'); ', this.myCyuFormGroup.get('myAgeFormControlName'));
         /*
         FormControl {asyncValidator: null, pristine: false, touche ...   value: 9
          */
+
+/*
         console.log('03 this.myCyuFormGroup.controls.myAgeFormControlName.value; ', this.myCyuFormGroup
             .controls.myAgeFormControlName.value); // Yes e.g. 4
+*/
         this.myCompareYourselfFormInfoObject.age = this.myCyuFormGroup.controls.myAgeFormControlName.value;
 
         // this.myCompareYourselfFormInfoObject.height = this.myHeight;
@@ -214,6 +218,10 @@ export class PostpenComponent implements OnInit {
         };
         this.myXhr.setRequestHeader('Content-Type', 'application/json');
         this.myXhr.setRequestHeader('Authorization', 'allow');
+        /* HARD CODED 'allow'
+        Just for development, testing. FAKE "authorization" !!!
+         */
+
         this.myXhr.send(JSON.stringify(this.myCompareYourselfFormInfoObject));
 
         this.myCyuFormGroup.reset();

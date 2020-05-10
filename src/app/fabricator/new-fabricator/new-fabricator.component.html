@@ -1,5 +1,7 @@
-<div fxLayoutAlign="center center"
-     fxLayoutGap="10px">
+<div
+        fxLayout="column"
+        fxLayoutAlign="center center"
+        fxLayoutGap="10px">
     <form
             bind-formGroup="myFabricatorFormGroup"
             on-ngSubmit="myOnSubmit()"
@@ -120,6 +122,92 @@ you do *not* subtract Counter Base #, (be that 0 or anything else, like say 40),
         *ngIf="myFabricatorFormControlStudentIncrementerCounter.value > 0"
         >Creating {{ myFabricatorFormControlNumberOfRows.value }} addresses, from {{ myFabricatorFormControlStudentIncrementerCounter.value }} to {{ ( myFabricatorFormControlStudentIncrementerCounter.value - 1 ) + myFabricatorFormControlNumberOfRows.value }} inclusive. Cheers.</p>
     </form>
+    <mat-card
+            fxLayout="column"
+            fxLayoutAlign="center center"
+    >
+        <mat-card-header>
+            <mat-card-title>
+                User Profiles
+            </mat-card-title>
+            <mat-card-subtitle>
+                Parsed from JSON
+            </mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content
+        fxLayout="column"
+        fxLayoutAlign="center center">
+            <p matLine>matLine Pending Educator Authorizations</p>
+            <p mat-line>mat-line Username, E-Mail, Etc.</p>
+            <p class="matLine">class="matLine" << only one that gets class="matLine", but, seems to be same as class="mat-line" anyway. a nothing-burger, people</p>
+            <p class="mat-line">class="mat-line" Username, E-Mail, Etc.</p>
+        </mat-card-content>
+        <mat-card-actions>
+            <button mat-raised-button
+            type="button"
+                    on-click="myParseOutEmails()"
+            >
+                Display E-Mail Addresses
+            </button>
+        </mat-card-actions>
+    </mat-card>
+
+    <!--
+    myColumnsToDisplay = ['username', 'email', 'institutionName'];
+
+    can also do <mat-table></mat-table> fwiw
+
+    Nah did NOT hide empty table: *ngIf="myEducatorsDataSource.data"
+    Yah did do the job: *ngIf="showTableDataIsHere"
+    -->
+<!--    <ng-container *ngIf="showTableDataIsHere">-->
+    <mat-table
+            [dataSource]="myEducatorsDataSource"
+            matSort >
+        <ng-container matColumnDef="username">
+            <th mat-header-cell *matHeaderCellDef
+            mat-sort-header>Username</th>
+            <td mat-cell *matCellDef="let educator">{{ educator.username }}</td>
+        </ng-container>
+        <ng-container matColumnDef="email">
+            <th mat-header-cell *matHeaderCellDef
+                mat-sort-header>E-Mail</th>
+            <td mat-cell *matCellDef="let educator">{{ educator.email }}</td>
+        </ng-container>
+        <ng-container matColumnDef="institutionName">
+            <th mat-header-cell *matHeaderCellDef
+                mat-sort-header>Institution Name</th>
+            <td mat-cell *matCellDef="let educator">{{ educator.institutionName }}</td>
+        </ng-container>
+        <!-- Q. Hmm, need that <tr>? A. Seems Yes. (Whereas in fitness-tracker-wr3 past-trainings HTML it did not. hmm o well)
+        Did NOT work: <mat-header-row></mat-header-row> fwiw etc -->
+        <tr mat-header-row *matHeaderRowDef="myColumnsToDisplay"></tr>
+        <tr mat-row *matRowDef="let row; columns: myColumnsToDisplay"></tr>
+    </mat-table>
+<!-- FAILS    *ngIf="showTableDataIsHere"
+If you put this "hide/show" separately here on both mat-table (above)
+and mat-paginator (here below), then they do both get hidden (good),
+BUT - when rendered, the paginator is apparently DISCONNECTED from the table.
+(Not (so) good (at all).)
+
+Fix? Prob a container div for both; put Mr. "hide/show" there.
+Hmm. That did NOT work. Paginator disconnected, and no longer centered. Hmmph.
+
+Tried <ng-container>. Still disconnected, but now centered again. O la.
+-->
+    <mat-paginator
+            [pageSize]="5"
+            [pageSizeOptions]="[2,5,10,20]"
+    >
+    </mat-paginator>
+<!--    </ng-container>-->
+    <mat-list>
+        <mat-list-item *ngFor="let educator of educators">
+            <h1 matLine><b>{{ educator.username }}</b></h1>
+            <p matLine>{{ educator.email }}</p>
+            <p matLine>{{ educator.institutionName }}</p>
+        </mat-list-item>
+    </mat-list>
 
 </div>
 

@@ -12,6 +12,11 @@ import { ClipboardModule } from '@angular/cdk/clipboard'; // << 1st time from CD
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatCardModule } from '@angular/material/card';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatTableModule } from '@angular/material/table';
+import {MatHeaderRowDef} from './fabricator/new-fabricator/new-fabricator.component';
+// import {MatRowDef} from './fabricator/new-fabricator/new-fabricator.component';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import {MatSortModule} from '@angular/material/sort';
 
 // MatFormFieldModule, // seems it is needed ?
 /* WHEN I get MatInputModule into this, I'll no longer need MatFormFieldModule. Cheers.
@@ -35,13 +40,23 @@ const myMaterialModulesImported = [
     MatSlideToggleModule,
     MatCardModule,
     MatRadioModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule,
 ];
 
 @NgModule({
-    declarations: [],
+    declarations: [
+        MatHeaderRowDef,
+        // MatRowDef,
+    ],
     imports: [], // Not needed, actually!
     // exports: myMaterialModulesImported, // << Yes
-    exports: [...myMaterialModulesImported], // Yes aussi, w Spread Operator inside literal [ ]
+    exports: [
+        ...myMaterialModulesImported,
+        MatHeaderRowDef, // abandoned this biz; see MatTable etc.
+        // MatRowDef
+    ], // Yes aussi, w Spread Operator inside literal [ ]
     providers: [],
 })
 

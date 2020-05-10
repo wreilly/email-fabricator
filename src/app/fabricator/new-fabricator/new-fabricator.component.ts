@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Directive, OnInit, AfterViewInit, ViewChild} from '@angular/core';
 import { FormGroup, FormControl, Validators, FormGroupDirective  } from '@angular/forms';
 /* Hmm, do we need NgForm? (for error matcher)
 Seems not so far. FormGroupDirective for Reactive Forms, NgForm for Template-Driven?
@@ -12,12 +12,26 @@ import { ErrorStateMatcher } from '@angular/material/core'; // MatInput property
 /*
 Example above where v. specific Material Design best imported
 just here in Component where used,
-rather than in app-wide MyMaterialModule.
+rather than in app-wide MyMaterialModule. MBU
 
 - "new() up in ngOnInit()
 - Then used here by this.myResetForm()
 (See .HTML matInput fields too).
  */
+
+/*
+HECS-6195  We have large JSON file of 115 Pending Educator Profiles
+ */
+// import { myJSON } from './hecs-6195-pending-educators.json';
+// import myjsontwo from './myjsontwo.json';
+import * as data from './myjsontwo.json';
+import {MatPaginator} from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import {MatTableDataSource} from '@angular/material/table';
+// https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-9.html
+// https://www.techiediaries.com/import-local-json-files-in-typescript/
+const myHeatAuthorizations: any = (data as any).default; // "default" is name of OBJECT { } holding all content in the .json file
+
 
 class MyErrorStateMatcherClass implements ErrorStateMatcher {
   isErrorState(controlPassedIn: FormControl | null, form: FormGroupDirective | null): boolean {
@@ -38,14 +52,59 @@ class MyErrorStateMatcherClass implements ErrorStateMatcher {
   }
 }
 
+// Issue was: IDE/TSLint complaining, though code still worked, re: matHeaderRowDef and columns. o well. ABANDONED
+// https://stackoverflow.com/questions/51085422/property-binding-matheaderrowdef-not-used-by-any-directive-on-an-embedded-templa
+@Directive({ // ABANDONED
+    // tslint:disable-next-line:directive-selector
+    selector: '[matHeaderRowDef]',
+    // tslint:disable-next-line:no-inputs-metadata-property
+    inputs: ['columns: matHeaderRowDef'],
+})
+// tslint:disable-next-line:directive-class-suffix
+export class MatHeaderRowDef { }
+
+/*
+@Directive({
+    // tslint:disable-next-line:directive-selector
+    selector: '[matRowDef]',
+    // tslint:disable-next-line:no-inputs-metadata-property
+    // inputs: ['columns: matRowDef'],
+})
+// tslint:disable-next-line:directive-class-suffix
+export class MatRowDef { }
+*/
+
 @Component({
   selector: 'app-new-fabricator',
   templateUrl: './new-fabricator.component.html',
   styleUrls: ['./new-fabricator.component.css']
 })
-export class NewFabricatorComponent implements OnInit {
+export class NewFabricatorComponent implements OnInit, AfterViewInit {
 
-  myFabricatorFormGroup: FormGroup;
+    // For simple MatList we had simple array of objects [{username, email, institutionName}]
+    educators: any[]; // << myParseOutEmails() triggers this, to write to List
+    // For MatTable, we need this MatTableDataSource thingie:
+    // DATASOURCE.data is that educators array thingie
+    myEducatorsDataSource = new MatTableDataSource();
+    myColumnsToDisplay = ['username', 'email', 'institutionName'];
+    @ViewChild(MatPaginator)myPaginator: MatPaginator; // {static: false } nor true either. didn't help. leaving out. cheers?
+
+    @ViewChild(MatSort, { static: false }) mySort: MatSort;
+
+    showTableDataIsHere = false; // Not using
+    // SEE NGAFTERVIEWINIT()
+    /* Notes from class: fitness-tracker-wr3
+https://www.udemy.com/angular-full-app-with-angular-material-angularfire-ngrx/learn/lecture/9120380#questions/7276854
+The "static" option is an Angular 8 thing. Wasn't in 7, and in Angular 9 won't be needed...
+Also:
+BTW: If the element (MatSort, MatPaginator) would be used in ngOnInit(), you would have to write { static: true }.
+(We use it in ngAfterViewInit(), so false is okay)
+https://angular.io/guide/static-query-migration
+(*) https://angular.io/guide/static-query-migration#what-does-this-flag-mean-and-why-is-it-necessary
+ */
+
+
+    myFabricatorFormGroup: FormGroup;
   myFabricatorFormControlStudentIncrementerCounter: FormControl;
   myFabricatorFormControlNumberOfRows: FormControl;
   /* N.B. Slightly unfortunate naming here.
@@ -179,9 +238,113 @@ https://stackoverflow.com/questions/2141974/javascript-regex-literal-with-g-used
 
     this.myOwnErrorStateMatcher = new MyErrorStateMatcherClass();
 
+
+    /*
+    JSON FING
+    https://www.techiediaries.com/import-local-json-files-in-typescript/
+
+    JSON Data! ?
+Module
+default:
+data: {users: Array(112), size: 115, totalElements: 112, totalPages: 1, number: 0}
+errors: []
+     */
+    console.log('JSON Data! ? ', data);
+    /* SAMPLE USER
+    {"errors":[],"data":{
+"users":[
+{
+"username":"arkangel.cordero",
+"profile":{
+	"firstName":"ARKANGEL",
+	"lastName":"CORDERO",
+	"email":"ARKANGEL.CORDERO@INCAE.EDU",
+	"institutionId":"001U000000BfHWSIA3",
+	"institutionName":"INCAE Business School",
+	"institutionWebSiteUrl":"Pending",
+	"department":"Management",
+	"title":"Visiting Professor",
+	"authorizationStatus":"ACTIVE",
+	"authorizationDate":"2018-10-14 22:15:33.568",
+	"phones":[],
+	"addresses":[
+		{"id":140810,
+		"street1":"INCAE Business School",
+		"street2":"Km. 10 1/2 Carretera Sur",
+		"city":"Managua",
+		"zip":"00000",
+		"state":"Managua, Nicaragua",
+		"country":"NI",
+		"verified":false,
+		"shipping":false}
+		],
+	"expirationDate":"2019-10-14 22:15:33.568",
+	"fullName":"ARKANGEL CORDERO",
+	"id":8327370
+	},
+"primaryRole":"ROLE_EDU_PREM",
+"primaryRoleName":"Educator Premium",
+"roles":["ROLE_EDU_PREM"],
+"userPermissions":[],
+"rolePermissions":[
+	"PERM_VIEW_TEST_BANK",...,"PERM_VIEW_COLLECTION"
+	],
+"createdDate":"2018-04-25T23:50:02.000+0000",
+"lastModifiedDate":"2018-04-25T23:50:07.000+0000",
+"id":8346445
+},
+     */
+    console.log('FING myHeatAuthorizations.data.users[0].username ', myHeatAuthorizations.data.users[0].username);
+
+    // Trying here ( ? )
+    this.myParseOutEmails(); // Just run it automatically. not wait for user button click
+      // Seems to be okay (vs. in ngAfterViewInit())
+
   } // /ngOnInit()
 
-  myOnSubmit() {
+    ngAfterViewInit() {
+      /* HIGHLY USEFUL:
+      https://blog.angular-university.io/angular-debugging/
+      Angular Debugging "Expression has changed after it was checked": Simple Explanation (and Fix)
+       */
+        this.myEducatorsDataSource.sort = this.mySort;
+        this.myEducatorsDataSource.paginator = this.myPaginator;
+      // this.myParseOutEmails(); // Just run it automatically. not wait for user button click
+      // NO. Not good place to run this, here in "AfterView"
+
+      // ***** EXPERIMENT **************************
+/*
+      if (this.myEducatorsDataSource.data.length === 0) {
+          // Wrong IF test: console.log('999 ngAfterViewInit() this.myEducatorsDataSource.data not null'); // Yep.
+          // this.showTableDataIsHere = true; // << Caused "Expression has changed after it was checked"
+          console.log('998');
+          setTimeout(() => { // << Yes this did prevent the debugging bug. ok.
+              this.showTableDataIsHere = true;
+          }); // N.B. Don't even need to specify 2nd param, "how long?"
+          // We just need this to await single JavaScript "turn" !
+          // Angular-University blog page (URL above)
+      }
+*/
+        // *******************************
+    }
+
+    myParseOutEmails() {
+        // this.showTableDataIsHere = true; // No matter whether top or bottom here...
+        this.educators = myHeatAuthorizations.data.users
+            .map((eachUser) => {
+                let oneEducator;
+                oneEducator = {
+                    username: eachUser.username,
+                    email: eachUser.profile.email,
+                    institutionName: eachUser.profile.institutionName,
+                };
+                return oneEducator;
+            });
+        this.myEducatorsDataSource.data = this.educators; // whamma-jamma
+        // this.showTableDataIsHere = true;
+    }
+
+    myOnSubmit() {
     /*
     Okay, magic of Angular Reactive Forms means:
     - ngOnSubmit() over in .HTML needs no passed parameter
@@ -301,7 +464,14 @@ https://material.angular.io/components/input/overview#changing-when-error-messag
      */
   }
 
-}
+  /*
+  2020-05-08
+  https://jira.hbsp.harvard.edu/browse/HECS-6095
+
+   */
+
+
+} // /class NewFabricatorComponent
 
 /*
 HEW-2461.txt
