@@ -14,24 +14,56 @@ Example above where v. specific Material Design best imported
 just here in Component where used,
 rather than in app-wide MyMaterialModule. MBU
 
-- "new() up in ngOnInit()
+- "new() up this ErrorStateMatcher in ngOnInit()
 - Then used here by this.myResetForm()
 (See .HTML matInput fields too).
  */
 
+import {MatTableDataSource} from '@angular/material/table';
+import {MatPaginator} from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+
+
+/* GETTING FILE DATA (JSON)
+1. HardCoded Filenames
+2. File Chooser/Selector widget
+ */
 /*
 HECS-6195  We have large JSON file of 115 Pending Educator Profiles
  */
-// import { myJSON } from './hecs-6195-pending-educators.json';
-// import myjsontwo from './myjsontwo.json';
-import * as data from './myjsontwo.json';
-import {MatPaginator} from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import {MatTableDataSource} from '@angular/material/table';
-// https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-9.html
-// https://www.techiediaries.com/import-local-json-files-in-typescript/
-const myHeatAuthorizations: any = (data as any).default; // "default" is name of OBJECT { } holding all content in the .json file
+// TSCONFIG.JSON ==> https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-9.html#new---resolvejsonmodule
+// https://www.techiediaries.com/import-local-json-files-in-typescript/  "Step 4"
+// import { myJSON } from './hecs-6195-pending-educators.json'; // << NO I think IIRC
+// import myjsontwo from './myjsontwo.json'; // << NO  :(
+// import * as data from './myjsontwo.json'; // << YES :)
+// 1. THREE HARD-CODED FILES I CAN USE (Comment Out two)
+// import * as data from './myjson-20200508-112.json';
+// import * as data from './myjson-20200510-59.json';
+import * as data from './myjson-20200512-65.json';
+// 2. "dataFromChooser" will be from FileReader, below
 
+
+// 1. YES WORKS:
+/*
+const myHeatAuthorizations: any = (data as any).default;
+*/
+/* Note: ".default" is name of OBJECT { } holding all content in the .json file, as seen apparently from a JSON "import" OK.
+*/
+
+// 2. W-I-P
+/*
+A. We'll declare the "from chooser" data variable up here y not. It's UNDEFINED up here btw fwiw.
+B. But the assignment from it to the "myHeatAuthorizations" should not happen here; down below in myOnChangeFileInput() instead. cheers.
+C. (Update) Okay, guess it's all right to *declare* those "Heat Authorizations" up here, just don't *assign* to them here. cheers.
+ */
+// A. Ok
+let dataFromChooser: string | ArrayBuffer; // FileReader.result type
+/* B. No not up here. below instead
+const myHeatAuthorizations: any = (dataFromChooser as any);
+*/
+// C. Ok
+let myHeatAuthorizations: any; // Q. What is this? A. [{},{}]
+// [{"username":"arkangel.cordero" ...}]
 
 class MyErrorStateMatcherClass implements ErrorStateMatcher {
   isErrorState(controlPassedIn: FormControl | null, form: FormGroupDirective | null): boolean {
@@ -80,6 +112,11 @@ export class MatRowDef { }
   styleUrls: ['./new-fabricator.component.css']
 })
 export class NewFabricatorComponent implements OnInit, AfterViewInit {
+
+    // FILE SELECTOR
+    // https://stackblitz.com/edit/angular-material-file-select?file=src%2Fapp%2Fapp.component.ts
+    @ViewChild('myFileInput') myFileInput;
+    myFile: File | null = null;
 
     // For simple MatList we had simple array of objects [{username, email, institutionName}]
     educators: any[]; // << myParseOutEmails() triggers this, to write to List
@@ -294,10 +331,13 @@ errors: []
 "id":8346445
 },
      */
-    console.log('FING myHeatAuthorizations.data.users[0].username ', myHeatAuthorizations.data.users[0].username);
+      // tslint:disable-next-line:max-line-length
+      // console.log('FING-01 data FromHardCoded myHeatAuthorizations.data.users[0].username ', myHeatAuthorizations.data.users[0].username);
+    console.log('FING-02 dataFromChooser myHeatAuthorizations.data.users[0].username ');
+    // NOT NOW, NOT in INIT: myHeatAuthorizations.data.users[0].username);
 
-    // Trying here ( ? )
-    this.myParseOutEmails(); // Just run it automatically. not wait for user button click
+    // Trying here in ngOnInit ( yeah woiks )
+    // this.myParseOutEmails(); // Just run it automatically. not wait for user button click
       // Seems to be okay (vs. in ngAfterViewInit())
 
   } // /ngOnInit()
@@ -326,11 +366,95 @@ errors: []
       }
 */
         // *******************************
+    } // /ngAfterViewInit()
+
+    /* HTTP to get the file ??? ??? WUL << See the SERVICE
+
+  GET ADMIN USER TOKEN 2020-05-12-0820AM good for 24 hours
+    curl --location -DING?size=115' \
+    --header 'Accept: application/json' \
+    --header 'Content-Type: application/json' \
+    --header 'Authorization: Bearer eyJjdHkiO ... JUuEQ'
+     */
+
+    myGetHttpHeatUsers() {
+        myHeatAuthorizations = this.myFabricatorService.giveMeHeatUsers();
+        console.log('HTTP-LAND! myHeatAuthorizations ', myHeatAuthorizations);
+    }
+
+
+    // FILE SELECTOR CHOOSER
+    // https://stackblitz.com/edit/angular-material-file-select?file=src%2Fapp%2Fapp.component.ts
+    myOnClickFileInputButton(): void {
+        this.myFileInput.nativeElement.click();
+    }
+    myOnChangeFileInput(): void {
+        const myFiles: { [key: string]: File } = this.myFileInput.nativeElement.files;
+        this.myFile = myFiles[0];
+        console.log('9999999 ', this.myFile);
+        /*
+        File
+lastModified: 1588616258106
+lastModifiedDate: Mon May 04 2020 14:17:38 GMT-0400 (Eastern Daylight Time) {}
+name: "HEAE-375-bulk-educator-registration-workflow.png"
+size: 1993270
+type: "image/png"
+webkitRelativePath: ""
+         */
+        // https://developer.mozilla.org/en-US/docs/Web/API/FormData
+        // https://stackoverflow.com/questions/47936183/angular-file-upload
+
+        // NAH not pursuing FormData so much. FileReader() instead.
+        // let myFormDataHoldingMyFile = new FormData();
+        /* Hmm, what I *really* want is:
+        https://developer.mozilla.org/en-US/docs/Web/API/FileReader
+         */
+
+        const myFileReaderToReadMyFile = new FileReader();
+        myFileReaderToReadMyFile.onload = (myEvent: any) => {
+            console.log('myEvent ', myEvent);
+            /* ProgressEvent
+            currentTarget: FileReader
+            srcElement: FileReader
+            target: FileReader
+            result: "{"errors":[],"data":{"users":[{"username":"arkange...
+            readyState: 2
+             */
+
+            dataFromChooser = myFileReaderToReadMyFile.result;
+            console.log('dataFromChooser ', dataFromChooser);
+            /*
+            {"errors":[],"data":{"users":[{"username":"arkangel.cordero"...
+             */
+
+            myHeatAuthorizations = (dataFromChooser as any);
+            console.log('myOnChangeFileInpu() ONLOAD Result: myHeatAuthorizations ', myHeatAuthorizations);
+            /* (Same Object)
+            {"errors":[],"data":{"users":[{"username":"arkangel.cordero",
+             */
+        };
+        myFileReaderToReadMyFile.readAsText(this.myFile);
     }
 
     myParseOutEmails() {
-        // this.showTableDataIsHere = true; // No matter whether top or bottom here...
-        this.educators = myHeatAuthorizations.data.users
+        // NAH: this.showTableDataIsHere = true; // No matter whether top or bottom here...
+
+        // console.log('myParseOutEmails() myHeatAuthorizations.data ', myHeatAuthorizations.data); // undefined
+        // console.log('myParseOutEmails() myHeatAuthorizations.data.users ', myHeatAuthorizations.data.users);
+        console.log('myParseOutEmails() myHeatAuthorizations ', myHeatAuthorizations);
+        /* wtf? looks to be right ?
+        {
+  "errors": [],
+  "data": {
+    "users": [{"username": "arkangel.cordero"
+
+    Q. Hmm, I think I need to JSON.parse() this string into JSON. Hmm
+    A. OH YEAH BABY-KIN OH YEAH!
+         */
+        const myHeatAuthorizationsAsJson = JSON.parse(myHeatAuthorizations);
+        console.log('myParseOutEmails() myHeatAuthorizationsAsJson ', myHeatAuthorizationsAsJson);
+        // core.js:5873 ERROR TypeError: Cannot read property 'users' of undefined at NewFabricatorComponent.myParseOutEmails
+        this.educators = myHeatAuthorizationsAsJson.data.users
             .map((eachUser) => {
                 let oneEducator;
                 oneEducator = {
@@ -341,7 +465,7 @@ errors: []
                 return oneEducator;
             });
         this.myEducatorsDataSource.data = this.educators; // whamma-jamma
-        // this.showTableDataIsHere = true;
+        // NAH:  this.showTableDataIsHere = true;
     }
 
     myOnSubmit() {

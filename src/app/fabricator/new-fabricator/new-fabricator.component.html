@@ -122,6 +122,61 @@ you do *not* subtract Counter Base #, (be that 0 or anything else, like say 40),
         *ngIf="myFabricatorFormControlStudentIncrementerCounter.value > 0"
         >Creating {{ myFabricatorFormControlNumberOfRows.value }} addresses, from {{ myFabricatorFormControlStudentIncrementerCounter.value }} to {{ ( myFabricatorFormControlStudentIncrementerCounter.value - 1 ) + myFabricatorFormControlNumberOfRows.value }} inclusive. Cheers.</p>
     </form>
+
+    <!-- HTTP GO GET HEAT USERS FUN! -->
+    <mat-card
+            fxLayout="column"
+            fxLayoutAlign="center center">
+        <mat-card-header>
+            <mat-card-title>HTTP GO</mat-card-title>
+            <mat-card-subtitle>GET HEAT USERS Pending Educators = Date Be NOW!</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content
+                fxLayout="column"
+                fxLayoutAlign="center center">
+            <button
+            mat-raised-button
+            type="button"
+            on-click="myGetHttpHeatUsers()">Go Get Them</button>
+        </mat-card-content>
+    </mat-card>
+
+        <!-- FILE CHOOSER SELECTOR
+    https://stackblitz.com/edit/angular-material-file-select?file=src%2Fapp%2Fapp.component.html
+    -->
+    <mat-card
+    fxLayout="column"
+    fxLayoutAlign="center center">
+        <mat-card-header>
+            <mat-card-title>Choose File</mat-card-title>
+            <mat-card-subtitle>Pending Educators = Date Snapshot</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content
+        fxLayout="column"
+        fxLayoutAlign="center center">
+            <!-- We hide this native button.
+            We pass the click on from our (shown)
+            Materials Design button.
+
+             N.B. COMMA separator for accept="" -->
+            <input type="file"
+                   style="display: none"
+            ref-myFileInput accept="application/json, image/*"
+            on-change="myOnChangeFileInput()">
+            <button
+            mat-raised-button
+            color="accent"
+            on-click="myOnClickFileInputButton()">
+                <mat-icon>attach_file</mat-icon>
+                <mat-icon>file_upload</mat-icon>
+            </button>attach_file!! |  file_upload!!
+            <p *ngIf="!myFile; else myFileName">your file will be here</p>
+            <ng-template ref-myFileName>
+                <p>{{ myFile?.name }}</p>
+            </ng-template>
+        </mat-card-content>
+    </mat-card>
+
     <mat-card
             fxLayout="column"
             fxLayoutAlign="center center"
