@@ -1,4 +1,4 @@
-import {Component, Directive, OnInit, AfterViewInit, ViewChild} from '@angular/core';
+import {Component, Directive, OnInit, AfterViewInit, ViewChild, OnDestroy} from '@angular/core';
 import { FormGroup, FormControl, Validators, FormGroupDirective  } from '@angular/forms';
 /* Hmm, do we need NgForm? (for error matcher)
 Seems not so far. FormGroupDirective for Reactive Forms, NgForm for Template-Driven?
@@ -40,6 +40,7 @@ HECS-6195  We have large JSON file of 115 Pending Educator Profiles
 // import * as data from './myjson-20200508-112.json';
 // import * as data from './myjson-20200510-59.json';
 import * as data from './myjson-20200512-65.json';
+import {Observable, Subscription} from 'rxjs';
 // 2. "dataFromChooser" will be from FileReader, below
 
 
@@ -111,15 +112,37 @@ export class MatRowDef { }
   templateUrl: './new-fabricator.component.html',
   styleUrls: ['./new-fabricator.component.css']
 })
-export class NewFabricatorComponent implements OnInit, AfterViewInit {
+export class NewFabricatorComponent implements OnInit, AfterViewInit, OnDestroy {
 
-    // FILE SELECTOR
+    // HTTP 'GET HEAT USERS' API CALL
+    myHeatAuthorizationsObservableInComponentDotPipe: Observable<any>; // ye gods ASYNC
+    myHeatAuthorizationsObservableInComponentDotNext: Observable<any>; // ye gods NO ASYNC
+    /* Okay - the above is:
+
+    "DOT-PIPE"
+    1.A.) In myGetHttpHeatUsersDotPipe(), it is going to be assigned (LHS) what
+    is returned from the Service's "DotPipe()" method for getting Heat Users,
+    the which will be an Observable<object>
+    1.B.) Also in same myGetHttpHeatUsersDotPipe(), we do an explicit
+    ".subscribe()" *off of* this Observable, right here in the Component!
+    We can then get at the data inside and use etc.
+    (e.g. MatTableDataSource, or non-'async' rendering to HTML template. very cool.)
+
+    "DOT-NEXT/SUBSCRIBE"
+    2) The "DotNext" variant is going to, in ngOnInit(), explicitly ".subscribe()"to this
+    Observable created over in the Service: myHeatUserInfoObservableInService$
+    (Note that the "DotPipe" version makes NO use nor reference to that Service Observable.)
+     */
+    private myHeatUsersSubscription: Subscription;
+
+    // FILE CHOOSER / SELECTOR
     // https://stackblitz.com/edit/angular-material-file-select?file=src%2Fapp%2Fapp.component.ts
     @ViewChild('myFileInput') myFileInput;
     myFile: File | null = null;
 
     // For simple MatList we had simple array of objects [{username, email, institutionName}]
     educators: any[]; // << myParseOutEmails() triggers this, to write to List
+    educatorsLength = 0; // Needed for a 'count' on template
     // For MatTable, we need this MatTableDataSource thingie:
     // DATASOURCE.data is that educators array thingie
     myEducatorsDataSource = new MatTableDataSource();
@@ -172,6 +195,22 @@ https://angular.io/guide/static-query-migration
   myArrayOfAddresses: string[];
   myListOfStringsOfAddresses: string;
   myStackOfStringsOfAddresses: string;
+
+    // private threeUserPropertiesForTableArray: any;
+    threeUserPropertiesForTableArray: any;
+    threeUserPropertiesForTableArrayLength = 0; // for counter on template
+/* We assign data to this in the "DotPipe()" method
+     let threeUserPropertiesForTableArray: [];
+     { username, email, institutionName }
+
+     Interesting Error, re: 'private'
+     "Private field cannot be resolved when using the AOT compiler"  << interesting. hmm.
+
+     error TS2341: Property 'threeUserPropertiesForTableArray' is private
+     and only accessible within class 'NewFabricatorComponent'.
+
+    279         <mat-list-item *ngFor="let oneguy of threeUserPropertiesForTableArray">
+ */
 
   constructor(
       private myRouter: Router,
@@ -340,6 +379,22 @@ errors: []
     // this.myParseOutEmails(); // Just run it automatically. not wait for user button click
       // Seems to be okay (vs. in ngAfterViewInit())
 
+    // noinspection UnnecessaryLocalVariableJS
+    const sampleUser = [{
+        username: 'sample',
+        email: 'email',
+        institutionName: 'skool',
+    }];
+    this.myEducatorsDataSource.data = sampleUser; // complains in template if empty at init. sigh.
+
+/* WR__TEMP DOT-NEXT !!! */
+    this.myHeatUsersSubscription = this.myFabricatorService.myHeatUserInfoObservableInService$.subscribe(
+        (yeahWhatWeGot) => {
+            this.myHeatAuthorizationsObservableInComponentDotNext = yeahWhatWeGot; // array of users[]
+        }
+    );
+
+
   } // /ngOnInit()
 
     ngAfterViewInit() {
@@ -349,7 +404,9 @@ errors: []
        */
         this.myEducatorsDataSource.sort = this.mySort;
         this.myEducatorsDataSource.paginator = this.myPaginator;
-      // this.myParseOutEmails(); // Just run it automatically. not wait for user button click
+
+
+        // this.myParseOutEmails(); // Just run it automatically. not wait for user button click
       // NO. Not good place to run this, here in "AfterView"
 
       // ***** EXPERIMENT **************************
@@ -368,19 +425,62 @@ errors: []
         // *******************************
     } // /ngAfterViewInit()
 
-    /* HTTP to get the file ??? ??? WUL << See the SERVICE
-
-  GET ADMIN USER TOKEN 2020-05-12-0820AM good for 24 hours
-    curl --location -DING?size=115' \
-    --header 'Accept: application/json' \
-    --header 'Content-Type: application/json' \
-    --header 'Authorization: Bearer eyJjdHkiO ... JUuEQ'
+    /* HTTP to get the file :o) WUL << See the SERVICE
      */
+    myGetHttpHeatUsersDotNext() {
+        /* // Fire & Forget!
+        That's right. From here in Component, you just kick off
+        this method over on the Service.
 
-    myGetHttpHeatUsers() {
-        myHeatAuthorizations = this.myFabricatorService.giveMeHeatUsers();
-        console.log('HTTP-LAND! myHeatAuthorizations ', myHeatAuthorizations);
+        You do *not* get anything directly back. No.
+
+        Over on the Service, that method does ".subscribe()"
+        on its own Observable (in the Service), and its own
+        ".next()" to supply data (gotten from HTTP) to
+        that Service Observable.
+        myHeatUserInfoObservableInService$
+
+        Meantime, here in the Component ngOnInit(), we have
+        ".subscribed()" to that Service Observable, and we
+        therefore instantly get its data updates.
+         */
+        this.myFabricatorService.giveMeHeatUsersDotNext();
     }
+
+    myGetHttpHeatUsersDotPipe() {
+        // Note: Below, LHS, is an Observable<object>, not a Subscription. ("LHS" friend, is "Left-Hand Side")
+        this.myHeatAuthorizationsObservableInComponentDotPipe = this.myFabricatorService.giveMeHeatUsersDotPipe();
+        /*
+        1. Great. From the above line, we obtain "observable" data,
+        the which we can get *out* of that observable,
+        so it can be rendered in the HTML template, by means of the Angular magic ' | async ' biz. Ok.
+
+        2. Now, we would like to use, get out, the
+         same "observable" data right here in TS.
+         (not making use of magic 'async').
+        We want to assign the actual data to the MatTableDataSource. woot.
+        The secret-if-not-quite-magical sauce is:
+        ".subscribe()" to the observable. cheers.
+         */
+        this.myHeatAuthorizationsObservableInComponentDotPipe.subscribe(
+            (userInfoWeGot) => { // << that ARRAY of users [{...},{...}]
+                // Hmm, what if we declare this higher up?
+                // let threeUserPropertiesForTableArray: [];
+                this.threeUserPropertiesForTableArray = userInfoWeGot.map( (eachUserInfo) => {
+                    // console.log('777 eachUserInfo.username ', eachUserInfo.username); // Yes
+                    return {
+                        username: eachUserInfo.username,
+                        email: eachUserInfo.profile.email,
+                        institutionName: eachUserInfo.profile.institutionName,
+                    };
+                });
+                // console.log('888 this.threeUserPropertiesForTableArray ', this.threeUserPropertiesForTableArray); // Yes, whole array
+
+                this.myEducatorsDataSource.data = this.threeUserPropertiesForTableArray; // whamma-jamma
+                this.threeUserPropertiesForTableArrayLength = this.threeUserPropertiesForTableArray.length;
+            }
+        ); // /.subscribe()
+    } // /myGetHeatUsersDotPipe()
 
 
     // FILE SELECTOR CHOOSER
@@ -465,6 +565,7 @@ webkitRelativePath: ""
                 return oneEducator;
             });
         this.myEducatorsDataSource.data = this.educators; // whamma-jamma
+        this.educatorsLength = this.educators.length;
         // NAH:  this.showTableDataIsHere = true;
     }
 
@@ -594,6 +695,14 @@ https://material.angular.io/components/input/overview#changing-when-error-messag
 
    */
 
+    ngOnDestroy() {
+        if (this.myHeatUsersSubscription) {
+            this.myHeatUsersSubscription.unsubscribe();
+        }
+        // doubtless unneeded; just sanity check
+        this.educatorsLength = 0;
+        this.threeUserPropertiesForTableArrayLength = 0;
+    }
 
 } // /class NewFabricatorComponent
 

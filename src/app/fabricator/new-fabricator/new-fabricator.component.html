@@ -134,10 +134,32 @@ you do *not* subtract Counter Base #, (be that 0 or anything else, like say 40),
         <mat-card-content
                 fxLayout="column"
                 fxLayoutAlign="center center">
-            <button
-            mat-raised-button
-            type="button"
-            on-click="myGetHttpHeatUsers()">Go Get Them</button>
+            <div
+                    fxLayout="row"
+                    fxLayoutAlign="center center">
+                <button
+                        mat-raised-button
+                        type="button"
+                        on-click="myGetHttpHeatUsersDotPipe()">Go Get Them DOT-PIPE</button>
+
+                <button
+                        mat-raised-button
+                        type="button"
+                        on-click="myGetHttpHeatUsersDotNext()">Go Get Them DOT-NEXT</button>
+            </div>
+            <div
+            fxLayout="row"
+            fxLayoutAlign="center start">
+<!-- Works. No Longer Needed. Now loaded to DataTable -->
+                <ul><span *ngIf="myHeatAuthorizationsObservableInComponentDotPipe">Using ' | async'</span>
+                    <li *ngFor="let meow of myHeatAuthorizationsObservableInComponentDotPipe | async">{{meow.username}} | {{meow.profile.email}}
+                    </li>
+                </ul>
+                <ul><span *ngIf="myHeatAuthorizationsObservableInComponentDotNext">NOT Using 'async'</span>
+                    <li *ngFor="let meowNext of myHeatAuthorizationsObservableInComponentDotNext">{{meowNext.username}} | {{meowNext.profile.email}}
+                    </li>
+                </ul>
+            </div>
         </mat-card-content>
     </mat-card>
 
@@ -170,9 +192,9 @@ you do *not* subtract Counter Base #, (be that 0 or anything else, like say 40),
                 <mat-icon>attach_file</mat-icon>
                 <mat-icon>file_upload</mat-icon>
             </button>attach_file!! |  file_upload!!
-            <p *ngIf="!myFile; else myFileName">your file will be here</p>
+<!--            <p *ngIf="!myFile; else myFileName">your file will be here</p>-->
             <ng-template ref-myFileName>
-                <p>{{ myFile?.name }}</p>
+<!--                <p>{{ myFile?.name }}</p>-->
             </ng-template>
         </mat-card-content>
     </mat-card>
@@ -252,17 +274,34 @@ Tried <ng-container>. Still disconnected, but now centered again. O la.
 -->
     <mat-paginator
             [pageSize]="5"
-            [pageSizeOptions]="[2,5,10,20]"
+            [pageSizeOptions]="[2,5,10,20,100]"
     >
     </mat-paginator>
 <!--    </ng-container>-->
+    <div
+    fxLayout="row"
+    fxLayoutAlign="center start"
+    fxLayoutGap="20px"
+    >
+
     <mat-list>
+        <div>Via HTTP. Count {{threeUserPropertiesForTableArrayLength}}
+        </div>
+        <mat-list-item *ngFor="let oneguy of threeUserPropertiesForTableArray">
+            <h1 matLine><b>three {{ oneguy.username }}</b></h1>
+            <p matLine>{{ oneguy.email }}</p>
+            <p matLine>{{ oneguy.institutionName }}</p>
+        </mat-list-item>
+    </mat-list>
+    <mat-list>
+        <div>From File. Count {{educatorsLength}}
+        </div>
         <mat-list-item *ngFor="let educator of educators">
-            <h1 matLine><b>{{ educator.username }}</b></h1>
+            <h1 matLine><b>educator {{ educator.username }}</b></h1>
             <p matLine>{{ educator.email }}</p>
             <p matLine>{{ educator.institutionName }}</p>
         </mat-list-item>
     </mat-list>
-
+    </div>
 </div>
 
