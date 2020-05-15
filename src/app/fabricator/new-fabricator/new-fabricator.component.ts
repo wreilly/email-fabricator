@@ -6,7 +6,9 @@ Seems not so far. FormGroupDirective for Reactive Forms, NgForm for Template-Dri
 
 import { Router } from '@angular/router';
 
-import { FabricatorService } from '../fabricator.service';
+
+import {FabricatorService, MyThreePropsUser, MyThreePropsUserFlat} from '../fabricator.service';
+// Couple interfaces refactored over to the Service
 
 import { ErrorStateMatcher } from '@angular/material/core'; // MatInput property
 /*
@@ -107,6 +109,7 @@ export class MatHeaderRowDef { }
 export class MatRowDef { }
 */
 
+
 @Component({
   selector: 'app-new-fabricator',
   templateUrl: './new-fabricator.component.html',
@@ -115,9 +118,33 @@ export class MatRowDef { }
 export class NewFabricatorComponent implements OnInit, AfterViewInit, OnDestroy {
 
     // HTTP 'GET HEAT USERS' API CALL
-    myHeatAuthorizationsObservableInComponentDotPipe: Observable<any>; // ye gods ASYNC
+    // myHeatAuthorizationsObservableInComponentDotPipe: Observable<MyThreePropsUser[]>; // << NO Not just ThreeProps.
+    // It is ENTIRE User {}. Needs that <any>, or perhaps <object> bit better:
+    // myHeatAuthorizationsObservableInComponentDotPipe: Observable<any>; // YES forgiving n'est-ce pas? ye gods ASYNC
+    // myHeatAuthorizationsObservableInComponentDotPipe: Observable<object>; // << NO not iterable
+    myHeatAuthorizationsObservableInComponentDotPipe: Observable<object[]>; // ?? << NO!
+    /*
+    ERROR in src/app/fabricator/new-fabricator/new-fabricator.component.ts:570:9 - error TS2322:
+    Type 'Observable<object>' is not assignable to type 'Observable<object[]>'.
+      Type '{}' is missing the following properties
+      from type 'object[]': length, pop, push, concat, and 26 more.
+     */
+    // Hmm, for | async, does need to be iterable
+
+/* Hmm, not an "Observable" ?? Hmm. (see NYTimes Top Stories)
     myHeatAuthorizationsObservableInComponentDotNext: Observable<any>; // ye gods NO ASYNC
-    /* Okay - the above is:
+*/
+    myHeatAuthorizationsObservableInComponentDotNext: MyThreePropsUser[]; // or, easier, any // ye gods NO ASYNC
+/*
+    myHeatAuthorizationsObservableInComponentDotNext: []; // or, easier, any // ye gods NO ASYNC
+*/
+    // keeping the name but changing the type. cheers.
+    // TODO CHANGE THE NAME Remove 'Observable' for it ain't one. Yeesh.
+    //  AND get this DotNext data onto the MatTableDataSource okay? Okay. 20200514-1736 whew <<
+    //  well, it only works if you click "Dot-Next" an embarrassing TWO TIMES (yeesh-issimo)
+
+
+    /* Okay - the class member variables declared above are:
 
     "DOT-PIPE"
     1.A.) In myGetHttpHeatUsersDotPipe(), it is going to be assigned (LHS) what
@@ -141,7 +168,8 @@ export class NewFabricatorComponent implements OnInit, AfterViewInit, OnDestroy 
     myFile: File | null = null;
 
     // For simple MatList we had simple array of objects [{username, email, institutionName}]
-    educators: any[]; // << myParseOutEmails() triggers this, to write to List
+    educators: MyThreePropsUserFlat[]; // << myParseOutEmails() triggers this, to write to List
+    // educators: any[]; // << myParseOutEmails() triggers this, to write to List
     educatorsLength = 0; // Needed for a 'count' on template
     // For MatTable, we need this MatTableDataSource thingie:
     // DATASOURCE.data is that educators array thingie
@@ -197,7 +225,7 @@ https://angular.io/guide/static-query-migration
   myStackOfStringsOfAddresses: string;
 
     // private threeUserPropertiesForTableArray: any;
-    threeUserPropertiesForTableArray: any;
+    threeUserPropertiesForTableArray: MyThreePropsUserFlat[]; // any;
     threeUserPropertiesForTableArrayLength = 0; // for counter on template
 /* We assign data to this in the "DotPipe()" method
      let threeUserPropertiesForTableArray: [];
@@ -380,22 +408,55 @@ errors: []
       // Seems to be okay (vs. in ngAfterViewInit())
 
     // noinspection UnnecessaryLocalVariableJS
-    const sampleUser = [{
-        username: 'sample',
-        email: 'email',
-        institutionName: 'skool',
+    const sampleUserForDataSource = [{
+        username: 'sampleForDataSource',
+        email: 'emailForDataSource',
+        institutionName: 'skoolForDataSource',
     }];
-    this.myEducatorsDataSource.data = sampleUser; // complains in template if empty at init. sigh.
+    this.myEducatorsDataSource.data = sampleUserForDataSource; // complains in template if empty at init. sigh.
 
 /* WR__TEMP DOT-NEXT !!! */
-    this.myHeatUsersSubscription = this.myFabricatorService.myHeatUserInfoObservableInService$.subscribe(
+    this.myHeatUsersSubscription = this.myFabricatorService.currentUserInfo$.subscribe( // << Now .subscribe() to .asObservable()
+        // https://fireship.io/lessons/sharing-data-between-angular-components-four-methods/
+   // this.myHeatUsersSubscription = this.myFabricatorService.myHeatUserInfoObservableInService$.subscribe(
+        // << made that Service$ BehaviorSubject private
         (yeahWhatWeGot) => {
+            console.log('0000 ngOnInit yeahWhatWeGot ', yeahWhatWeGot);
+            // TODONE Not Seen ! 20200514-0839
+            // OK Now seen (using BehaviorSubject)
+            /*
+            0000 ngOnInit yeahWhatWeGot  'defaultBehaviorSubjectValueHereInService' // << string to begin
+
+            Now: looks pretty good, on INITIAL LOAD
+            0: [{}]
+username: "sampleFromService",
+profile: { institutionName: "skoolFromService",
+           email: "emailFromService"
+          }
+             */
             this.myHeatAuthorizationsObservableInComponentDotNext = yeahWhatWeGot; // array of users[]
+
+            // tslint:disable-next-line:max-line-length
+            console.log('0000-BBBB ngOnInit this.myHeatAuthorizationsObservableInComponentDotNext ', this.myHeatAuthorizationsObservableInComponentDotNext);
+            /* Yes.
+            - Initial load, the one sampleFromService entry (same as above)
+            - After user clicks "DOT-NEXT"
+            we do get whole [] array of full user {} = :o)
+            BUT ( problem is ) that is TOO LATE
+             */
         }
     );
 
+    // console.log('4444-NGONINIT this be ? ', this); // YES: NewFabricatorComponent {}
+
+      // console.log('5555-NGONINIT. this.threeUserPropertiesForTableArray ', this.threeUserPropertiesForTableArray); // YES: undefined
 
   } // /ngOnInit()
+
+    showMeThreeUserPropertiesForTableArray() {
+        console.log('5555-SHOWME. (after) this.threeUserPropertiesForTableArray ', this.threeUserPropertiesForTableArray);
+        // YES: undefined (as expected!!) :)
+    }
 
     ngAfterViewInit() {
       /* HIGHLY USEFUL:
@@ -443,19 +504,118 @@ errors: []
         Meantime, here in the Component ngOnInit(), we have
         ".subscribed()" to that Service Observable, and we
         therefore instantly get its data updates.
+        Those updates are provided to this Observable here in this Component:
+        * myHeatAuthorizationsObservableInComponentDotNext *
          */
+
+/* What (The Hell) Was This. Ignore:
+        let whatServiceSent; // ? : Subscription;
+        whatServiceSent = this.myFabricatorService.giveMeHeatUsersDotNext();
+*/
+
         this.myFabricatorService.giveMeHeatUsersDotNext();
-    }
+
+        /* Q. What About Data Access Here in TypeScript?
+           A. So, while it is true the above line is "Fire & Forget", and is enough
+        to get the data delivered to the Component here, to our big ol' Observable:
+        * myHeatAuthorizationsObservableInComponentDotNext *
+        such that it can be rendered to the HTML template -- all good ...
+           BUT - We may have need for that data here in the TS. Read on:
+           Easy-peasy, no?
+           That same big ol' Observable with the unwieldy name can be used,
+           * myHeatAuthorizationsObservableInComponentDotNext *
+           you just have to ***".subscribe()"*** to it. cheers.
+         */
+
+// **************************************
+/* CWAZY !!! We do NOT do a ".subscribe()"
+on this semi-sorta-pseudo-"Observable" (it's not)
+we get for our "DotNext" doings.
+No.
+
+        this.myHeatAuthorizationsObservableInComponentDotNext.subscribe(
+            // this.mySharedSubscribeBothDotPipeAndDotNext); // /.subscribe() to DotNext !
+        this.mySharedSubscribeBothDotPipeAndDotNext.bind(this));
+        // That refactored-out method we are calling *IS* Old Skool; gotta use .bind()
+*/
+
+// /**************************************
+
+        /* OK. We need to .map() or whatever
+        the data we have in this thing:
+        myHeatAuthorizationsObservableInComponentDotNext
+        [ {}, {} ] array of full user {}
+
+        to be in this thing:
+        threeUserPropertiesForTableArray
+        {
+          username: eachUserInfo.username,
+          email: eachUserInfo.profile.email,
+          institutionName: eachUserInfo.profile.institutionName,
+        }
+        Then we use it in the TypeScript like so:
+   this.myEducatorsDataSource.data = this.threeUserPropertiesForTableArray; // whamma-jamma
+   this.threeUserPropertiesForTableArrayLength = this.threeUserPropertiesForTableArray.length;
+         */
+        /*
+        To do that, we could:
+        1) write that code again here (but, D.R.Y. right?)
+        2) re-use that mad method below:
+          "mySharedSubscribeBothDotPipeAndDotNext()"
+
+          We'll try # 2.
+         */
+        // Param passed in is big ol' [{},{}]
+// https://javascript.info/settimeout-setinterval
+/*
+Q. Hmm, this setTimeout() biz did not seem to make the difference I was looking for... o well.
+A. Hah! (you silly)
+The value held in that HeatAuth...DotNext thing
+is merely the SampleUserFromService
+And even after 9 seconds it is STILL
+that same Sample user only.
+So forget about "setTimeout()"...
+*/
+/*
+        setTimeout(
+            this.mySharedSubscribeBothDotPipeAndDotNext,
+            9000,
+            this.myHeatAuthorizationsObservableInComponentDotNext); // Crazy Artificial Delay
+*/
+/* */
+// Cool. This is (sorta) working (even though you have to click "Dot-Next" button twice) (ouch)
+        this.mySharedSubscribeBothDotPipeAndDotNext(this.myHeatAuthorizationsObservableInComponentDotNext);
+
+
+        // Above is (I think?) sort of fire & forget. cheers.
+
+    } // /myGetHttpHeatUsersDotNext()
 
     myGetHttpHeatUsersDotPipe() {
         // Note: Below, LHS, is an Observable<object>, not a Subscription. ("LHS" friend, is "Left-Hand Side")
-        this.myHeatAuthorizationsObservableInComponentDotPipe = this.myFabricatorService.giveMeHeatUsersDotPipe();
+
+        /* (below)
+        ERROR in src/app/fabricator/new-fabricator/new-fabricator.component.ts:570:9 - error TS2322: Type 'Observable<object>'
+        is not assignable to type 'Observable<object[]>'.
+      Type '{}' is missing the following properties from type 'object[]': length, pop, push, concat, and 26 more.
+
+      TO FIX: (seemingly?)
+      Both are now Observable<object[]>
+      - The Service's giveMeHeatUsersDotPipe()
+      - The Component's myHeatAuthorizationsObservableInComponentDotPipe
+         */
+        this.myHeatAuthorizationsObservableInComponentDotPipe = this.myFabricatorService
+            .giveMeHeatUsersDotPipe();
         /*
         1. Great. From the above line, we obtain "observable" data,
         the which we can get *out* of that observable,
         so it can be rendered in the HTML template, by means of the Angular magic ' | async ' biz. Ok.
+        YOU DON'T NEED TO .subscribe() TO IT.
+        ASYNC DOES THAT FOR YOU.
 
-        2. Now, we would like to use, get out, the
+        2. Now, if, for the hell of it, in addition to the
+        above async biz, we would ALSO like to use,
+        to get out, the
          same "observable" data right here in TS.
          (not making use of magic 'async').
         We want to assign the actual data to the MatTableDataSource. woot.
@@ -463,9 +623,82 @@ errors: []
         ".subscribe()" to the observable. cheers.
          */
         this.myHeatAuthorizationsObservableInComponentDotPipe.subscribe(
-            (userInfoWeGot) => { // << that ARRAY of users [{...},{...}]
-                // Hmm, what if we declare this higher up?
-                // let threeUserPropertiesForTableArray: [];
+            /* Whoa. Some interesting (re)-learning:
+            A. Plan "A" had entire inline function right here in the .subscribe()
+            B. Plan "B" became: since we do Same Thing for bot DotPipe and DotNext, let us
+            *refactor* to a separate callable function. cheers.
+
+            A. INLINE
+            Okay, 2 ways to deal with this Inline function:
+            A.1. ARROW () => {}
+            A.2. OLD SKOOL function() {}
+
+            So, for A.1., the usual inline function is an arrow => function. The 'this' handling all set.
+
+            But, to do a little A.2. biz, William being William and all,
+            he/I wished to explore the vagaries of ".bind()" & Etc.
+            I'd recalled a variant vagary that featured this:
+            ----------------------------
+                    }.bind(this));
+            ----------------------------
+The odd bit is: hmm, how come a "." dot function thing, hanging off of a "}" ?? That's just weird.
+
+Google didn't recall that line very well, and it took keen eyes and heaps o' patience to find this
+ONLY PAGE ON THE INTERNET that shows it in use:
+https://www.smashingmagazine.com/2014/01/understanding-javascript-function-prototype-bind/
+Wot They Had:
+-----------
+render: function () {
+    this.getAsyncData(function () {
+        this.specialFunction();
+        this.anotherSpecialFunction();
+    }.bind(this)); // <<<<<<<<<<  THAR SHE BLOWS!!
+}
+-----------
+Question became: How The Hell To Get This To Work, For Me.
+Key things to note:
+- It is an INLINE function
+- It is (of course) old skool: "function() {}"
+- And so yeah that .bind() crazy thing can hang directly right off that closing brace: }.bind(this)); whoa.
+
+
+PLAN B. = "REFACTORING" / "RE-USE" / NIRVANA !!! !!!
+PARAMETER PASS IN A FUNCTION
+B.1. Try to make that work WITHOUT any use of .bind() << Hah!
+B.2. Figger out how to get .bind() to work right & Etc. << OK
+
+N.B. To do this stuff, we COMMENT OUT the entire A. Inline Function
+B.1. The thing worth noting here, when I did *not* use .bind(this),
+was the CONFUSION I created for myself.
+
+In the refactored-out method, I had two "this." class members to try to access.
+In sum, I was not accessing either one of them.
+But (insert CONFUSION here) I Did Not Know That. oi!
+- One of them was just an Array. So, I just assigned data to it and NOBODY COMPLAINED. oi!
+- The other was an Object. I tried to assign data to a ".data" property off that Object, and
+the system DID COMPLAIN. ok. ok. I get it. Kinda. Sorta.
+(was bugging me why one was "working" (hah!) while the other was, well,
+trying to show me how stupid I really was.) oi!
+As you can imagine, the Array one turned out to be me very simply
+and very stupidly just MAKING AN ENTIRELY NEW VARIABLE down in
+the context of my refactored-out method. Same name
+
+B.2. Once the .bind(this) was added to the calling function, things were FINE.
+oi!
+
+
+             */
+
+            /*
+            PLAN B.  REFACTOR
+             */
+// When refactored-out method we're calling is Old Skool, you gotta use .bind()
+             // this.mySharedSubscribeBothDotPipeAndDotNext); // NO. << N.B. WITHOUT .bind() here...
+             // this.mySharedSubscribeBothDotPipeAndDotNext.bind(this)); // YES. << N.B. .bind() here...
+/* */
+            // (userInfoWeGot) => { // << INLINE uptown arrow => function; no need for .bind anything
+            function(userInfoWeGot) { // << INLINE old skool function; can use }.bind(this)); at end
+
                 this.threeUserPropertiesForTableArray = userInfoWeGot.map( (eachUserInfo) => {
                     // console.log('777 eachUserInfo.username ', eachUserInfo.username); // Yes
                     return {
@@ -478,10 +711,91 @@ errors: []
 
                 this.myEducatorsDataSource.data = this.threeUserPropertiesForTableArray; // whamma-jamma
                 this.threeUserPropertiesForTableArrayLength = this.threeUserPropertiesForTableArray.length;
-            }
+            // } // << Inline arrow => function; no need for .bind()
+            }.bind(this) // <<<<<<<<<<<< THAR SHE BLOWS !!! :o)  INLINE old skool function(). Needs .bind()
         ); // /.subscribe()
+ /* */
     } // /myGetHeatUsersDotPipe()
 
+    mySharedSubscribeBothDotPipeAndDotNext(userInfoWeGotFromBothDotPipeAndDotNext) { // << that ARRAY of users [{...},{...}]
+        /* Hey Guys, Little Finding Here
+        (I know, I know, "kindergarten" level, what can you do.)
+        1. NO:    mySharedSubscribeBothDotPipeAndDotNext(userInfoWeGotFromBothDotPipeAndDotNext) {
+        2. YES:   mySharedSubscribeBothDotPipeAndDotNext = (userInfoWeGotFromBothDotPipeAndDotNext) => {
+        3. YES: (NEEDS .bind())   mySharedSubscribeBothDotPipeAndDotNext(userInfoWeGotFromBothDotPipeAndDotNext) {
+
+        Q. What?
+        A. # 1 is old skool function, and it handles 'this' in old skool way. Tlicky!
+           # 2 is uptown "arrow" function (very groovy) and it Takes Care of 'this' For You. Veddy nice.
+           # 3 requires *calling* function to use *** .bind(this) ***. Then it'll work even w. old skool. Bene.
+        Q.2. Why? Wha-a-a? What's happening here?
+        A.2. This method is being used in a **nested** fashion. It is passed in as a **parameter** to
+        another function here in this Component. (Two other functions in fact. That's the point. This
+        here method is getting some *re-use* (nice)).
+        But watch out: when doing this "pass in a function as a parameter" biz, the 'this'
+        reference ain't what you think no more, in that new, nested context. You got to take care.
+         */
+        console.log('7777 userInfoWeGotFromBothDotPipeAndDotNext ', userInfoWeGotFromBothDotPipeAndDotNext);
+        // Yes Array of users ...
+
+        console.log('5555-AAAA early? this.threeUserPropertiesForTableArray ', this.threeUserPropertiesForTableArray); // undefined
+        // But apparently okay for use in next line. hmm.
+        console.log('4444 this be ? ', this);
+        /* Hmm. NOT the "NewFabricatorComponent {}" No suh.
+        'this' is:
+        SafeSubscriber {
+          myEducatorDataSource: Array(94) [{}],
+          threeUserPropertiesForTableArray: Array(94) [{}],
+        }
+         */
+
+        this.threeUserPropertiesForTableArray = userInfoWeGotFromBothDotPipeAndDotNext.map( (eachUserInfo) => {
+            return {
+                username: eachUserInfo.username,
+                email: eachUserInfo.profile.email,
+                institutionName: eachUserInfo.profile.institutionName,
+            };
+        });
+        console.log('5555-BBBB after. this.threeUserPropertiesForTableArray ', this.threeUserPropertiesForTableArray);
+        // yes. 3 properties. good.
+
+        console.log('6666-AAAA this.myEducatorsDataSource ', this.myEducatorsDataSource);
+        /* WITH BIND: Huh! It DOES find it, with our initial sample record:
+         {username: "sample", email: "email", institutionName: "skool"}
+         */
+        /* WITHOUT BIND:
+        undefined :o( << When NO BIND.  We are (trying to) be fixing that. :o) w-i-p
+         */
+        // fwiw" MatTableDataSource.filteredData is the Array of 3 property items. Also _data._value too. cheers.
+
+/*
+        this.myEducatorsDataSource.data = this.threeUserPropertiesForTableArray.map(
+            eachThing => eachThing // map it on, instead of whamma-jamma (?) << YES WORKED
+        );
+*/
+
+        this.myEducatorsDataSource.data = this.threeUserPropertiesForTableArray; // whamma-jamma
+        /*
+        For above line to work, the .BIND() must be in place, properly used. Cheers.
+        (Without BIND, you get "cannot find 'data' of undefined")
+         */
+
+        // this.myEducatorsDataSource = this.threeUserPropertiesForTableArray; // whamma-jamma
+        /*
+        The above line ain't right. Was an experiment. We are *not* to whamma-jamma an array right
+        onto a MatTableDataSource. No.
+         */
+
+        console.log('6666-BBBB Now? this.myEducatorsDataSource ', this.myEducatorsDataSource);
+        /* WITHOUT BIND --> No. (sad)
+        core.js:5873 ERROR TypeError: Cannot set property 'data' of undefined
+         */
+
+        this.threeUserPropertiesForTableArrayLength = this.threeUserPropertiesForTableArray.length;
+    }  // /mySharedSubscribeBothDotPipeAndDotNext()
+    // >>>>  }.bind(this);  <<<< Hmm, apparently you don't put the bind biz here, on the function that is called. No.
+    // You instead put the bind biz up on the *calling* of this function. Hmm.
+    // https://github.com/microsoft/TypeScript/wiki/'this'-in-TypeScript#functionbind
 
     // FILE SELECTOR CHOOSER
     // https://stackblitz.com/edit/angular-material-file-select?file=src%2Fapp%2Fapp.component.ts
@@ -567,7 +881,7 @@ webkitRelativePath: ""
         this.myEducatorsDataSource.data = this.educators; // whamma-jamma
         this.educatorsLength = this.educators.length;
         // NAH:  this.showTableDataIsHere = true;
-    }
+    } // /myParseOutEmails()
 
     myOnSubmit() {
     /*
@@ -711,7 +1025,7 @@ HEW-2461.txt
 ======================
 JAVASCRIPT to create e-mail addresses to paste into Excel
 ======================
-// TODO:
+// TODOOLD:
 let myStudentIncrementerCounter = 0
 let myCounter = 0
 

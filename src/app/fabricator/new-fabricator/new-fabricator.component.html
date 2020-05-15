@@ -123,6 +123,14 @@ you do *not* subtract Counter Base #, (be that 0 or anything else, like say 40),
         >Creating {{ myFabricatorFormControlNumberOfRows.value }} addresses, from {{ myFabricatorFormControlStudentIncrementerCounter.value }} to {{ ( myFabricatorFormControlStudentIncrementerCounter.value - 1 ) + myFabricatorFormControlNumberOfRows.value }} inclusive. Cheers.</p>
     </form>
 
+    <p>The poorly named non-Observable for "DOT-NEXT":</p>
+    <p>myHeatAuthorizationsObservableInComponentDotNext</p>
+    <ul>
+        <li *ngFor="let necessaryCat of myHeatAuthorizationsObservableInComponentDotNext">
+            {{necessaryCat.username}} | {{necessaryCat.profile.email}}
+        </li>
+    </ul>
+    <button type="button" on-click="showMeThreeUserPropertiesForTableArray()">Show Me threeUserPropertiesForTableArray</button>
     <!-- HTTP GO GET HEAT USERS FUN! -->
     <mat-card
             fxLayout="column"
@@ -285,7 +293,9 @@ Tried <ng-container>. Still disconnected, but now centered again. O la.
     >
 
     <mat-list>
-        <div>Via HTTP. Count {{threeUserPropertiesForTableArrayLength}}
+        <div>Via HTTP. <span *ngIf="threeUserPropertiesForTableArrayLength > 0">Count {{threeUserPropertiesForTableArrayLength}}</span>
+        </div>
+        <div>(be that Dot-Pipe OR Dot-Next. cheers.)
         </div>
         <mat-list-item *ngFor="let oneguy of threeUserPropertiesForTableArray">
             <h1 matLine><b>three {{ oneguy.username }}</b></h1>
@@ -294,8 +304,9 @@ Tried <ng-container>. Still disconnected, but now centered again. O la.
         </mat-list-item>
     </mat-list>
     <mat-list>
-        <div>From File. Count {{educatorsLength}}
+        <div>From File.  <span *ngIf="educatorsLength > 0">Count {{educatorsLength}}</span>
         </div>
+        <div>(from a previously saved file)</div>
         <mat-list-item *ngFor="let educator of educators">
             <h1 matLine><b>educator {{ educator.username }}</b></h1>
             <p matLine>{{ educator.email }}</p>

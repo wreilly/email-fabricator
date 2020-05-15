@@ -5,6 +5,24 @@ import { HttpClient } from '@angular/common/http';
 
 import { environment } from '../../environments/environment';
 
+// NO: << Hmm. May be?    Not used. This is small subset of entire "user" with many more properties
+export interface MyThreePropsUser {
+    username: string; // hmm, removing didn't break anything
+    profile: {
+        email: string;
+        institutionName: string;
+    };
+    // broken: string; // hmm, adding didn't break anything
+}
+
+// YES: Used for MatTableDataSource.
+export interface MyThreePropsUserFlat {
+    username: string;
+    email: string;
+    institutionName: string;
+}
+
+
 @Injectable({
     providedIn: 'root'
 })
@@ -13,11 +31,24 @@ export class FabricatorService {
 For trying to get HEAT data from services.hbsp.harvard.edu
  */
 /* WR__TEMP  Used with "DOT-NEXT" */
-    myHeatUserInfoObservableInService$ = new Subject<any>();
+    // myHeatUserInfoObservableInService$ = new Subject<any>();
 
-    // will be kit AND caboodle:
-    // {errors: [], data: {users:[]...}
+    sampleUserFromService = [{
+        username: 'sampleFromService',
+        profile: {
+            email: 'emailFromService',
+            institutionName: 'skoolFromService',
+        }
+    }];
 
+    private myHeatUserInfoObservableInService$ = new BehaviorSubject<any>(this.sampleUserFromService);
+    currentUserInfo$ = this.myHeatUserInfoObservableInService$.asObservable();
+    // https://fireship.io/lessons/sharing-data-between-angular-components-four-methods/
+    // (['defaultBehaviorSubjectValueHereInService']);
+/*
+private messageSource = new BehaviorSubject('default message');
+  currentMessage = this.messageSource.asObservable();
+ */
     constructor(
         private myHttpClient: HttpClient,
     ) { }
@@ -34,10 +65,18 @@ For trying to get HEAT data from services.hbsp.harvard.edu
                 this.myStackOfStringsOfAddressesInServiceSubject.next(stuffSentInToService);
         */
         this.myStackOfStringsOfAddressesInServiceBehaviorSubject.next(stuffSentInToService);
-    }
+    } // /sendInStackResults()
 
-    giveMeHeatUsersDotNext() {
-        this.myHttpClient.get(
+    giveMeHeatUsersDotNext(): void { // << : NO return ?? Seems not needed/used/doing-anything
+        // Seems also the Component invokes this in FIRE & FORGET manner, right? right.
+
+ // giveMeHeatUsersDotNext(): object { // << : return type ??
+        this.myHttpClient.get( // << N.B. no 'return' = ok. No <typing> either
+        // this.myHttpClient.get<MyThreePropsUser>( // << this <typing> didn't work out. Seems unneeded.
+        // The complete response body is
+        //  far larger than my little 3-prop interface
+
+        // return this.myHttpClient.get<MyThreePropsUser>( // << Q. should this be 'return'? (wasn't) hmm.
             'https://services.hbsp.harvard.edu/api/admin/users/authorization-status/PENDING',
             {
                 headers: {
@@ -50,20 +89,63 @@ For trying to get HEAT data from services.hbsp.harvard.edu
                 }
             }
         ).subscribe(
-            (userInfoWeSubscribedToInService: any) => { // WR__ Warning: More loosey, more goosey. Read 'em and weep.
+            (userInfoWeSubscribedToInService) => { // WR__ Wondering... Not 'any'. Default seems to be : Object
+                // Guess that holds the JSON of the HTTP Response entire. okay...
+
+            // (userInfoWeSubscribedToInService: any) => { // WR__ Warning: More loosey, more goosey. Read 'em and weep.
                 console.log('userInfoWeSubscribedToInService ', userInfoWeSubscribedToInService);
-                /* Yes:
+                /* Yes: This is JSON Response entire (body of HTTP Response)
                 {errors: Array(0), data: {users: Array(35)...…}}
                  */
 
-/* WR__TEMP */
-                this.myHeatUserInfoObservableInService$.next(userInfoWeSubscribedToInService.data.users);
+                // Yes [''] bracket notation works
+                console.log('NOGO 01 ? GOES :o) userInfoWeSubscribedToInService[\'data\'] ', userInfoWeSubscribedToInService['data']);
 
+                // tslint:disable-next-line:max-line-length
+                console.log('NOGO 01-A ? GOES :o)userInfoWeSubscribedToInService[\'data\'][\'users\'][0][\'username\']) ', userInfoWeSubscribedToInService['data']['users'][0]['username']); // << Very nice. My buddy, arkangel.cordero
+                // NO? YES! Does work; albeit TSLint complainy.
+                // "TSLint object access via string-literals is disallowed"
+                /* YES:
+                {users: Array(62), size: 115, totalElements: 62, totalPages: 1, number: 0}
+                 */
+
+               // BREAKS COMPILATION !!! "." dot-notation
+                // NO: console.log('NOGO 02 ? userInfoWeSubscribedToInService.data ',
+                // userInfoWeSubscribedToInService.data);
+                // ERROR "Property 'data' does not exist on type 'Object'"
+
+// https://angular.io/guide/http#requesting-a-typed-response
+                console.log('NIFTY 01 HEY (userInfoWeSubscribedToInService as any).data ', (userInfoWeSubscribedToInService as any).data);
+                // 01 nifty trick. wtf.
+                /* YES!
+                {users: Array(60), size: 115, totalElements: 60, totalPages: 1, number: 0}
+                 */
+                console.log('NIFTY 02 HEY (userInfoWeSubscribedToInService as any).data.users ', (userInfoWeSubscribedToInService as any)
+                    .data.users);
+                // nifty 02
+                /* YES!
+                [{…}, {…},]
+                 */
+                // tslint:disable-next-line:max-line-length
+                console.log('NIFTY 03 HEY (userInfoWeSubscribedToInService as any).data.users[0].username ', (userInfoWeSubscribedToInService as any)
+                    .data.users[0].username); // nifty 03
+                /* YES!
+                arkangel.cordero << My buddy
+                 */
+
+/* WR__TEMP */
+                this.myHeatUserInfoObservableInService$.next( (userInfoWeSubscribedToInService as any).data.users); // << Yes works
+                // this.myHeatUserInfoObservableInService$.next(userInfoWeSubscribedToInService.data.users);
+                // Yes also works; TSLint complainy
+                // ERROR: data is not a property...
+
+                // ?? return userInfoWeSubscribedToInService.data.users; // << Q. should this be 'return'? (wasn't) hmm.
             }
-        );
+        ); // /.subscribe()
     } // /giveMeHeatUsersDotNext()
 
-    giveMeHeatUsersDotPipe(): Observable<object> {
+    // giveMeHeatUsersDotPipe(): Observable<object> {
+    giveMeHeatUsersDotPipe(): Observable<object[]> {
         /*  << Yeah, returns an Observable to the Component
         We return an ARRAY (as an Observable, MBU)
     [{…}, {…}, {…}, ] username: "angel..."
