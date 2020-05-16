@@ -1,7 +1,8 @@
 /* tslint:disable:no-string-literal */
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import {ThreePropsUser} from './three-props-user.model';
 
 import { environment } from '../../environments/environment';
@@ -28,12 +29,12 @@ export class HbspService {
     // https://fireship.io/lessons/sharing-data-between-angular-components-four-methods/
 
     constructor(
-        private myHttp: HttpClient,
+        private myHttpClient: HttpClient,
     ) {  }
 
     giveMeHeatUsersDotNext(): void {
 
-        this.myHttp.get(
+        this.myHttpClient.get(
             'https://services.hbsp.harvard.edu/api/admin/users/authorization-status/PENDING',
             {
                 params: {
@@ -65,5 +66,33 @@ export class HbspService {
             }
         ); // /.subscribe()
     } // /giveMeHeatUsersDotNext()
+
+    giveMeHeatUsersDotPipe(): Observable<object[]> {
+        return this.myHttpClient.get(
+            'https://services.hbsp.harvard.edu/api/admin/users/authorization-status/PENDING',
+            {
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${environment['hbsp-admin-user-token']}`,
+                },
+                params: {
+                    size: '115'
+                }
+            }
+        ).pipe(
+            map(
+                (fromTapToMap: any) => { // WR__ Warning bit loosey goosey w any
+                    console.log('03 PIPE | MAP SERVICE HTTP-Land fromTapToMap.data.users ', fromTapToMap.data.users);
+                    /* YES: we *return* an ARRAY
+                    (as an Observable, MBU)
+                     [{…}, {…}, {…}, ]
+                    0: {username: "arkangel.cordero",...
+                     */
+                    return fromTapToMap.data.users;
+                }
+            ) // /map()
+        );
+    }
 
 }
