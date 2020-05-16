@@ -1,3 +1,4 @@
+/* tslint:disable:no-string-literal */
 import {Injectable} from '@angular/core';
 import {Subject, BehaviorSubject, Subscription, Observable} from 'rxjs';
 import { tap, map } from 'rxjs/operators';
@@ -82,7 +83,7 @@ private messageSource = new BehaviorSubject('default message');
                 headers: {
                     Accept: 'application/json',
                     'Content-Type': 'application/json',
-                    Authorization: `Bearer ${environment['admin-user-token']}`,
+                    Authorization: `Bearer ${environment['hbsp-admin-user-token']}`,
                 },
                 params: {
                     size: '115'
@@ -166,7 +167,7 @@ import { environment } from '../../../environments/environment';
                 headers: {
                     Accept: 'application/json',
                     'Content-Type': 'application/json',
-                    Authorization: `Bearer ${environment['admin-user-token']}`,
+                    Authorization: `Bearer ${environment['hbsp-admin-user-token']}`,
                 },
                 params: {
                     size: '115'

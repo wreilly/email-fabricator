@@ -24,7 +24,9 @@ rather than in app-wide MyMaterialModule. MBU
 import {MatTableDataSource} from '@angular/material/table';
 import {MatPaginator} from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-
+// YES the above NEED to be imported here in Component
+// NO it isn't "enough" that they are imported as Modules in my-material.module.ts
+// o well
 
 /* GETTING FILE DATA (JSON)
 1. HardCoded Filenames
@@ -435,6 +437,7 @@ profile: { institutionName: "skoolFromService",
           }
              */
             this.myHeatAuthorizationsObservableInComponentDotNext = yeahWhatWeGot; // array of users[]
+            this.mySharedSubscribeBothDotPipeAndDotNext(yeahWhatWeGot);
 
             // tslint:disable-next-line:max-line-length
             console.log('0000-BBBB ngOnInit this.myHeatAuthorizationsObservableInComponentDotNext ', this.myHeatAuthorizationsObservableInComponentDotNext);
@@ -445,7 +448,7 @@ profile: { institutionName: "skoolFromService",
             BUT ( problem is ) that is TOO LATE
              */
         }
-    );
+    ); // /.subscribe()
 
     // console.log('4444-NGONINIT this be ? ', this); // YES: NewFabricatorComponent {}
 

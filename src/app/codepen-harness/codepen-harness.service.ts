@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
 
+// provider: [] is in its own CodepenModule. working ok ...
 @Injectable()
 export class CodepenHarnessService {
 /*

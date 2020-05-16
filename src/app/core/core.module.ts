@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 
 import { ThemeService } from './services/theme.service';
 
+import { HbspService } from '../hbsp/hbsp.service';
+
 @NgModule({
     imports: [
 
@@ -14,8 +16,7 @@ import { ThemeService } from './services/theme.service';
     ],
     providers: [
         ThemeService,
+        HbspService,
     ],
 })
-export class CoreModule {
-
-}
+export class CoreModule { }
