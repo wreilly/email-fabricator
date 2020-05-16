@@ -23,11 +23,13 @@ import { FabricatorModule } from './fabricator/fabricator.module';
 import { NYTimesModule } from './nytimes/nytimes.module';
 import { RxjsPlaygroundModule } from './rxjs-playground/rxjs-playground.module';
 import { CodepenHarnessModule } from './codepen-harness/codepen-harness.module';
+import { HbspModule } from './hbsp/hbsp.module';
 
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './navigation/header/header.component';
 import { SidenavListComponent } from './navigation/sidenav-list/sidenav-list.component';
 import {WelcomeComponent} from './welcome/welcome.component';
+// import { HbspComponent } from './hbsp/hbsp.component';
 // import { RxjsPlaygroundComponent } from './rxjs-playground/rxjs-playground.component'; // nope
 
 @NgModule({
@@ -36,6 +38,7 @@ import {WelcomeComponent} from './welcome/welcome.component';
     HeaderComponent,
     SidenavListComponent,
     WelcomeComponent,
+    // HbspComponent,
     // RxjsPlaygroundComponent, // nope
   ],
   imports: [
@@ -57,6 +60,7 @@ import {WelcomeComponent} from './welcome/welcome.component';
     NYTimesModule,
     RxjsPlaygroundModule,
     CodepenHarnessModule,
+    HbspModule,
   ],
   providers: [], // << None. From CoreModule (for (singleton) Services)
   bootstrap: [AppComponent]

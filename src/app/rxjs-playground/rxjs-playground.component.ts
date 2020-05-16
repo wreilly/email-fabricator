@@ -55,7 +55,7 @@ A. We need to reference those Subscription(s) down in ngOnDestroy()
         this.myBehaviorSubscriptionOne = myBehaviorSubjectOne.subscribe((observerFromBehaviorSubjectWeGot) => {
             console.log('observerFromBehaviorSubjectWeGot ', observerFromBehaviorSubjectWeGot);
             this.somethingBehaviorToShow = observerFromBehaviorSubjectWeGot; // << Yep. 'that first bit of Behavior string'
-        })
+        });
 
         this.mySubscriptionTwo = mySubjectOne.subscribe(
             (observerTwoWeGot: string) => {
