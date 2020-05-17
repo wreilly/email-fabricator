@@ -62,6 +62,7 @@ https://stackblitz.com/edit/angular-material-file-select?file=src%2Fapp%2Fapp.co
         <mat-card-actions>
             <button mat-raised-button
                     type="button"
+                    [disabled]="!myHeatAuthorizations"
                     on-click="myParseOutEmails()"
             >
                 Display E-Mail Addresses
