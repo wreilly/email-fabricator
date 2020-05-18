@@ -43,8 +43,12 @@ HECS-6195  We have large JSON file of 115 Pending Educator Profiles
 // 1. THREE HARD-CODED FILES I CAN USE (Comment Out two)
 // import * as data from './myjson-20200508-112.json';
 // import * as data from './myjson-20200510-59.json';
+/* NO LONGER USED  see hbsp/heat-json/heat-json.component.ts
 import * as data from './myjson-20200512-65.json';
+*/
+
 import {Observable, Subscription} from 'rxjs';
+
 // 2. "dataFromChooser" will be from FileReader, below
 
 
@@ -355,7 +359,9 @@ default:
 data: {users: Array(112), size: 115, totalElements: 112, totalPages: 1, number: 0}
 errors: []
      */
+/* No Longer Used Here. See HeatJsonComponent
     console.log('JSON Data! ? ', data);
+*/
     /* SAMPLE USER
     {"errors":[],"data":{
 "users":[

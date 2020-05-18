@@ -20,8 +20,13 @@ import { ThreePropsUser, ThreePropsUserFlat } from '../../three-props-user.model
 })
 export class HeatHttpDotNextComponent implements OnInit, AfterViewInit, OnDestroy {
 
-  // myHeatAuthorizationsObservableInComponentDotNext: MyThreePropsUser[]; // << VERY BAD ORIGINAL NAME
+  // myHeatAuthorizationsObservableInComponentDotNext: MyThreePropsUser[];
+  // << VERY BAD ORIGINAL NAME. Q. Y? A. Because it is NOT an "Observable".
+
   myHeatAuthorizationsArrayInComponentDotNext: ThreePropsUser[]; // NO ASYNC
+  // Modestly Better Name now
+
+  isLoadingBooleanInComponent: boolean;
 
 /*
   "DOT-NEXT/SUBSCRIBE"
@@ -30,6 +35,7 @@ export class HeatHttpDotNextComponent implements OnInit, AfterViewInit, OnDestro
 (Note that the "DotPipe" version makes NO use nor reference to that Service Observable.)
 */
   private myHeatUsersSubscription: Subscription;
+  private myIsLoadingSubscription: Subscription;
 
   myEducatorsDataSource = new MatTableDataSource();
   myColumnsToDisplay = ['username', 'email', 'institutionName'];
@@ -56,6 +62,9 @@ https://angular.io/guide/static-query-migration
   ) { }
 
   ngOnInit(): void {
+    // Note: Does *not* use ' | async', so does
+    // need to .subscribe to Observable from Service
+
     this.myHbspService.currentUserInfoInService$.subscribe(
         (currentUserArrayWeGot) => {
           /* Q. Hmm, put the data received onto:
@@ -73,10 +82,10 @@ https://angular.io/guide/static-query-migration
           this.threeUserPropertiesForTableArray = currentUserArrayWeGot; // whamma-jamma
 */
           // 2.
-/*
-          this.myHeatAuthorizationsArrayInComponentDotNext = currentUserArrayWeGot; //
-          whamma-jamma (oughter work, fit-wise) BUT SEE # 4 below ISS BETTAH !!!
-*/
+/* Hmm. Wish to do this TOO t.b.d. */
+          this.myHeatAuthorizationsArrayInComponentDotNext = currentUserArrayWeGot;
+          // whamma-jamma (oughter work, fit-wise) BUT SEE # 4 below ISS BETTAH !!!
+
           /* N.B. incoming data has MORE fields than target type,
              but, there is "subset/superset alignment" if you know what I mean, so it works. MBU
           */
@@ -92,7 +101,14 @@ https://angular.io/guide/static-query-migration
           this.mySharedSubscribeBothDotPipeAndDotNext(currentUserArrayWeGot);
 
         }
-    ); // /.subscribe()
+    ); // /.subscribe() currentUserInfoInService$
+
+    this.myIsLoadingSubscription = this.myHbspService.isLoadingObservableInService$.subscribe(
+        (isLoadingOrNot) => {
+          this.isLoadingBooleanInComponent = isLoadingOrNot;
+        }
+    );
+
   } // /ngOnInit()
 
   ngAfterViewInit() {
@@ -113,6 +129,25 @@ https://angular.io/guide/static-query-migration
     worrying about Mr. "Let's Also .subscribe()"
     Here In The Component biz.
     That'll be any Phase II (presuming there ever is any Phase II).
+     */
+    /* PHASE II (Q. n'est-ce pas?) (A. kinda not really)
+    We actually do do the ".subscribe()" here in the Component biz,
+    up in ngOnInit() (of all places), when inside that
+    subscription to the Service's "currentUserInfo" biz, we do
+    two things, not one:
+    1) (typical) Yes we immediately assign the currentUserInfo received as-is
+       to a Component member, an Array.
+       Ho hum, typical stuff. That Array we can use in Template without async. Very nice.
+    2) (whoa) But we *also* run our own method herein:
+        "mySharedSubscribeBothDotPipeAndDotNext()"
+        Q. What (the hell) does that do?
+        A. That method receives the same currentUserInfo array data,
+        but then is used to transform it (using .map()) to what we need
+        (e.g. flatten hierarchy etc).
+        That's all. Not very exciting, actually.
+
+        Note that we are not dealing with Observables
+        in either of the 2 above bullet points.
      */
   }
 
@@ -165,6 +200,9 @@ https://angular.io/guide/static-query-migration
   ngOnDestroy(): void {
     if (this.myHeatUsersSubscription) {
       this.myHeatUsersSubscription.unsubscribe();
+    }
+    if (this.myIsLoadingSubscription) {
+      this.myIsLoadingSubscription.unsubscribe();
     }
   }
 

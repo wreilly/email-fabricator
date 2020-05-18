@@ -11,18 +11,42 @@
     >
         Get Them DOT-NEXT
     </button>
+    <mat-progress-spinner
+            *ngIf="isLoadingBooleanInComponent"
+            mode="indeterminate"
+            color="accent"
+            strokeWidth="5"
+            diameter="75"
+    >
+    </mat-progress-spinner>
     <h3>myHeatAuthorizationsArrayInComponentDotNext: ThreeUserProps[]</h3>
-    <ul>
-        <li *ngFor="let three of myHeatAuthorizationsArrayInComponentDotNext">
-            {{ three.username }} | {{ three.profile.email }}
-        </li>
-    </ul>
+    <!-- Two Notes:
+    1)
+    Magic Number '1' means: Let us skip the default sample empty string entry
+    and rely upon the return ALWAYS being at least 2 !! (pretty durned likely)
+    Fallback/Work-Around/Worst-Case: The MatTable will show, even if only *1* returned. Cheers.
+    2)
+    This "myHeatAuthorizations" etc. CAN successfully use/borrow/steal the
+    "threeUserProperties" etc. LENGTH thing. They'll always be same length.
+    Obviates me needing to declare/init/manage TWO vars for same damned purpose. Cheers.
+    -->
+    <div *ngIf="threeUserPropertiesForTableArrayLength > 1">
+        Count: {{threeUserPropertiesForTableArrayLength}}
+        <ul>
+            <li *ngFor="let three of myHeatAuthorizationsArrayInComponentDotNext">
+                {{ three.username }} | {{ three.profile.email }} <!-- N.B. ".profile." = non-flat ;) -->
+            </li>
+        </ul>
+    </div>
     <h3>threeUserPropertiesForTableArray: ThreeUserPropsFlat[]</h3>
-    <ul>
-        <li *ngFor="let threeFlat of threeUserPropertiesForTableArray">
-            {{ threeFlat.username }} | {{ threeFlat.email }}
-        </li>
-    </ul>
+    <div *ngIf="threeUserPropertiesForTableArrayLength > 1">
+        Count: {{threeUserPropertiesForTableArrayLength}}
+        <ul>
+            <li *ngFor="let threeFlat of threeUserPropertiesForTableArray">
+                {{ threeFlat.username }} | {{ threeFlat.email }}
+            </li>
+        </ul>
+    </div>
     <mat-table
             [dataSource]="myEducatorsDataSource"
             matSort

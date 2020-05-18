@@ -1,6 +1,7 @@
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 
 import { HbspService } from '../hbsp.service';
+import { ThreePropsUserFlat } from '../three-props-user.model';
 
 
 /*
@@ -94,7 +95,7 @@ https://angular.io/guide/static-query-migration
 
 
   // For simple MatList we had simple array of objects [{username, email, institutionName}]
-  educators: []; // MyThreePropsUserFlat[]; // << myParseOutEmails() triggers this, to write to List
+  educators: ThreePropsUserFlat[]; // << myParseOutEmails() triggers this, to write to List
   // educators: any[]; // << myParseOutEmails() triggers this, to write to List
   educatorsLength = 0; // Needed for a 'count' on template
   // For MatTable, we need this MatTableDataSource thingie:

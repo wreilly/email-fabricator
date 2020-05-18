@@ -10,8 +10,8 @@ https://stackblitz.com/edit/angular-material-file-select?file=src%2Fapp%2Fapp.co
             fxLayout="column"
             fxLayoutAlign="center center">
         <mat-card-header>
-            <mat-card-title>Choose File</mat-card-title>
-            <mat-card-subtitle>Pending Educators = Date Snapshot</mat-card-subtitle>
+            <mat-card-title>Pending Educators</mat-card-title>
+            <mat-card-subtitle>Files with Date Snapshots</mat-card-subtitle>
         </mat-card-header>
         <mat-card-content
                 fxLayout="column"
@@ -29,9 +29,12 @@ https://stackblitz.com/edit/angular-material-file-select?file=src%2Fapp%2Fapp.co
                     mat-raised-button
                     color="accent"
                     on-click="myOnClickFileInputButton()">
-                <mat-icon>attach_file</mat-icon>
-                <mat-icon>file_upload</mat-icon>
-            </button>attach_file!! |  file_upload!!
+                <mat-icon>attach_file</mat-icon> Choose File
+
+            </button><!--
+     [color]="!myHeatAuthorizations ? 'accent' : 'primary'" // << Worked!
+
+            attach_file!! |  file_upload!!-->
             <!--            <p *ngIf="!myFile; else myFileName">your file will be here</p>-->
             <ng-template ref-myFileName>
                 <!--                <p>{{ myFile?.name }}</p>-->
@@ -54,17 +57,20 @@ https://stackblitz.com/edit/angular-material-file-select?file=src%2Fapp%2Fapp.co
         <mat-card-content
                 fxLayout="column"
                 fxLayoutAlign="center center">
-            <p matLine>matLine Pending Educator Authorizations</p>
+<!--            <p matLine>Pending Educator Authorizations</p>-->
+<!--
             <p mat-line>mat-line Username, E-Mail, Etc.</p>
             <p class="matLine">class="matLine" << only one that gets class="matLine", but, seems to be same as class="mat-line" anyway. a nothing-burger, people</p>
             <p class="mat-line">class="mat-line" Username, E-Mail, Etc.</p>
+-->
         </mat-card-content>
         <mat-card-actions>
             <button mat-raised-button
                     type="button"
+                    color="accent"
                     [disabled]="!myHeatAuthorizations"
                     on-click="myParseOutEmails()"
-            >
+            ><mat-icon>file_upload</mat-icon>
                 Display E-Mail Addresses
             </button>
         </mat-card-actions>

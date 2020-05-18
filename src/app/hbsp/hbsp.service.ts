@@ -1,11 +1,12 @@
 /* tslint:disable:no-string-literal */
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import {BehaviorSubject, Subject, Observable, ObservableInput, of, throwError} from 'rxjs';
+import {catchError, map, tap } from 'rxjs/operators';
 import {ThreePropsUser} from './three-props-user.model';
 
 import { environment } from '../../environments/environment';
+import set = Reflect.set;
 
 
 /*
@@ -16,24 +17,68 @@ import { environment } from '../../environments/environment';
 @Injectable() // Testing: providers: [] in CoreModule << seemstabe ok
 export class HbspService {
 
-    sampleUserFromHbspService: ThreePropsUser[] = [{
-        username: 'sampleFromHbspService',
+/* We do still use (see note below).
+Also: this is only seen on DotNext, not DotPipe.
+Q. Why?
+A. Because DotNext is a Component invoking a Service
+to do HTTP call and .subscribe to the results and to
+update (.next()) an Observable on the Service to which
+the Component has .subscribed(), in its ngOnInit().
+So, it is in the course of the Component processing the
+Observable's data, in the Component, that we update
+the Component's MatDataTableSource.
+So, the Component's very first initialization *also*
+updates the MatDataTableSource, with this "sample" record.
+Hence we get "1 of 1" (whether empty '' string or 'sample')
+Less mysterious to have visible 'sample'.
+(you know, maybe debatable which is better way to go
+re: UX confusion on this pretty tiny point.)
+Maybe depends how much of a perfectionist one is.
+O la!
+
+DotPipe by contrast is a Component invoking a Service
+to do HTTP call, and NOT to .subscribe() to it, but to
+instead just directly *return* the received Observable.
+That is done via RxJs .pipe().map() return.
+This means the Component *must* do .subscribe on that
+returned Observable, right when it gets it (not set up
+earlier in ngOnInit()) - to access its data.
+So, this Component never has an initial "empty" or "sample"
+version of the MatTableDataSource to display on initialization.
+
+    sampleUserFromHbspServiceBAK: ThreePropsUser[] = [{
+        username: 'sample', // sample-fromService',
         profile: {
-            email: 'emailFromHbspService',
-            institutionName: 'skoolFromHbspService',
+            email: 'record', // email-fromService',
+            institutionName: 'placeholder', // univ-fromService',
         }
     }];
+*/
+/* Urgh. Well, turns out this "invisible" entry is fine
+for the table row (not seen), BUT, the durned
+table "1 of 1" does display :o(
+*/
+    sampleUserFromHbspService: ThreePropsUser[] = [{
+        username: '', // yeah works well as empty string
+        profile: {
+            email: '',
+            institutionName: '',
+        }
+    }];
+/* */
 
     private myHeatUserInfoObservableInService$ = new BehaviorSubject<any>(this.sampleUserFromHbspService);
     currentUserInfoInService$ = this.myHeatUserInfoObservableInService$.asObservable();
     // https://fireship.io/lessons/sharing-data-between-angular-components-four-methods/
+
+    isLoadingObservableInService$ = new Subject<boolean>();
 
     constructor(
         private myHttpClient: HttpClient,
     ) {  }
 
     giveMeHeatUsersDotNext(): void {
-
+        this.isLoadingObservableInService$.next(true);
         this.myHttpClient.get(
             'https://services.hbsp.harvard.edu/api/admin/users/authorization-status/PENDING',
             {
@@ -63,6 +108,16 @@ export class HbspService {
 
                 this.myHeatUserInfoObservableInService$.next( (userInfoWeSubscribedToInService as any).data.users);
 
+                setTimeout(
+                    () => {
+                        this.isLoadingObservableInService$.next(false);
+                    },
+                    1000
+                );
+            },
+            (httpGetError) => {
+                console.log('httpGetError DotNext ', httpGetError);
+                this.isLoadingObservableInService$.next(false);
             }
         ); // /.subscribe()
     } // /giveMeHeatUsersDotNext()
@@ -91,8 +146,32 @@ export class HbspService {
                      */
                     return fromTapToMap.data.users;
                 }
-            ) // /map()
-        );
-    }
+            ), // /map()
+            catchError(
+                // (err, caught). Can throw error?
+                // https://rxjs-dev.firebaseapp.com/api/operators/catchError
+                (httpGetErrorDotPipe): ObservableInput<any> => {
+                    /* Q. Can I call that 'httpGetErrorDotPipe' ?
+                    Or do I have to call it 'err' ?
+                    A. t.b.d. Mebbe yah
+                     */
+                    console.log('err as in httpGetErrorDotPipe ', httpGetErrorDotPipe);
+                    /* Yep:
+                    err as in httpGetErrorDotPipe
+                    HttpErrorResponse {headers: HttpHeaders, status: 401, statusText: "Unauthorized",
+                     */
+                    this.isLoadingObservableInService$.next(false);
+/* No. Error message is not what you want to 'return' to
+calling function in Component. No way.
+*/
+                    return of(httpGetErrorDotPipe); // ? NO
+/* Didn't work hmm.
+                    return throwError(httpGetErrorDotPipe);
+*/
+                }
+            ) // /catchError()
+        ); // /.pipe()
+
+    } // /giveMeHeatUsersDotPipe()
 
 }
