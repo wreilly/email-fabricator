@@ -1,5 +1,7 @@
 import { Action } from '@ngrx/store';
 
+export const START_IS_LOADING = '[UI] Start Is Loading';
+export const STOP_IS_LOADING = '[UI] Stop Is Loading';
 export const SETSIDENAVTOOPPOSITESTATE = '[UI] Set Sidenav To Opposite State'; // i.e. Open vs. Closed (Toggle)
 /* HMM
 re: use of NGRX for "toggle" concept...
@@ -26,10 +28,40 @@ case TOGGLE_ATTENDING:
       return state;
  */
 
+export class StartIsLoading implements Action {
+    type = START_IS_LOADING;
+    // No payload
+    constructor() { }
+}
+
+export class StopIsLoading implements Action {
+    type = STOP_IS_LOADING;
+    // No payload
+    constructor() { }
+}
+
 export class SetSidenavToOppositeState implements Action {
     readonly type = SETSIDENAVTOOPPOSITESTATE;
     // No payload
     constructor() { }
 }
 
-export type UIActions = SetSidenavToOppositeState;
+export type UIActions =
+      StartIsLoading
+    | StopIsLoading
+    | SetSidenavToOppositeState;
+
+
+// *****  From OTHER Project  ************************
+/* EXAMPLE USE OF .SELECT()
+    this.myUIIsLoadingStore$ = this.myStore.select(fromRoot.getIsLoading);
+    src/app/auth/login/login.component.ts:197
+ */
+/* EXAMPLE USE OF .DISPATCH()
+this.myStore.dispatch(new UI.StartLoading());
+src/app/auth/auth.service.ts:255
+ */
+// *************************************
+/*
+/Users/william.reilly/dev/Angular/Udemy-AngularMaterial-MaxS/2019/WR__2/fitness-tracker-wr3/src/app/shared/ui.actions.ts
+*/

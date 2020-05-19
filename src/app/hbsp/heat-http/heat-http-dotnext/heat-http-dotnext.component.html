@@ -11,8 +11,10 @@
     >
         Get Them DOT-NEXT
     </button>
+    <div>Does <b>not</b> use ' | async'</div>
+<!--  Used w. RxJs  *ngIf="isLoadingBooleanInComponent"-->
     <mat-progress-spinner
-            *ngIf="isLoadingBooleanInComponent"
+            *ngIf="myUIisLoadingObservableStore$ | async"
             mode="indeterminate"
             color="accent"
             strokeWidth="5"

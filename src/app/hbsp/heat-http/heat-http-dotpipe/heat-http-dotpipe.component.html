@@ -11,9 +11,10 @@
     >
         Get Them DOT-PIPE
     </button>
-
+    <div>Uses ' | async'</div>
+<!-- RxJs:    *ngIf="isLoadingBehaviorSubjectInComponent.value"-->
     <mat-progress-spinner
-            *ngIf="isLoadingBehaviorSubjectInComponent.value"
+            *ngIf="myUIisLoadingObservableStore$ | async"
             mode="indeterminate"
             color="accent"
             diameter="75"

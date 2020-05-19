@@ -1,15 +1,23 @@
+/*
 import {SETSIDENAVTOOPPOSITESTATE, UIActions} from './ui.actions';
+*/
+import * as fromUIActions from './ui.actions';
+
 
 export interface MyState {
     sidenavIsOpen: boolean;
+    isLoading: boolean;
 }
 
 const myInitialState: MyState = {
-    sidenavIsOpen: false
+    sidenavIsOpen: false,
+    isLoading: false,
 };
 
-export function UIReducer(state = myInitialState,
-                          action: UIActions): MyState {
+export function UIReducer(
+    state: MyState = myInitialState,
+    action: fromUIActions.UIActions
+): MyState {
     /*
     From Max's Angular "2020" course, we are told to NOT MUTATE
     the State in the Store, so, make a COPY first.
@@ -17,9 +25,27 @@ export function UIReducer(state = myInitialState,
     /Users/william.reilly/dev/Angular/Udemy-Angular5-MaxS/2019/WR__/prj-recipes-wr2/src/app/shopping-list/store/shopping-list.reducer.ts
      */
 
+    console.log('state in UIReducer: ', state);
+
     // noinspection JSRedundantSwitchStatement
     switch (action.type) {
-        case SETSIDENAVTOOPPOSITESTATE:
+        case fromUIActions.START_IS_LOADING:
+
+            console.log('START_IS_LOADING');
+
+            return {
+                ...state,
+                isLoading: true,
+            };
+
+        case fromUIActions.STOP_IS_LOADING:
+            console.log('STOP_IS_LOADING');
+            return {
+                ...state,
+                isLoading: false,
+            };
+
+        case fromUIActions.SETSIDENAVTOOPPOSITESTATE:
             /*
             MAKE A COPY. DON'T MUTATE. ETc.
             Hmm, in that Max example, we could use spread operator.
@@ -37,7 +63,10 @@ export function UIReducer(state = myInitialState,
             console.log('myStateToBeUpdatedACopyObject ', myStateToBeUpdatedACopyObject); // yeah: {sidenavIsOpen: false}
 
 
-            const myStateToBeUpdatedACopyObjectViaAssign: MyState = { sidenavIsOpen: null};
+            const myStateToBeUpdatedACopyObjectViaAssign: MyState = {
+                ...state,
+                sidenavIsOpen: null
+            };
             // huh, who knew that null could work here (for boolean) hmm.
 
             Object.assign(myStateToBeUpdatedACopyObjectViaAssign, state);
@@ -76,15 +105,26 @@ https://stackoverflow.com/questions/6605640/javascript-by-reference-vs-by-value
   it just points the variable to a new primitive or object.
 - However, changing a property of an object referenced by a variable does change the underlying object."
  */
-            const whatItWas = state.sidenavIsOpen;
-            console.log('0 ', whatItWas);
-            state = {sidenavIsOpen: true}; // CHANGE A
-            console.log('1A ', state);
-            console.log('2A ', myStateToBeUpdatedACopyObject);
-            state = {sidenavIsOpen: false}; // CHANGE B
-            console.log('1B ', state);
-            console.log('2B ', myStateToBeUpdatedACopyObject);
-            state = {sidenavIsOpen: whatItWas};
+            const whatItWas: MyState = {
+                ...state,
+            };
+            console.log('0 whatItWas ', whatItWas);
+            state = {
+                ...state,
+                sidenavIsOpen: true
+            }; // CHANGE A
+            console.log('1A sidenavbiz set to TRUE state ', state);
+            console.log('2A myStateToBeUpdatedACopyObject ', myStateToBeUpdatedACopyObject);
+            state = {
+                ...state,
+                sidenavIsOpen: false
+            }; // CHANGE B
+            console.log('1B sidenavbiz set to FALSE state ', state);
+            console.log('2B myStateToBeUpdatedACopyObject ', myStateToBeUpdatedACopyObject);
+            state = {
+                ...state,
+                sidenavIsOpen: whatItWas.sidenavIsOpen
+            };
             /*
             /TEST FUN
 
@@ -110,7 +150,7 @@ https://stackoverflow.com/questions/6605640/javascript-by-reference-vs-by-value
 
 export function UIReducerBACKUPORIG(
     state = myInitialState,
-    action: UIActions
+    action: fromUIActions.UIActions
 ) {
 
     // This ORIG version does NOT create a COPY of State
@@ -118,7 +158,7 @@ export function UIReducerBACKUPORIG(
 
     // noinspection JSRedundantSwitchStatement
     switch (action.type) {
-        case SETSIDENAVTOOPPOSITESTATE:
+        case fromUIActions.SETSIDENAVTOOPPOSITESTATE:
             // WR__ Dreadful pseudo-toggle if/else code. Yish.
             // See also Comments in ACTIONS file
             if (state.sidenavIsOpen === true) {
@@ -146,3 +186,25 @@ export const getIsSidenavOpen = (statePassedIn: MyState) => {
      */
     return statePassedIn.sidenavIsOpen; // ?
 };
+
+export const getIsLoading = (state: MyState) => { // returns (I think) : MyState['isLoading']
+    console.log('7777 UI REDUCER getIsLoading  state passed in?? : ', state);
+    /*
+    t.b.d.
+     */
+    return state.isLoading;
+};
+
+// *****  From OTHER Project  ************************
+/* EXAMPLE USE OF .SELECT()
+    this.myUIIsLoadingStore$ = this.myStore.select(fromRoot.getIsLoading);
+    src/app/auth/login/login.component.ts:197
+ */
+/* EXAMPLE USE OF .DISPATCH()
+this.myStore.dispatch(new UI.StartLoading());
+src/app/auth/auth.service.ts:255
+ */
+// *************************************
+/*
+/Users/william.reilly/dev/Angular/Udemy-AngularMaterial-MaxS/2019/WR__2/fitness-tracker-wr3/src/app/shared/ui.actions.ts
+*/

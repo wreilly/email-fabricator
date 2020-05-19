@@ -1,4 +1,4 @@
-// COPIED (WHOLESALE) FROM OTHER PROJECT! (fitness-tracer-wr3)
+// COPIED (WHOLESALE) FROM OTHER PROJECT! (fitness-tracker-wr3)
 import { NgModule } from '@angular/core';
 import {CommonModule} from '@angular/common'; // Kind of subset of BrowserModule (as I understand it; hmm)
 // yep: https://guide.freecodecamp.org/angular/ngmodules/

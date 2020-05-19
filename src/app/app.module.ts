@@ -63,6 +63,36 @@ import {WelcomeComponent} from './welcome/welcome.component';
     HbspModule,
   ],
   providers: [], // << None. From CoreModule (for (singleton) Services)
+  /* Hmm.
+
+  I.
+  Doing: @Injectable({ providedIn: 'root' }) for:
+
+  FabricatorService
+  NYTimesService
+  BookReviewsService
+
+
+  II.
+  Doing: @Injectable() for:
+
+  CodepenHarnessService
+    "provider: [] is in its own CodepenModule."
+  ThemeService
+    "provider is in CoreModule"
+    (where we apparently by design put "singleton" Services) hmm.
+  HbspService
+    "provider is in CoreModule"
+    (I just put it there; don't know if "singleton") double hmm.
+
+More on Services, Providers, @Injectable()
+http://www.deanpdx.com/2018/07/30/what-does-angular-injectable-mean.html
+
+HEY WHOA UPDATE (05/Dec/2019)
+This article helps us understand why (best to) JUST PUT @Injectable() ON TOP OF
+EVERY SERVICE is not a bad idea, and can't hurt. Yeesh.
+https://blog.ninja-squad.com/2016/12/08/angular-injectable/
+   */
   bootstrap: [AppComponent]
 })
 export class AppModule { }

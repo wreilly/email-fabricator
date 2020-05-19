@@ -14,6 +14,22 @@ import { HbspService } from '../../hbsp.service';
 import { ThreePropsUser, ThreePropsUserFlat } from '../../three-props-user.model';
 
 
+import { Store } from '@ngrx/store';
+/* Nah - I think this 'UIReducer' level is wrong.
+You want "fromRoot" (see other 2 Angular projects: fitness; recipes)
+import * as fromUIReducer from '../../../shared/ui.reducer';
+*/
+import * as fromRoot from '../../../app.reducer';
+/* NgRx Actions - Not Needed here in Component.   We will do NgRx .Dispatch() in SERVICE
+UPDATE: Ok - here in "DotPipe" we DO need the NgRx Actions here.
+Q. Why?
+A. Because we do the "isLoading" biz here, not in Service
+(Contrast with "DotNext" Component, which does the opposite. cheers.)
+*/
+import * as fromUIActions from '../../../shared/ui.actions';
+import {StartIsLoading} from '../../../shared/ui.actions';
+
+
 @Component({
     selector: 'app-heat-http-dotpipe',
     templateUrl: './heat-http-dotpipe.component.html',
@@ -44,13 +60,19 @@ export class HeatHttpDotPipeComponent implements OnInit, AfterViewInit, OnDestro
 /* Yes re: defining. ok. But no re: we need BehaviorSubject, not Subject. ok.
     isLoadingBehaviorSubjectInComponent = new Subject<boolean>(); // << Yes, that's what you gotta do.
 */
+    // TODONE Will be Commented Out when we do NgRx 20200518-1109
+/* No Longer Using
     isLoadingBehaviorSubjectInComponent = new BehaviorSubject<boolean>(false);
+*/
+    // Now NgRx
+    myUIisLoadingObservableStore$ = new Observable<boolean>();
 
     threeUserPropertiesForTableArray: ThreePropsUserFlat[]; // any;
     threeUserPropertiesForTableArrayLength = 0; // for counter on template
 
     constructor(
         private myHbspService: HbspService,
+        private myStore: Store<fromRoot.MyOverallState>
     ) {
     }
 
@@ -59,6 +81,9 @@ export class HeatHttpDotPipeComponent implements OnInit, AfterViewInit, OnDestro
         // to an Observable in the Service, over here in Component ngOnInit().
 
 //        this.isLoadingBehaviorSubjectInComponent.next(false); // ??? Nope not here (silly)
+
+        // NgRx now: (even for DotPipe (I do believe))
+        this.myUIisLoadingObservableStore$ = this.myStore.select(fromRoot.getIsLoading);
     }
 
     ngAfterViewInit() {
@@ -67,7 +92,14 @@ export class HeatHttpDotPipeComponent implements OnInit, AfterViewInit, OnDestro
     }
 
     myGetHttpHeatUsersFromServiceDotPipe() {
+        // RxJs << going to Comment Out
+/* No Longer Using
         this.isLoadingBehaviorSubjectInComponent.next(true); // YES
+*/
+/* Make more sense to do on Service ??
+        // NgRx
+        this.myStore.dispatch(new fromUIActions.StartIsLoading());
+*/
 
         this.myHeatAuthorizationsObservableInComponentDotPipe = this.myHbspService
             .giveMeHeatUsersDotPipe();
@@ -162,7 +194,13 @@ HttpErrorResponse {headers: HttpHeaders, status: 401, statusText: "Unauthorized
                     Just crazy.
                      */
                     console.log('Aw shucks HTTP error!', currentUserArrayWeGotDotPipe);
+                    // RxJs
+/* No Longer Using
                     this.isLoadingBehaviorSubjectInComponent.next(false);
+*/
+                    // NgRx
+                    this.myStore.dispatch(new fromUIActions.StopIsLoading());
+
                 } else if (currentUserArrayWeGotDotPipe[0]) { // we're good, here comes arkangel cordero, my buddy
                     this.mySharedSubscribeBothDotPipeAndDotNext(currentUserArrayWeGotDotPipe);
                     // this.isLoadingBehaviorSubjectInComponent.next(false); // NO not where this logic goes.
@@ -175,7 +213,7 @@ HttpErrorResponse {headers: HttpHeaders, status: 401, statusText: "Unauthorized
 
     }
 
-    mySharedSubscribeBothDotPipeAndDotNext(userInfoWeGotFromBothDotPipeAndDotNext) {
+    mySharedSubscribeBothDotPipeAndDotNext(userInfoWeGotFromBothDotPipeAndDotNext): void {
 
         this.threeUserPropertiesForTableArray = userInfoWeGotFromBothDotPipeAndDotNext
             .map((eachUserInfo) => {
@@ -191,7 +229,12 @@ HttpErrorResponse {headers: HttpHeaders, status: 401, statusText: "Unauthorized
         );
         this.threeUserPropertiesForTableArrayLength = this.threeUserPropertiesForTableArray.length;
 
+        // RxJs
+/* No Longer Using
         this.isLoadingBehaviorSubjectInComponent.next(false); // YES. This is where you put it.
+*/
+        // NgRx
+        this.myStore.dispatch(new fromUIActions.StopIsLoading());
 
     } // /mySharedSubscribeBothDotPipeAndDotNext()
 

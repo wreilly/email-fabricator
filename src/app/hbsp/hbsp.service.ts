@@ -3,6 +3,15 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {BehaviorSubject, Subject, Observable, ObservableInput, of, throwError} from 'rxjs';
 import {catchError, map, tap } from 'rxjs/operators';
+
+import { Store } from '@ngrx/store';
+/* Nah - I think this 'UIReducer' level is wrong.
+You want "fromRoot" (see other 2 Angular projects: fitness; recipes)
+import * as fromUIReducer from '../shared/ui.reducer';
+*/
+import * as fromRoot from '../app.reducer';
+import * as fromUIActions from '../shared/ui.actions';
+
 import {ThreePropsUser} from './three-props-user.model';
 
 import { environment } from '../../environments/environment';
@@ -71,14 +80,30 @@ table "1 of 1" does display :o(
     currentUserInfoInService$ = this.myHeatUserInfoObservableInService$.asObservable();
     // https://fireship.io/lessons/sharing-data-between-angular-components-four-methods/
 
+/* No Longer Used
     isLoadingObservableInService$ = new Subject<boolean>();
+*/
+    /*
+    Hmm, used by BOTH DotPipe and DotNext ? At least, when doing RxJs.
+    Now doing NgRx - comment out for both ? Hmm.
+     */
 
     constructor(
         private myHttpClient: HttpClient,
+        private myStore: Store<fromRoot.MyOverallState>
     ) {  }
 
     giveMeHeatUsersDotNext(): void {
+        // Does **NOT** use ' | async'
+
+        // RxJs (used w. boolean back in Component)
+/* No Longer Used?
         this.isLoadingObservableInService$.next(true);
+*/
+        // Now NgRx
+        this.myStore.dispatch(new fromUIActions.StartIsLoading());
+
+        // N.B. **NO** 'return' on next line
         this.myHttpClient.get(
             'https://services.hbsp.harvard.edu/api/admin/users/authorization-status/PENDING',
             {
@@ -109,20 +134,40 @@ table "1 of 1" does display :o(
                 this.myHeatUserInfoObservableInService$.next( (userInfoWeSubscribedToInService as any).data.users);
 
                 setTimeout(
+                    // Kinda unneeded artificial delay, to ensure we see Spinner a bit...
                     () => {
+                        // RxJs
+/* No Longer Used
                         this.isLoadingObservableInService$.next(false);
+*/
+                        // NgRx
+                        this.myStore.dispatch(new fromUIActions.StopIsLoading());
                     },
                     1000
                 );
             },
             (httpGetError) => {
                 console.log('httpGetError DotNext ', httpGetError);
+                // RxJs
+/* No Longer Used
                 this.isLoadingObservableInService$.next(false);
+*/
+                // NgRx
+                this.myStore.dispatch(new fromUIActions.StopIsLoading());
             }
         ); // /.subscribe()
     } // /giveMeHeatUsersDotNext()
 
     giveMeHeatUsersDotPipe(): Observable<object[]> {
+        // USES ' | async'
+
+        // For "DotPipe" - no NgRx isLoading biz here.
+        // It's over in Component. (Contrast "DotNext")
+        // hmm y not here?
+        // NgRx
+        this.myStore.dispatch(new fromUIActions.StartIsLoading());
+
+        // N.B. **YES** a 'return' on next line.
         return this.myHttpClient.get(
             'https://services.hbsp.harvard.edu/api/admin/users/authorization-status/PENDING',
             {
@@ -160,7 +205,13 @@ table "1 of 1" does display :o(
                     err as in httpGetErrorDotPipe
                     HttpErrorResponse {headers: HttpHeaders, status: 401, statusText: "Unauthorized",
                      */
+                    // RxJs
+/* No Longer Used
                     this.isLoadingObservableInService$.next(false);
+*/
+                    // NgRx
+                    this.myStore.dispatch(new fromUIActions.StopIsLoading());
+
 /* No. Error message is not what you want to 'return' to
 calling function in Component. No way.
 */

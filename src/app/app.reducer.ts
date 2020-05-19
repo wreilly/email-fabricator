@@ -10,5 +10,8 @@ export const reducers: ActionReducerMap<MyOverallState> = {
     ui: fromUi.UIReducer,
 };
 
+
+
 export const getUiState = createFeatureSelector<fromUi.MyState>('ui');
 export const getIsSidenavOpen = createSelector(getUiState, fromUi.getIsSidenavOpen);
+export const getIsLoading = createSelector(getUiState, fromUi.getIsLoading);

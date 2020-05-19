@@ -13,6 +13,11 @@ import { HbspService } from '../../hbsp.service';
 
 import { ThreePropsUser, ThreePropsUserFlat } from '../../three-props-user.model';
 
+import { Store } from '@ngrx/store';
+import * as fromRoot from '../../../app.reducer';
+// DotNext does NOT need Actions; dispatching done over on Service. Cheers.
+// (DotPipe does use Actions)
+
 @Component({
   selector: 'app-heat-http-dotnext',
   templateUrl: './heat-http-dotnext.component.html',
@@ -26,7 +31,13 @@ export class HeatHttpDotNextComponent implements OnInit, AfterViewInit, OnDestro
   myHeatAuthorizationsArrayInComponentDotNext: ThreePropsUser[]; // NO ASYNC
   // Modestly Better Name now
 
+  // Used w. RxJs << Maybe NgRx too? << Nope.
+/* No Longer Used
   isLoadingBooleanInComponent: boolean;
+*/
+  // Now NgRx (as seen in DotPipe too) hmm - yep!
+  myUIisLoadingObservableStore$ = new Observable<boolean>();
+
 
 /*
   "DOT-NEXT/SUBSCRIBE"
@@ -59,11 +70,18 @@ https://angular.io/guide/static-query-migration
 
   constructor(
       private myHbspService: HbspService,
+      private myStore: Store<fromRoot.MyOverallState>,
   ) { }
 
   ngOnInit(): void {
-    // Note: Does *not* use ' | async', so does
+    // Note: Does *not* use ' | async', for the HeatUsers data, so does
     // need to .subscribe to Observable from Service
+
+
+    /* Here in DotNext (where we do NOT use ' | async' for the HTTP-gotten HeatUsers info),
+    note that we **DO** use ' | async' for this little Store .isLoading. Cheers.
+     */
+    this.myUIisLoadingObservableStore$ = this.myStore.select(fromRoot.getIsLoading);
 
     this.myHbspService.currentUserInfoInService$.subscribe(
         (currentUserArrayWeGot) => {
@@ -103,11 +121,14 @@ https://angular.io/guide/static-query-migration
         }
     ); // /.subscribe() currentUserInfoInService$
 
+/* No Longer Used, This Whole Thing. I think.
     this.myIsLoadingSubscription = this.myHbspService.isLoadingObservableInService$.subscribe(
         (isLoadingOrNot) => {
+          // Used w. RxJs
           this.isLoadingBooleanInComponent = isLoadingOrNot;
         }
     );
+*/
 
   } // /ngOnInit()
 
@@ -118,6 +139,7 @@ https://angular.io/guide/static-query-migration
 
   myGetHttpHeatUsersFromServiceDotNext() {
     // Fire & Forget InFamy!
+    // DotNext does **NOT** use ' | async'
     this.myHbspService.giveMeHeatUsersDotNext();
     /*
     Q. What, pray tell, does that do?
