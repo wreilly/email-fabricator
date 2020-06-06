@@ -96,7 +96,7 @@ export class HeatHttpDotPipeComponent implements OnInit, AfterViewInit, OnDestro
 /* No Longer Using
         this.isLoadingBehaviorSubjectInComponent.next(true); // YES
 */
-/* Make more sense to do on Service ??
+/* Make more sense to do on Service ?? Think so! (works anyway)
         // NgRx
         this.myStore.dispatch(new fromUIActions.StartIsLoading());
 */
