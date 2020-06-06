@@ -39,18 +39,39 @@ export const environment = {
 /* NYTIMES API INFO
 TOP STORIES API
 
+SEE:
+../email-fabricator-assets-out-of-git/nytimes-api-key-top-stories.txt
+
+I have learned (the not quite hard way)
+to NOT keep this stuff in Comments
+in "environment.ts" file.
+It is all LEGIBLE as Git Out ;) on the INTERWEBS.
+
+(In my (kinda) defense, I only do this silliness
+in the NON-PRODUCTION environment.ts file.
+NOT in the PRODUCTION one. Cheers.)
+
+----------------------------
 App Name
-email-fabricator
+email-fabricator << okay you can have that
 
 App ID
-5a9e270b-2008-47b4-8fe9-c16ca3f30ee0
+5a9FOOBARBUSTEDUP4-8fFOOBARBUSTEDUP30ee0 << sorry this is now FOOBARBUSTEDUP
 
 API Key
-STMA4A1DcdjKxY68rwVzYFAlC2EficSF
+STMA4A1DcdjKxY68rwVzYFAlC2EficSF << okay this one's already PUBLIC what can you do nothing
 
 API Secret
-JilsH7FNtCHQUyb3
+JiFOOBARBUSTEDUPabcdFOOBARBUSTEDUPabcdFOOBARBUSTEDUPb3 << FOOBARBUSTEDUP sheesh. Boys and girls, you *don't want* to put your api SECRET
+here in your "environment.ts" file.
+No.
+It may keep it outta Git (good, okay),
+but it ain't keeping it offa
+THE INTERNET.
 
+oi!
+SEE:
+../email-fabricator-assets-out-of-git/nytimes-api-key-top-stories.txt
  */
 
 
