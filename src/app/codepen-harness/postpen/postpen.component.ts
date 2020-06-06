@@ -57,6 +57,22 @@ interface CompareYourselfInfo {
     height: number;
     income: number;
 }
+/* No:
+I had incorrectly! intuited you had to repeat the
+source interface:
+
+interface CompareYourselfInfoWithId extends CompareYourselfInfo {
+    cyu: CompareYourselfInfo; // << NO !!!
+    wrPrincipalIdInComponent: string;
+}
+
+https://stackoverflow.com/questions/53636756/typescript-interface-extending-another-interface-with-nested-properties
+
+
+ */
+interface CompareYourselfInfoWithId extends CompareYourselfInfo {
+    wrPrincipalIdInComponent: string;
+}
 
 @Component({
     selector: 'app-postpen',
@@ -94,6 +110,35 @@ export class PostpenComponent implements OnInit {
         height: 0,
         income: 0,
     };
+/* NO:
+Wrong intuition! about extending TypeScript interfaces, pal.
+    myCompareYourselfFormInfoObjectWithId: CompareYourselfInfoWithId = {
+        cyu: {
+            age: 0,
+            height: 0,
+            income: 0,
+        },
+        wrPrincipalIdInComponent: 'hardcodedidincomponent',
+    };
+*/
+
+    myCompareYourselfFormInfoObjectWithId: CompareYourselfInfoWithId = {
+        age: this.myCompareYourselfFormInfoObject.age,
+        height: this.myCompareYourselfFormInfoObject.height,
+        income: this.myCompareYourselfFormInfoObject.income,
+        wrPrincipalIdInComponent: 'hardcodedidincomponent', // << Not really used
+    };
+    /*
+    Note re: above. This attempt at doing User ID (principalId etc.)
+    is ABANDONED.
+    The Max course only takes us so far re: use of NON-COGNITO, Custom
+    Authorizer. All we do is (As noted elsewhere), hard-code
+    in that the 'Authorization' is 'allowed'. That's it.
+    We do not get to How To Pass In User ID to that Custom Authorizer.
+    Sad.
+    So that means for NON-COGNITO Custom Authorizer this is the
+    End of the Line. cheers.
+     */
 
     // Emulating passed-in values from form
     myAge = 22;
@@ -198,31 +243,80 @@ export class PostpenComponent implements OnInit {
             .controls.myAgeFormControlName.value); // Yes e.g. 4
 */
         this.myCompareYourselfFormInfoObject.age = this.myCyuFormGroup.controls.myAgeFormControlName.value;
+        this.myCompareYourselfFormInfoObjectWithId.age = this.myCyuFormGroup.controls.myAgeFormControlName.value;
 
         // this.myCompareYourselfFormInfoObject.height = this.myHeight;
         this.myCompareYourselfFormInfoObject.height = this.myCyuFormGroup.controls.myHeightFormControlName.value;
+        this.myCompareYourselfFormInfoObjectWithId.height = this.myCyuFormGroup.controls.myHeightFormControlName.value;
 
         // this.myCompareYourselfFormInfoObject.income = this.myIncome;
         this.myCompareYourselfFormInfoObject.income = this.myCyuFormGroup.controls.myIncomeFormControlName.value;
+        this.myCompareYourselfFormInfoObjectWithId.income = this.myCyuFormGroup.controls.myIncomeFormControlName.value;
 
 
         console.log('05 - this.myCompareYourselfFormInfoObject ', this.myCompareYourselfFormInfoObject);
         /*
         05 - this.myCompareYourselfFormInfoObject  {age: 22, height: 33, income: 44}
          */
+        console.log('05WithId - this.myCompareYourselfFormInfoObjectWithId ', this.myCompareYourselfFormInfoObjectWithId);
+        /*
+        age: 56
+height: 56
+income: 57
+wrPrincipalIdInComponent: "hardcodedidincomponent"
+         */
+/* Nope:
+        const myCompareYourselfFormInfoObjectWithIdToBeSent = {...this.myCompareYourselfFormInfoObjectWithId };
+
+I don't want to clone, really.
+Instead, to successfully send to the API endpoint,
+I need to change one of the property *keys*
+FROM:
+  wrPrincipalIdInComponent: "hardcodedidincomponent"
+TO:
+  wrprincipalId: "hardcodedidincomponent" // << ixnay
+  principalId: "hardcodedidincomponent" // << *UnLikely* ! << NOPE
+
+  (Note the loosey-goosey 'any' here. tsk, tsk)
+*/
+        const myCompareYourselfFormInfoObjectWithIdToBeSent: any = {
+            age: undefined,
+            height: undefined,
+            income: undefined,
+            principalId: undefined,
+        };
+        myCompareYourselfFormInfoObjectWithIdToBeSent.age = this.myCompareYourselfFormInfoObjectWithId.age;
+        myCompareYourselfFormInfoObjectWithIdToBeSent.height = this.myCompareYourselfFormInfoObjectWithId.height;
+        myCompareYourselfFormInfoObjectWithIdToBeSent.income = this.myCompareYourselfFormInfoObjectWithId.income;
+        myCompareYourselfFormInfoObjectWithIdToBeSent.principalId = this.myCompareYourselfFormInfoObjectWithId.wrPrincipalIdInComponent;
+
 
         this.myXhr.open(this.myMethod, this.myApiUrl);
         this.myXhr.onreadystatechange = (eventPassedIn) => {
             console.log('eventPassedIn.target ', eventPassedIn.target);
             // console.log('eventPassedIn.target.response ', eventPassedIn.target.response);
+            /* XMLHttpRequest
+            {__zone_symbol__xhrSync: false, __zone_symbol__xhrURL:
+             "https://z20go3ghcg.execute-api.us-east-1.amazonaws.com/dev/compare-yourself", __zone_symbol__readystatechangefalse: Array(1),
+             */
         };
         this.myXhr.setRequestHeader('Content-Type', 'application/json');
         this.myXhr.setRequestHeader('Authorization', 'allow');
         /* HARD CODED 'allow'
         Just for development, testing. FAKE "authorization" !!!
          */
+        /* N.B.
+- There is *NO* "userId" etc. in the Angular app (at this point).
+- Just the hard-coded "allow" authorization.
+- Therefore, what data the app is sending in, will be allowed (pass authorization).
+- But the question of *which user* this data is for is presently simply hard-coded into the Custom Authorizer Lambda ('abcdefghijklmnop')
+*/
 
+/* WORKED! ORIGINAL!
         this.myXhr.send(JSON.stringify(this.myCompareYourselfFormInfoObject));
+*/
+        console.log('About to SEND. myCompareYourselfFormInfoObjectWithIdToBeSent: ', myCompareYourselfFormInfoObjectWithIdToBeSent);
+        this.myXhr.send(JSON.stringify(myCompareYourselfFormInfoObjectWithIdToBeSent));
 
         this.myCyuFormGroup.reset();
 
