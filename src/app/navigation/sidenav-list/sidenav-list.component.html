@@ -35,6 +35,15 @@
     </mat-list-item>
     <mat-list-item>
         <a
+                on-click="myCloseSidenav()"
+                routerLink="/nytimes">
+            <img src="../../../assets/nytimes-T.png" alt="NY Times" height="25px"> </a>
+        <a
+                on-click="myCloseSidenav()"
+                routerLink="/nytimes/top-stories"><span>&nbsp; NY Times Top Stories</span></a>
+    </mat-list-item>
+    <mat-list-item>
+        <a
                 routerLink="/rxjs-playground"
                 on-click="myCloseSidenav()"
         >
