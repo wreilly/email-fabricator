@@ -7,6 +7,7 @@ import { HeatHttpDotPipeComponent } from './heat-http/heat-http-dotpipe/heat-htt
 import { HeatHttpDotNextComponent } from './heat-http/heat-http-dotnext/heat-http-dotnext.component';
 import { HeatJsonComponent } from './heat-json/heat-json.component';
 import { RShinyComponent } from './r-shiny/r-shiny.component';
+import {PardBasicComponent} from './pard-basic/pard-basic.component';
 
 const myHbspRoutes: Routes = [
     {
@@ -34,7 +35,11 @@ const myHbspRoutes: Routes = [
             {
                 path: 'r-shiny',
                 component: RShinyComponent,
-            }
+            },
+            {
+                path: 'pard-basic',
+                component: PardBasicComponent,
+            },
         ]
     },
 ];
