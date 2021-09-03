@@ -23,6 +23,8 @@ export class PardBasicComponent implements OnInit {
     myJiraAuthObservable: Observable<any>; // woot encore
     myJiraAuthSubscription: Subscription;
 
+    fakeApiStuff;
+
     constructor(
         private myHttpClient: HttpClient,
     ) {
@@ -30,8 +32,51 @@ export class PardBasicComponent implements OnInit {
 
     ngOnInit() {
         console.log('PardBasic (Parade) component here... (ngOnInit())'); // Browser console, mind.
+
+/* NO. CORS issue
+        this.myJiraAuthObservable = this.myCallJira();
+*/
+
+/* NO. STILL CORS issue
         this.myJiraAuthObservable = this.myCallJiraCORS();
-        // console.log('whatIGotBackFromJira: any turns out to be: ', this.whatIGotBackFromJira);
+*/
+
+        /*
+        Trying PROXY to avoid CORS ...
+        Simplifying - just .subscribe() for now, don't worry about Observable etc.
+         */
+        // this.myJiraAuthObservable = this.myCallJiraPROXY('PARD-3');
+        // *****************************************************
+        // * COMMENTING OUT FOR NOW * (sad)
+        // *****************************************************
+/*
+        this.myCallJiraPROXY('PARD-3')
+            .subscribe(
+                (whatIGot: { myJiraDataProperty: any } ) => {
+                    console.log('JIRA whatIGot: ', whatIGot);
+                  /!*
+                    // I did my own "wrapping" of the data object, over in my Proxy Server:
+                    const myWrappedJiraDataObject = { myJiraDataProperty: data }
+                    res.status(200).send(myWrappedJiraDataObject); // << Working fine, sends whole object. All set.
+                *!/
+
+                    console.log('JIRA whatIGot.myJiraDataProperty: ', whatIGot.myJiraDataProperty);
+
+                },
+                (err) => {
+                    console.log('myCallJiraPROXY err: ', err);
+                },
+                () => {
+                    // done
+                    console.log('myCallJiraPROXY Complete ...');
+                }
+            ); // /.subscribe()  myCallJiraPROXY()
+*/
+        // *****************************************************
+        // * /COMMENTING OUT FOR NOW * (sad)
+        // *****************************************************
+
+// console.log('whatIGotBackFromJira: any turns out to be: ', this.whatIGotBackFromJira);
         /*
         Getting Somewhere!
 
@@ -39,21 +84,104 @@ export class PardBasicComponent implements OnInit {
           Observable {_isScalar: false, source: Observable, operator: MapOperator}
          */
 
+        // *****************************************************
+        // * NOT USING *
+        // *****************************************************
+/*
         this.myJiraAuthSubscription = this.myJiraAuthObservable.subscribe(
             (whatWeGotSubscription) => {
                 console.log('whatWeGotSubscription ', whatWeGotSubscription);
                 if (whatWeGotSubscription?.error?.error) {
-                    /* Ye Olde Elvis Operator ?.
+                    /!* Ye Olde Elvis Operator ?.
                     Lets us query the object with care.
                     This thing might be an HTTPErrorResponse. It might be an Array of User objects.
                     Just crazy.
-                     */
+                     *!/
                     console.log('Aw shucks HTTP error!', whatWeGotSubscription);
                 } else {
                     console.log('O GOOD not an error. whatWeGotSubscription ', whatWeGotSubscription);
                 }
             }
-        );
+        ); // /.subscribe() myJiraAuthObservable
+*/
+        // *****************************************************
+
+    } // /ngOnInit()
+
+
+
+    /* ******************************* */
+    /* *******  FAKEAPI ************** */
+    /* ******************************* */
+    getFakeAPI(event) {
+        this.get100FakeAPI()
+            .subscribe(
+                (response: any) => {
+                    console.log('FAKE - Ng HTTP response is ', response);
+                  //  lilInspector(response[0], '');
+                    /*
+                      [ 0: {userId: 1, id: 1, title: "sunt aut facere ..."}
+                    */
+                    this.fakeApiStuff = response;
+                    console.log('FAKE - Ng HTTP this.fakeApiStuff is ', this.fakeApiStuff); // [{},{}...]
+                },
+                (err) => {
+                    console.log('FAKE - Ng HTTP err ', err);
+                },
+                () => { console.log('FAKE - Complete .......'); }
+            );
+    }
+
+
+    get100FakeAPI() {
+        /* FakeAPI.com
+        Just put here for comparison purpose. Simpler API call, no "CORS" issues.
+         */
+        // "100" is the default return for "get ALL" from this free, open, "fake" API.
+
+        return this.myHttpClient.get('https://jsonplaceholder.typicode.com/posts');
+
+        /* Note: Here, Angular HttpClient GENERATES an Observable.
+               In the calling app.component.ts, we SUBSCRIBE to that Observable.
+        */
+    }
+
+    callMyCallJiraPROXY(issueIdFromForm) {
+        console.log('wtf callMyCallJiraPROXY');
+        this.myCallJiraPROXY(issueIdFromForm)
+            .subscribe(
+                (whatIGot: { myJiraDataProperty: any } ) => {
+                    console.log('JIRA whatIGot: ', whatIGot);
+                    /*
+                    // I did my own "wrapping" of the data object, over in my Proxy Server:
+                    const myWrappedJiraDataObject = { myJiraDataProperty: data }
+                    res.status(200).send(myWrappedJiraDataObject); // << Working fine, sends whole object. All set.
+                    */
+
+                    console.log('JIRA whatIGot.myJiraDataProperty: ', whatIGot.myJiraDataProperty);
+
+                },
+                (err) => {
+                    console.log('myCallJiraPROXY err: ', err);
+                },
+                () => {
+                    // done
+                    console.log('myCallJiraPROXY Complete ...');
+                }
+            ); // /.subscribe()  callMyCallJiraPROXY()
+    }
+
+
+    myCallJiraPROXY(issueId: string): any {
+        /*
+        Here inside Component we are lazily running a
+        method that belongs properly over in a Service = TODO
+         */
+
+        console.log('wtf 2 myCallJiraPROXY', issueId);
+
+        return this.myHttpClient.get(
+            `http://0.0.0.0:3000/issue/${issueId}`);
     }
 
     myCallJiraCORS(): any {
