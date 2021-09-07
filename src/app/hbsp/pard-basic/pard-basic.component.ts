@@ -110,40 +110,8 @@ export class PardBasicComponent implements OnInit {
 
 
 
-    /* ******************************* */
-    /* *******  FAKEAPI ************** */
-    /* ******************************* */
-    getFakeAPI(event) {
-        this.get100FakeAPI()
-            .subscribe(
-                (response: any) => {
-                    console.log('FAKE - Ng HTTP response is ', response);
-                  //  lilInspector(response[0], '');
-                    /*
-                      [ 0: {userId: 1, id: 1, title: "sunt aut facere ..."}
-                    */
-                    this.fakeApiStuff = response;
-                    console.log('FAKE - Ng HTTP this.fakeApiStuff is ', this.fakeApiStuff); // [{},{}...]
-                },
-                (err) => {
-                    console.log('FAKE - Ng HTTP err ', err);
-                },
-                () => { console.log('FAKE - Complete .......'); }
-            );
-    }
-
-
-    get100FakeAPI() {
-        /* FakeAPI.com
-        Just put here for comparison purpose. Simpler API call, no "CORS" issues.
-         */
-        // "100" is the default return for "get ALL" from this free, open, "fake" API.
-
-        return this.myHttpClient.get('https://jsonplaceholder.typicode.com/posts');
-
-        /* Note: Here, Angular HttpClient GENERATES an Observable.
-               In the calling app.component.ts, we SUBSCRIBE to that Observable.
-        */
+    callMyCallTicketPage(ticketIdFromPage) {
+        console.log('wtf callMyCallTicketPage');  // NOT USED ( ? )
     }
 
     callMyCallJiraPROXY(issueIdFromForm) {
@@ -178,10 +146,10 @@ export class PardBasicComponent implements OnInit {
         method that belongs properly over in a Service = TODO
          */
 
-        console.log('wtf 2 myCallJiraPROXY', issueId);
+            console.log('wtf 2 myCallJiraPROXY', issueId);
 
-        return this.myHttpClient.get(
-            `http://0.0.0.0:3000/issue/${issueId}`);
+            return this.myHttpClient.get(
+                `http://0.0.0.0:3000/issue/${issueId}`);
     }
 
     myCallJiraCORS(): any {
@@ -248,4 +216,42 @@ Status Code: 404 Not Found
         );
     }
 
-}
+
+    /* ******************************* */
+    /* *******  FAKEAPI ************** */
+    /* ******************************* */
+    getFakeAPI(event) {
+        this.get100FakeAPI()
+            .subscribe(
+                (response: any) => {
+                    console.log('FAKE - Ng HTTP response is ', response);
+                    //  lilInspector(response[0], '');
+                    /*
+                      [ 0: {userId: 1, id: 1, title: "sunt aut facere ..."}
+                    */
+                    this.fakeApiStuff = response;
+                    console.log('FAKE - Ng HTTP this.fakeApiStuff is ', this.fakeApiStuff); // [{},{}...]
+                },
+                (err) => {
+                    console.log('FAKE - Ng HTTP err ', err);
+                },
+                () => { console.log('FAKE - Complete .......'); }
+            );
+    }
+
+
+    get100FakeAPI() {
+        /* FakeAPI.com
+        Just put here for comparison purpose. Simpler API call, no "CORS" issues.
+         */
+        // "100" is the default return for "get ALL" from this free, open, "fake" API.
+
+        return this.myHttpClient.get('https://jsonplaceholder.typicode.com/posts');
+
+        /* Note: Here, Angular HttpClient GENERATES an Observable.
+               In the calling app.component.ts, we SUBSCRIBE to that Observable.
+        */
+    }
+
+
+} // /PardBasicComponent { }

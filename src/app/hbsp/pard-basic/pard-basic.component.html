@@ -16,11 +16,21 @@
                 fxLayoutAlign="center center"
         >
             <div>
+                <a routerLink="/hbsp/parade/PARD-3"
+                >Hard-coded "PARD-3"</a>
+            </div>
+            <div>
+                <button
+                        mat-raised-button
+                        on-click="callMyCallTicketPage('PARD-3')"
+                >
+                    NOPE: FE Call - Get Jira Issue PARD-3
+                </button> |
                 <button
                         mat-raised-button
                         on-click="callMyCallJiraPROXY('PARD-3')"
                 >
-                    Get Jira Issue PARD-3
+                    BE Call - Get Jira Issue PARD-3
                 </button> |
                 <button
                         mat-raised-button
