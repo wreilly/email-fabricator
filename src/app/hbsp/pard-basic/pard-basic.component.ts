@@ -149,7 +149,8 @@ export class PardBasicComponent implements OnInit {
             console.log('wtf 2 myCallJiraPROXY', issueId);
 
             return this.myHttpClient.get(
-                `http://0.0.0.0:3000/issue/${issueId}`);
+                // `http://0.0.0.0:3000/issue/${issueId}`);
+        `http://0.0.0.0:3000/api/v1/issue/${issueId}`);
     }
 
     myCallJiraCORS(): any {
@@ -204,7 +205,7 @@ Status Code: 404 Not Found
                     Accept: 'application/json',
                     'Content-Type': 'application/json',
                     Authorization: `Bearer ${environment['atlassian-jira-basic-auth']}`,
-                }
+                } // N.B. Should be 'Basic' not 'Bearer'. But, doesn't work anyway so NEVERMIND. ;)
             }
         ).pipe(
             map(

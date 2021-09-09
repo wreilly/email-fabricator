@@ -102,9 +102,10 @@ export class ParadeTicketComponent implements OnInit {
 
                           console.log('JIRA whatIGot.myJiraDataProperty: ', whatIGot.myJiraDataProperty);
                           console.log('JIRA whatIGot.myJiraDataProperty.fields.customfield_10029: ',
-                              whatIGot.myJiraDataProperty.fields.customfield_10029);
+                              whatIGot.myJiraDataProperty.fields.customfield_10029); // YES. e.g. 123456
                           this.hewUserId = whatIGot.myJiraDataProperty.fields.customfield_10029;
                           this.hewUsername = this.fakeHeatHeServicesSharedPlatformUserAPILookup(this.hewUserId);
+                          // brings back hard-coded 'william.reilly@hbsp.harvard.edu' cheers
 
                       },
                       (err) => {
@@ -128,12 +129,15 @@ method that belongs properly over in a Service = TODO
       console.log('wtf 2 getParadeTicketPseudoService() ', ticketIdInService);
 
       return this.myHttpClient.get(
-          `http://0.0.0.0:3000/issue/${ticketIdInService}`);
+          // `http://0.0.0.0:3000/issue/${ticketIdInService}`); // << Worked just fine.
+      `http://0.0.0.0:3000/api/v1/issue/${ticketIdInService}`); // Hey! Works just fine, too.
+      // Request URL: http://0.0.0.0:3000/api/v1/issue/PARD-3
 
   }
 
   fakeHeatHeServicesSharedPlatformUserAPILookup(hewUserIdPassedIn) {
-      return this.hardCodedHewUsername;
+      console.log(hewUserIdPassedIn); // just pretending to use this variable ...
+      return this.hardCodedHewUsername; // really we return this hard-coded name: 'william.reilly@hbsp.harvard.edu'
   }
 
 } // /ParadeTicketComponent { }

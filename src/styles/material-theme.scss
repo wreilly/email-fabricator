@@ -29,12 +29,27 @@ $theme: mat-light-theme($primary, $accent, $warn);
 /* Not Using Here
 @include component-theme($theme);
 */
-
+/* O la. 2021. Trying to get plain <a href="">link</a> to be VISIBLE in DARK-MODE.
+               Default behavior is the a href link is just plain DARK PURPLE when "visited,"
+               and bloody INVISIBLE in DARK MODE. Oi!
+https://github.com/angular/components/issues/6532
+ */
+a {
+  color: mat-color($accent);
+}
 
 // Our dark theme
+/* Yellow was Not So Great, when "Amber" is your "accent". sigh.
+That is, the app-header toolbar has color="primary" (okay).
+For Dark Theme, that was Yellow, but with the <a routerLink> text is Amber. Terrible contrast.
+
+  $dark-primary: mat-palette($mat-yellow);
+  $dark-primary: mat-palette($mat-blue-grey); // Yucky. Looked like polluted water.
+  $dark-primary: mat-palette($mat-teal); // << Tolerable. Not great. Good enough.
+ */
 .dark-theme {
   color: $light-primary-text;
-  $dark-primary: mat-palette($mat-yellow);
+  $dark-primary: mat-palette($mat-teal);
   $dark-accent: mat-palette($mat-amber, A400, A100, A700);
   $dark-warn: mat-palette($mat-red);
   $dark-theme: mat-dark-theme($dark-primary, $dark-accent, $dark-warn);
@@ -43,4 +58,10 @@ $theme: mat-light-theme($primary, $accent, $warn);
   /* Not Using Here
   @include component-theme($dark-theme);
   */
+
+  // Here's hoping? https://github.com/angular/components/issues/6532  See also above.
+  a {
+    color: mat-color($dark-accent);
+  }
+
 }

@@ -16,9 +16,28 @@
                 fxLayoutAlign="center center"
         >
             <div>
-                <a routerLink="/hbsp/parade/PARD-3"
-                >Hard-coded "PARD-3"</a>
+                What happens if I type content inside of mat-card-content?
             </div>
+
+
+            <div>
+                Q.1. What happens if I put a plain old a href link <a href="https://nytimes.com">inside</a> of mat-card-content?
+            </div>
+
+            <div>
+                Q.2. What happens if I put an Angular routerLink <a routerLink="/hbsp/parade/PARD-3" routerLinkActive="my-active">inside</a> of mat-card-content?
+            </div>
+
+
+            <div>
+                A. Both look like HELL in dark-theme mode. Uurrgghh.
+            </div>
+
+
+                <a routerLink="/hbsp/parade/PARD-3"
+                   routerLinkActive="my-active"
+                >Hard-coded "PARD-3"</a>
+
             <div>
                 <button
                         mat-raised-button

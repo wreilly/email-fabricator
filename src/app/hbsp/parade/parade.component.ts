@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
+import { ParadeService } from './parade.service';
+
 @Component({
     selector: 'app-parade',
     templateUrl: './parade.component.html',
@@ -7,10 +9,23 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ParadeComponent implements OnInit {
 
-    constructor() {
+    constructor(
+        private myParadeService: ParadeService,
+    ) {
     }
 
     ngOnInit() {
         console.log('Parade component here... (ngOnInit())');
+
+/* WORKS FINE, but ...
+        this.myParadeService.getFieldNames();
+*/
+        // We'll fire this off instead:
+        this.myParadeService.seeIfWeNeedFieldNames();
     }
-} // /class
+
+    clearFieldnamesFromJira() {
+        this.myParadeService.clearFieldNames(); // fire 'n ferget from here
+    }
+
+} // /class ParadeComponent

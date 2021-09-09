@@ -1,5 +1,12 @@
 <nav mat-tab-nav-bar>
     <a mat-tab-link routerLink="pard-basic" routerLinkActive="my-active">Basic Auth</a>
     <a mat-tab-link routerLink="parade-ticket" routerLinkActive="my-active">Parade Ticket</a>
+    <button
+            mat-raised-button
+            color="primary"
+            on-click="clearFieldnamesFromJira()"
+    >
+        Clear Fieldnames from Jira
+    </button>
 </nav>
 <router-outlet></router-outlet>
