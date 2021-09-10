@@ -25,6 +25,10 @@ export class ParadeTicketComponent implements OnInit {
   hewUsername: string; // e.g. william.reilly@hbsp.harard.edu
   hardCodedHewUsername = 'william.reilly@hbsp.harvard.edu';
 
+  availabilityId: string; // e.g. 4040-PDF-ENG
+  availabilityTitle: string; // e.g. "Blaine"
+  hardCodedAvailabilityTitle = 'Blaine Kitchenware';
+
   urlHereObservable$: Observable<string>;
   // This just gets 'PARD-3', LAST part of "URL". Hmm, where is the REST of the URL ??
 
@@ -103,9 +107,11 @@ export class ParadeTicketComponent implements OnInit {
                           console.log('JIRA whatIGot.myJiraDataProperty: ', whatIGot.myJiraDataProperty);
                           console.log('JIRA whatIGot.myJiraDataProperty.fields.customfield_10029: ',
                               whatIGot.myJiraDataProperty.fields.customfield_10029); // YES. e.g. 123456
-                          this.hewUserId = whatIGot.myJiraDataProperty.fields.customfield_10029;
+                          this.hewUserId = whatIGot.myJiraDataProperty.fields.customfield_10029; // e.g. 123456
                           this.hewUsername = this.fakeHeatHeServicesSharedPlatformUserAPILookup(this.hewUserId);
                           // brings back hard-coded 'william.reilly@hbsp.harvard.edu' cheers
+                          this.availabilityId = whatIGot.myJiraDataProperty.fields.customfield_10030; // e.g. 4040-PDF-ENG
+                          this.availabilityTitle = this.fakeCatalogApiAvailabilityIdLookup(this.availabilityId);
 
                       },
                       (err) => {
@@ -138,6 +144,11 @@ method that belongs properly over in a Service = TODO
   fakeHeatHeServicesSharedPlatformUserAPILookup(hewUserIdPassedIn) {
       console.log(hewUserIdPassedIn); // just pretending to use this variable ...
       return this.hardCodedHewUsername; // really we return this hard-coded name: 'william.reilly@hbsp.harvard.edu'
+  }
+
+  fakeCatalogApiAvailabilityIdLookup(availabilityIdPassedIn) {
+      console.log('this.fakeCatalogApiAvailabilityIdLookup() ', availabilityIdPassedIn);
+      return this.hardCodedAvailabilityTitle; // "Blaine Kitchenware"
   }
 
 } // /ParadeTicketComponent { }
