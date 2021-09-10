@@ -1,26 +1,26 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { tap } from 'rxjs/operators';
 
 import { environment } from '../../../environments/environment';
-import {Observable} from 'rxjs';
-import * as punycode from 'punycode';
+
 
 /*
 https://angular.io/guide/providers
 */
-
 /* DEFAULT WAS:
 @Injectable({
   providedIn: 'root'
 })
 */
-// We'll put as provider in Core Module (like we did for hbsp.service.ts)
+// We put as provider into the Core Module (like we did for hbsp.service.ts)
 @Injectable()
 export class ParadeService {
-
+    
   allThoseFieldNamesFromJira; // t.b.d. : [any];
   myCustomFieldNames; // [] array of some objects/model t.b.d.
+
+  private classVariableForJiraNamingConvention = '\^customfield'; // used in RegExp() in selectOutMyCustomFields()
+    // ? '^customfield' OR '\^customfield' ? // << BOTH Worked! (kinda surprising - o well)
 
   constructor(
       private myHttpClient: HttpClient,
@@ -39,7 +39,7 @@ export class ParadeService {
   /*
   Get Field Names (from Field Codes)
    */
-  getFieldNames(): void { // t.b.d. just what we return. [] array of something(s)
+  getFieldNames(): void { // No 'return'. Instead, assign data gotten, to a local variable.
     console.log('getFieldNames() in ParadeService');
     // return 'TEXAS'; // worked fine, thx.
 
@@ -87,17 +87,31 @@ export class ParadeService {
   } // /getFieldNames()
 
   selectOutMyCustomFields() {
-      this.myCustomFieldNames = 'foobar';
+
+      // const localNamingConvention = 'customfield'; // Nah. see just below.
+
+      // const localRegExVariable = '\^customfield'; // ? OR '^customfield' ? // << BOTH Worked! (kinda surprising - o well)
+      // const localRegExItself = new RegExp(localRegExVariable); // << YES Worked fine.
+      const localRegExItself = new RegExp(this.classVariableForJiraNamingConvention); // YES Works. Bon!
+
       this.myCustomFieldNames = this.allThoseFieldNamesFromJira.filter(
           (eachItem) => {
-              if (eachItem.id.match(/^customfield/)) {
-                  return eachItem;1
+              if (eachItem.id.match(localRegExItself)) {
+              // if (eachItem.id.match(/^customfield/)) { // Yes, of course plain Regex works :)
+                  return eachItem;
               }
           }
       );
       console.log('selectOutMyCustomFields() this.myCustomFieldNames: ', this.myCustomFieldNames);
   }
+/* Kinda stupy:
+  // ^^^^ No, all these attempts to use `backticks` and ${interpolated-variable},
+              inside a '(/regex/)' with literal '/' boundaries = Fuhggedaboudid. oi!
 
+              if (eachItem.id.match(`/^${localNamingConvention}/`)) {
+              if (eachItem.id.match(`/^${this.ilMioLocalNamingConvention}/`)) {
+              if (eachItem.id.match(`/\^${this.ilMioLocalNamingConvention}/`)) {
+ */
 
   clearFieldNames() {
       this.allThoseFieldNamesFromJira = undefined;
