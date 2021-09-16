@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient  } from '@angular/common/http';
+
+import { ParadeService } from '../parade/parade.service';
 
 /*
 From
@@ -34,7 +35,7 @@ export class ParadeTicketComponent implements OnInit {
 
   constructor(
       private myActivatedRoute: ActivatedRoute,
-      private myHttpClient: HttpClient,
+      private myParadeService: ParadeService,
   ) {
     /*
     https://angular.io/api/router/ActivatedRoute
@@ -94,10 +95,15 @@ export class ParadeTicketComponent implements OnInit {
               comes from hbsp-routing.module.ts
                */
               this.ticketIdHere = paramsIGot.ticket_id;
+/* ** NO LONGER USED **
               this.getParadeTicketPseudoService(this.ticketIdHere)
+*/
+              // NOW USING ACTUAL SERVICE = More Better
+              this.myParadeService.getIssue(this.ticketIdHere)
                   .subscribe(
                       (whatIGot: { myJiraDataProperty: any } ) => {
-                          console.log('getParadeTicketPseudoService 99999 JIRA whatIGot: ', whatIGot);
+                          console.log('getIssue() from ParadeService 88888 JIRA whatIGot: ', whatIGot);
+                          // console.log('getParadeTicketPseudoService 99999 JIRA whatIGot: ', whatIGot);
                           /*
                           // I did my own "wrapping" of the data object, over in my Proxy Server:
                           const myWrappedJiraDataObject = { myJiraDataProperty: data }
@@ -127,11 +133,13 @@ export class ParadeTicketComponent implements OnInit {
 
   }
 
+  //  *** NO LONGER USED **
+/*
   getParadeTicketPseudoService(ticketIdInService: string ) {
-      /*
+      /!*
 Here inside Component we are lazily running a
 method that belongs properly over in a Service = TODO
- */
+ *!/
       console.log('wtf 2 getParadeTicketPseudoService() ', ticketIdInService);
 
       return this.myHttpClient.get(
@@ -140,6 +148,7 @@ method that belongs properly over in a Service = TODO
       // Request URL: http://0.0.0.0:3000/api/v1/issue/PARD-3
 
   }
+  */
 
   fakeHeatHeServicesSharedPlatformUserAPILookup(hewUserIdPassedIn) {
       console.log(hewUserIdPassedIn); // just pretending to use this variable ...

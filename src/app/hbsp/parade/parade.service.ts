@@ -15,7 +15,7 @@ https://angular.io/guide/providers
 // We put as provider into the Core Module (like we did for hbsp.service.ts)
 @Injectable()
 export class ParadeService {
-    
+
   allThoseFieldNamesFromJira; // t.b.d. : [any];
   myCustomFieldNames; // [] array of some objects/model t.b.d.
 
@@ -26,6 +26,33 @@ export class ParadeService {
       private myHttpClient: HttpClient,
   ) { }
 
+
+    /*
+    GET ISSUE (Parade Ticket)
+     */
+    getIssue(issueIdFromComponent: string) {
+        console.log('SERVICE. getIssue() issueIdFromComponent: ', issueIdFromComponent);
+
+        return this.myHttpClient.get(
+
+            // tslint:disable-next-line:max-line-length
+            `${environment.jiraProxyServer.apiUrl}:${environment.jiraProxyServer.apiPort}/${environment.jiraProxyServer.apiVersion}/issue/${issueIdFromComponent}`,
+/*
+From .env
+    apiUrl: 'http://ec2-100-26-170-247.compute-1.amazonaws.com',
+    apiPort: '3000',
+    apiVersion: 'api/v1',
+
+            `http://0.0.0.0:3000/api/v1/issue/${issueIdFromComponent}`);
+             e.g. Request URL: http://0.0.0.0:3000/api/v1/issue/PARD-3
+*/
+        );
+    } // /getIssue()
+
+
+    /*
+       ***  JIRA FIELD NAMES  ***
+     */
     seeIfWeNeedFieldNames() {
       if (typeof this.allThoseFieldNamesFromJira === 'undefined') {
           // We DO Need them! :)
@@ -43,7 +70,7 @@ export class ParadeService {
     console.log('getFieldNames() in ParadeService');
     // return 'TEXAS'; // worked fine, thx.
 
-    console.log('Env stuff? ', `${environment.jiraProxyServer.apiUrl}`); // yep. 'http://0.0.0.0'
+    console.log('Env stuff jiraProxyServer.apiUrl: ', `${environment.jiraProxyServer.apiUrl}`); // yep. 'http://0.0.0.0'
 
 /* WORKS JUST FINE: (that is, simply returning to calling Component)
     return this.myHttpClient.get(
